@@ -3,7 +3,7 @@ using OLX_clone.Server.Models;
 
 namespace OLX_clone.Server.Data.Repositories.CategoryRepository;
 
-public class CategoryRepository
+public class CategoryRepository: ICategoryRepository
 {
     private readonly ApplicationDbContext _context;
 
