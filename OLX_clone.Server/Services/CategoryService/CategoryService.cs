@@ -38,4 +38,29 @@ public class CategoryService: ICategoryService
 
         return new ApiResponse<Category> { Data = createdCategory, Message = "Category created successfully" };
     }
+    
+    public async Task<ApiResponse<Category>> UpdateCategory(int id, UpdateCategoryDto categoryUpdateDto)
+    {
+        Category categoryFromDb = await _categoryRepository.GetCategory(id);
+        if (categoryFromDb == null)
+            return new ApiResponse<Category> { Success = false, Message = "Category not found." };
+
+        categoryFromDb = _mapper.Map(categoryUpdateDto, categoryFromDb);
+
+        var updatedCategory = await _categoryRepository.UpdateCategory(categoryFromDb);
+
+        return new ApiResponse<Category> { Data = updatedCategory, Message = "Category updated successfully" };
+    }
+    
+    public async Task<ApiResponse<bool>> DeleteCategory(int id)
+    {
+        Category categoryFromDb = await _categoryRepository.GetCategory(id);
+        if (categoryFromDb == null)
+            return new ApiResponse<bool> { Success = false, Message = "Category not found." };
+
+        var deletedCategory = await _categoryRepository.DeleteCategory(id);
+
+        return !deletedCategory ? new ApiResponse<bool> { Success = false, Message = "Error occured while deleting category." } 
+            : new ApiResponse<bool> { Message = "Category deleted successfully" };
+    }
 }

@@ -9,5 +9,6 @@ public class MapperConfiguration : Profile
     public MapperConfiguration()
     {
         CreateMap<CreateCategoryDto, Category>();
+        CreateMap<UpdateCategoryDto, Category>();
     }
 }
