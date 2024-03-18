@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OLX_clone.Server.Data;
+using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Data.Repositories.CategoryRepository;
+using OLX_clone.Server.Data.Repositories.GenericRepositor;
 using OLX_clone.Server.Services.CategoryService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkSto
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
