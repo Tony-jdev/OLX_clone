@@ -64,4 +64,62 @@ public class CategoryController: ControllerBase
 
         return BadRequest(apiResponse);
     }
+    
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<ApiResponse<Category>>> UpdateCategory(int id, [FromForm] UpdateCategoryDto menuItemUpdateDto)
+    {
+        var apiResponse = new ApiResponse<Category> { Success = false, Message = "Model is invalid" };
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                if (id != menuItemUpdateDto.Id){
+                    apiResponse.Message = "Wrong category";
+                    return BadRequest(apiResponse);
+                }
+
+                apiResponse = await _categoryService.UpdateCategory(id, menuItemUpdateDto);
+                if (!apiResponse.Success)
+                {
+                    return BadRequest(apiResponse);
+                }
+                return Ok(apiResponse);
+            }
+        }
+        catch (Exception ex)
+        {
+            apiResponse.Success = false;
+            apiResponse.Message = ex.Message;
+        }
+
+        return BadRequest(apiResponse);
+    }
+    
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<ApiResponse<bool>>> DeleteCategory(int id)
+    {
+        var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };
+        try
+        {
+            if (id == 0)
+                return BadRequest(apiResponse);
+
+            apiResponse = await _categoryService.DeleteCategory(id);
+            if (!apiResponse.Success && apiResponse.Message == "Category not found.")
+            {
+                return NotFound(apiResponse);
+            }
+
+            if(!apiResponse.Success) return BadRequest(apiResponse);
+
+            return Ok(apiResponse);
+        }
+        catch (Exception ex)
+        {
+            apiResponse.Success = false;
+            apiResponse.Message = ex.Message;
+        }
+
+        return apiResponse;
+    }
 }
