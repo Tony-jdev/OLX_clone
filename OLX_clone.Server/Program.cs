@@ -4,6 +4,7 @@ using OLX_clone.Server.Data;
 using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Data.Repositories.CategoryRepository;
 using OLX_clone.Server.Data.Repositories.GenericRepositor;
+using OLX_clone.Server.Models;
 using OLX_clone.Server.Services.CategoryService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection"));
 });
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
