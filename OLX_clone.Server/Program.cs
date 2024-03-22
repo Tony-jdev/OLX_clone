@@ -7,6 +7,7 @@ using OLX_clone.Server.Data.Repositories.CategoryRepository;
 using OLX_clone.Server.Data.Repositories.GenericRepositor;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Services.CategoryService;
+using OLX_clone.Server.Services.PostService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();

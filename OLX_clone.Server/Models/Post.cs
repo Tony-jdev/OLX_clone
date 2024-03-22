@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using OLX_clone.Server.Helpers;
 
 namespace OLX_clone.Server.Models;
 
@@ -13,11 +14,13 @@ public class Post
     public string Description { get; set; }
     [Required]
     public double Price { get; set; }
+    [Required] 
+    public string Status { get; set; } = SD.status_active;
     [Required]
-    public string Status{ get; set; }
+    public string ApplicationUserId { get; set; }
     [ForeignKey("ApplicationUserId")]
     public ApplicationUser User { get; set; }
-    public DateTime CreatedAt{ get; set; }
+    public DateTime CreatedAt{ get; set; } = DateTime.Now;
     
     ICollection<PostView> PostViews{ get; set; }
     ICollection<Category> Categories{ get; set; }

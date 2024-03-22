@@ -1,26 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
-using OLX_clone.Server.Models.Dtos;
-using OLX_clone.Server.Services.CategoryService;
+using OLX_clone.Server.Models.Dtos.Post;
+using OLX_clone.Server.Services.PostService;
 
 namespace OLX_clone.Server.Controllers;
 
 [ApiController]
-[Route("api/categories")]
-public class CategoryController: ControllerBase
+[Route("api/posts")]
+public class PostController: ControllerBase
 {
-    private readonly ICategoryService _categoryService;
-
-    public CategoryController(ICategoryService categoryService)
+    private readonly IPostService _postService;
+    
+    public PostController(IPostService postService)
     {
-        _categoryService = categoryService;
+        _postService = postService;
     }
-
+    
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<Category>>>> GetCategories()
+    public async Task<ActionResult<ApiResponse<List<Post>>>> GetPosts()
     {
-        var apiResponse = await _categoryService.GetCategories();
+        var apiResponse = await _postService.GetPosts();
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);
@@ -28,27 +28,27 @@ public class CategoryController: ControllerBase
 
         return Ok(apiResponse);
     }
-
-    [HttpGet("{id:int}", Name = "GetCategory")]
-    public async Task<ActionResult<ApiResponse<Category>>> GetCategory(int id)
+    
+    [HttpGet("{id:int}", Name = "GetPost")]
+    public async Task<ActionResult<ApiResponse<Post>>> GetPost(int id)
     {
-        var apiResponse = await _categoryService.GetCategory(id);
+        var apiResponse = await _postService.GetPost(id);
         if (!apiResponse.Success)
         {
             return NotFound(apiResponse);
         }
         return Ok(apiResponse);
     }
-
+    
     [HttpPost]
-    public async Task<ActionResult<ApiResponse<Category>>> CreateCategory([FromForm] CreateCategoryDto categoryCreateDto)
+    public async Task<ActionResult<ApiResponse<Post>>> CreatePost([FromForm] CreatePostDto postCreateDto)
     {
-        var apiResponse = new ApiResponse<Category>{ Success = false, Message = "Model is invalid" };
+        var apiResponse = new ApiResponse<Post>{ Success = false, Message = "Model is invalid" };
         try
         {
             if (ModelState.IsValid)
             {
-                apiResponse = await _categoryService.CreateCategory(categoryCreateDto);
+                apiResponse = await _postService.CreatePost(postCreateDto);
                 if (!apiResponse.Success)
                 {
                     return NotFound(apiResponse);
@@ -66,19 +66,19 @@ public class CategoryController: ControllerBase
     }
     
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<ApiResponse<Category>>> UpdateCategory(int id, [FromForm] UpdateCategoryDto categoryUpdateDto)
+    public async Task<ActionResult<ApiResponse<Post>>> UpdatePost(int id, [FromForm] UpdatePostDto postUpdateDto)
     {
-        var apiResponse = new ApiResponse<Category> { Success = false, Message = "Model is invalid" };
+        var apiResponse = new ApiResponse<Post> { Success = false, Message = "Model is invalid" };
         try
         {
             if (ModelState.IsValid)
             {
-                if (id != categoryUpdateDto.Id){
-                    apiResponse.Message = "Wrong category";
+                if (id != postUpdateDto.Id){
+                    apiResponse.Message = "Wrong post";
                     return BadRequest(apiResponse);
                 }
 
-                apiResponse = await _categoryService.UpdateCategory(id, categoryUpdateDto);
+                apiResponse = await _postService.UpdatePost(id, postUpdateDto);
                 if (!apiResponse.Success)
                 {
                     return BadRequest(apiResponse);
@@ -96,7 +96,7 @@ public class CategoryController: ControllerBase
     }
     
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult<ApiResponse<bool>>> DeleteCategory(int id)
+    public async Task<ActionResult<ApiResponse<bool>>> DeletePost(int id)
     {
         var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };
         try
@@ -104,8 +104,8 @@ public class CategoryController: ControllerBase
             if (id == 0)
                 return BadRequest(apiResponse);
 
-            apiResponse = await _categoryService.DeleteCategory(id);
-            if (!apiResponse.Success && apiResponse.Message == "Category not found.")
+            apiResponse = await _postService.DeletePost(id);
+            if (!apiResponse.Success && apiResponse.Message == "Post not found.")
             {
                 return NotFound(apiResponse);
             }

@@ -15,6 +15,4 @@ public class UpdatePostDto
     public double Price { get; set; }
     [Required]
     public string Status{ get; set; }
-    [ForeignKey("ApplicationUserId")]
-    public ApplicationUser User { get; set; }
 }

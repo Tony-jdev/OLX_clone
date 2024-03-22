@@ -11,6 +11,6 @@ public class CreatePostDto
     public string Description { get; set; }
     [Required]
     public double Price { get; set; }
-    [ForeignKey("ApplicationUserId")]
-    public ApplicationUser User { get; set; }
+    [Required]
+    public string ApplicationUserId { get; set; }
 }
