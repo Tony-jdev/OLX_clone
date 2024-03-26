@@ -31,6 +31,7 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IPostViewRepository, PostViewRepository>();
 
 var app = builder.Build();
 

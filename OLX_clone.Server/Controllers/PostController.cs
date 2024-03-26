@@ -30,13 +30,15 @@ public class PostController: ControllerBase
     }
     
     [HttpGet("{id:int}", Name = "GetPost")]
-    public async Task<ActionResult<ApiResponse<Post>>> GetPost(int id)
+    public async Task<ActionResult<ApiResponse<GetPostDetailsDto>>> GetPost(int id)
     {
         var apiResponse = await _postService.GetPost(id);
         if (!apiResponse.Success)
         {
             return NotFound(apiResponse);
         }
+        await _postService.AddPostView(id);
+        
         return Ok(apiResponse);
     }
     

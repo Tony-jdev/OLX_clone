@@ -9,25 +9,34 @@ namespace OLX_clone.Server.Services.PostService;
 public class PostService : IPostService
 {
     private readonly IPostRepository _postRepository;
+    private readonly IPostViewRepository _postViewRepository;
     private readonly IMapper _mapper;
     
-    public PostService(IPostRepository postRepository, IMapper mapper)
+    public PostService(IPostRepository postRepository, IPostViewRepository postViewRepository,IMapper mapper)
     {
         _postRepository = postRepository;
+        _postViewRepository = postViewRepository;
         _mapper = mapper;
     }
     
     public async Task<ApiResponse<List<Post>>> GetPosts()
     {
-        var posts = await _postRepository.GetAllAsync();
+        var posts = await _postRepository.GetAllDetailedAsync();
         return new ApiResponse<List<Post>> { Data = posts, Message = "Posts retrieved successfully." };
     }
 
-    public async Task<ApiResponse<Post>> GetPost(int id)
+    public async Task<ApiResponse<GetPostDetailsDto>> GetPost(int id)
     {
-        var post = await _postRepository.GetAsync(id);
-        return post == null ? new ApiResponse<Post> { Success = false, Message = "Post not found." } 
-            : new ApiResponse<Post> { Data = post, Message = "Post retrieved successfully." };
+        var post = await _postRepository.GetDetailsAsync(id);
+        if (post == null)
+        {
+            return new ApiResponse<GetPostDetailsDto> { Success = false, Message = "Post not found." };
+        }
+        
+        var postToView = _mapper.Map<Post, GetPostDetailsDto>(post);
+        postToView.ViewsCount = await _postViewRepository.GetAllPostViewsCountByPostId(id);
+        
+        return new ApiResponse<GetPostDetailsDto> { Data = postToView, Message = "Post retrieved successfully." };
     }
 
     public async Task<ApiResponse<Post>> CreatePost(CreatePostDto postCreateDto)
@@ -62,5 +71,11 @@ public class PostService : IPostService
 
         return !deletedPost ? new ApiResponse<bool> { Success = false, Message = "Error occured while deleting category." } 
             : new ApiResponse<bool> { Message = "Post deleted successfully" };
+    }
+    
+    public async Task AddPostView(int postId)
+    {
+        PostView postView = new PostView{PostId = postId};
+        await _postViewRepository.AddAsync(postView);
     }
 }

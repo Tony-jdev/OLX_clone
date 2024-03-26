@@ -12,12 +12,12 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
       
     }
     
-    public async Task<List<Post>> GetAllAsync()
+    public async Task<List<Post>> GetAllDetailedAsync()
     {
         return await _context.Posts.Include(p => p.User).ToListAsync();
     }
     
-    public async Task<Post> GetAsync(int? id)
+    public async Task<Post> GetDetailsAsync(int? id)
     {
         if (id is null)
         {

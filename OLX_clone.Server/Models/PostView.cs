@@ -7,7 +7,9 @@ public class PostView
 {
     [Key]
     public int Id { get; set; }
-    public DateTime ViewedAt{ get; set; }
+    [Required]
+    public int PostId { get; set; }
     [ForeignKey("PostId")]
     public Post Post { get; set; }
+    public DateTime ViewedAt{ get; set; }=DateTime.Now;
 }

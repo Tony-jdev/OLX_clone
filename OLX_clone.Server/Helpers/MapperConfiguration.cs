@@ -13,5 +13,7 @@ public class MapperConfiguration : Profile
         CreateMap<UpdateCategoryDto, Category>();
         CreateMap<CreatePostDto, Post>();
         CreateMap<UpdatePostDto, Post>();
+        
+        CreateMap<Post, GetPostDetailsDto>();
     }
 }
