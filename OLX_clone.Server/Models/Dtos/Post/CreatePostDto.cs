@@ -12,5 +12,8 @@ public class CreatePostDto
     [Required]
     public double Price { get; set; }
     [Required]
+    public List<int> CategoriesId { get; set; }
+    [Required]
     public string ApplicationUserId { get; set; }
+    public List<IFormFile> Files { get; set; }
 }

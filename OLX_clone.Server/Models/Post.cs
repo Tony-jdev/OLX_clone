@@ -22,6 +22,6 @@ public class Post
     public ApplicationUser User { get; set; }
     public DateTime CreatedAt{ get; set; } = DateTime.Now;
     
-    ICollection<PostView> PostViews{ get; set; }
-    ICollection<Category> Categories{ get; set; }
+    public ICollection<Category> Categories{ get; set; }
+    public ICollection<PostView> PostViews{ get; set; }
 }

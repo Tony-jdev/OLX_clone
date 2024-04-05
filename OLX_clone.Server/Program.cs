@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OLX_clone.Server.Data;
@@ -6,6 +7,7 @@ using OLX_clone.Server.Data.Repositories;
 using OLX_clone.Server.Data.Repositories.CategoryRepository;
 using OLX_clone.Server.Data.Repositories.GenericRepositor;
 using OLX_clone.Server.Models;
+using OLX_clone.Server.Services.BlobService;
 using OLX_clone.Server.Services.CategoryService;
 using OLX_clone.Server.Services.PostService;
 
@@ -26,12 +28,17 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 
 builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services.AddSingleton(u => new BlobServiceClient(
+    builder.Configuration.GetConnectionString("StorageAccount")));
+builder.Services.AddSingleton<IBlobService, BlobService>();
+
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostViewRepository, PostViewRepository>();
+builder.Services.AddScoped<IPostPhotoRepository, PostPhotoRepository>();
 
 var app = builder.Build();
 

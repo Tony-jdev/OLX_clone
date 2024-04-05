@@ -24,6 +24,7 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
             return null;
         }
 
-        return await _context.Posts.Include(p => p.User).Where(p => p.Id == id).FirstOrDefaultAsync();
+        return await _context.Posts.Include(p => p.User)
+            .Include(p => p.Categories).Where(p => p.Id == id).FirstOrDefaultAsync();
     }
 }
