@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using OLX_clone.Server.Data;
 using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Data.Repositories;
-using OLX_clone.Server.Data.Repositories.CategoryRepository;
 using OLX_clone.Server.Data.Repositories.GenericRepositor;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Services.BlobService;
@@ -35,10 +34,7 @@ builder.Services.AddSingleton<IBlobService, BlobService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<IPostViewRepository, PostViewRepository>();
-builder.Services.AddScoped<IPostPhotoRepository, PostPhotoRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

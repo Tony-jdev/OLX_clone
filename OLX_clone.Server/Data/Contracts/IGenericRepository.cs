@@ -1,4 +1,6 @@
-﻿namespace OLX_clone.Server.Data.Contracts;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace OLX_clone.Server.Data.Contracts;
 
 public interface IGenericRepository<T> where T : class
 {
@@ -8,4 +10,5 @@ public interface IGenericRepository<T> where T : class
     Task<T> UpdateAsync(T entity);
     Task<bool>  DeleteAsync(int id);
     Task<bool> Exists(int id);
+    Task<IDbContextTransaction> BeginTransactionAsync();
 }

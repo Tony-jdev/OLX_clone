@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using OLX_clone.Server.Data.Contracts;
 
 namespace OLX_clone.Server.Data.Repositories.GenericRepositor;
@@ -54,5 +55,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         var entity = await GetAsync(id);
         return entity != null;
+    }
+    
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
+    {
+        return await _context.Database.BeginTransactionAsync();
     }
 }
