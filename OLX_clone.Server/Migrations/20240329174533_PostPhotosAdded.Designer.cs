@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OLX_clone.Server.Data;
 
@@ -11,9 +12,11 @@ using OLX_clone.Server.Data;
 namespace OLX_clone.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240329174533_PostPhotosAdded")]
+    partial class PostPhotosAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace OLX_clone.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CategoryPost", b =>
-                {
-                    b.Property<int>("CategoriesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesId", "PostsId");
-
-                    b.HasIndex("PostsId");
-
-                    b.ToTable("CategoryPost", (string)null);
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -257,7 +245,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.Post", b =>
@@ -294,7 +282,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.PostPhoto", b =>
@@ -314,7 +302,9 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PostPhotos", (string)null);
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostPhotos");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.PostView", b =>
@@ -335,22 +325,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostViews", (string)null);
-                });
-
-            modelBuilder.Entity("CategoryPost", b =>
-                {
-                    b.HasOne("OLX_clone.Server.Models.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OLX_clone.Server.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("PostViews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -415,10 +390,10 @@ namespace OLX_clone.Server.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OLX_clone.Server.Models.PostView", b =>
+            modelBuilder.Entity("OLX_clone.Server.Models.PostPhoto", b =>
                 {
                     b.HasOne("OLX_clone.Server.Models.Post", "Post")
-                        .WithMany("PostViews")
+                        .WithMany()
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -426,9 +401,15 @@ namespace OLX_clone.Server.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("OLX_clone.Server.Models.Post", b =>
+            modelBuilder.Entity("OLX_clone.Server.Models.PostView", b =>
                 {
-                    b.Navigation("PostViews");
+                    b.HasOne("OLX_clone.Server.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
                 });
 #pragma warning restore 612, 618
         }

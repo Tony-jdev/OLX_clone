@@ -3,7 +3,7 @@ using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Data.Repositories.GenericRepositor;
 using OLX_clone.Server.Models;
 
-namespace OLX_clone.Server.Data.Repositories.CategoryRepository;
+namespace OLX_clone.Server.Data.Repositories;
 
 public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
 {

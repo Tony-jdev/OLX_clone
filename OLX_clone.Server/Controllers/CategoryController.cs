@@ -66,19 +66,19 @@ public class CategoryController: ControllerBase
     }
     
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<ApiResponse<Category>>> UpdateCategory(int id, [FromForm] UpdateCategoryDto menuItemUpdateDto)
+    public async Task<ActionResult<ApiResponse<Category>>> UpdateCategory(int id, [FromForm] UpdateCategoryDto categoryUpdateDto)
     {
         var apiResponse = new ApiResponse<Category> { Success = false, Message = "Model is invalid" };
         try
         {
             if (ModelState.IsValid)
             {
-                if (id != menuItemUpdateDto.Id){
+                if (id != categoryUpdateDto.Id){
                     apiResponse.Message = "Wrong category";
                     return BadRequest(apiResponse);
                 }
 
-                apiResponse = await _categoryService.UpdateCategory(id, menuItemUpdateDto);
+                apiResponse = await _categoryService.UpdateCategory(id, categoryUpdateDto);
                 if (!apiResponse.Success)
                 {
                     return BadRequest(apiResponse);

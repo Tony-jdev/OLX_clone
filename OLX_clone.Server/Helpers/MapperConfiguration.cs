@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
+using OLX_clone.Server.Models.Dtos.Post;
 
 namespace OLX_clone.Server.Helpers;
 
@@ -10,5 +11,10 @@ public class MapperConfiguration : Profile
     {
         CreateMap<CreateCategoryDto, Category>();
         CreateMap<UpdateCategoryDto, Category>();
+        CreateMap<CreatePostDto, Post>();
+        CreateMap<UpdatePostDto, Post>();
+        CreateMap<Post, GetPostDto>();
+        CreateMap<Post, GetPostDetailsDto>();
+        CreateMap<Category, GetCategoryDto>();
     }
 }
