@@ -31,34 +31,26 @@ public class AuthService: IAuthService
         _unitofwork = unitofwork;
     }
     
-    public async Task<ApiResponse<bool>> Register(RegisterRequestDto registerRequestDto)
+    public async Task<ApiResponse<IEnumerable<IdentityError>>> Register(RegisterRequestDto registerRequestDto)
     {
-        //ApplicationUser? userFromDb = await _unitofwork.UserRepository.GetUserByEmail(registerRequestDto.UserName);
+        var userFromDb = await _userManager.FindByEmailAsync(registerRequestDto.Email);    
 
-        /*if (userFromDb != null)
+        if (userFromDb != null)
         {
-            return new ApiResponse<bool> { Success = false, Message = "User with this email already exists" };
-        }*/
+            return new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "User with this email already exists" };
+        }
 
         var user = _mapper.Map<ApplicationUser>(registerRequestDto);
-        user.UserName = registerRequestDto.Email;
-
-        try
+        
+        var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
+        if (result.Succeeded)   
         {
-            var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
-            if (result.Succeeded)   
-            {
-                await _userManager.AddToRoleAsync(user, SD.Role_User);
+            await _userManager.AddToRoleAsync(user, SD.Role_User);
             
-                return new ApiResponse<bool> { Message = "User registered successfully" };
-            }
-        }
-        catch (Exception ex)
-        {
-            return new ApiResponse<bool> { Success = false, Message = $"Error occured while saving: {ex.Message}" };
+            return new ApiResponse<IEnumerable<IdentityError>> { Success = true, Message = "User registered successfully" };
         }
 
-        return new ApiResponse<bool> { Success = false, Message = $"Error occured while registering" };
+        return new ApiResponse<IEnumerable<IdentityError>> {Data = result.Errors, Success = false, Message = $"Error occured while registering" };
     }
     
     public async Task<ApiResponse<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)

@@ -18,6 +18,7 @@ public class MapperConfiguration : Profile
         CreateMap<Post, GetPostDto>();
         CreateMap<Post, GetPostDetailsDto>();
         CreateMap<Category, GetCategoryDto>();
-        CreateMap<RegisterRequestDto, ApplicationUser>();
+        CreateMap<RegisterRequestDto, ApplicationUser>()
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
     }
 }
