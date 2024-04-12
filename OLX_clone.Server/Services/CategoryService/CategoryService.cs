@@ -3,6 +3,7 @@ using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
+using OLX_clone.Server.Models.Dtos.Category;
 
 namespace OLX_clone.Server.Services.CategoryService;
 

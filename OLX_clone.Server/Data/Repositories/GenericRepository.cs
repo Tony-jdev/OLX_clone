@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using OLX_clone.Server.Data.Contracts;
 
-namespace OLX_clone.Server.Data.Repositories.GenericRepositor;
+namespace OLX_clone.Server.Data.Repositories;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {

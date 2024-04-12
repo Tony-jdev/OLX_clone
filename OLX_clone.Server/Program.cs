@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using OLX_clone.Server.Data;
 using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Data.Repositories;
-using OLX_clone.Server.Data.Repositories.GenericRepositor;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Services.AuthService;
 using OLX_clone.Server.Services.BlobService;
@@ -34,7 +33,7 @@ builder.Services.AddSwaggerGen(options =>
         In = ParameterLocation.Header,
         Scheme = JwtBearerDefaults.AuthenticationScheme
     });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
@@ -77,7 +76,7 @@ builder.Services.AddAuthentication(u =>
     u.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(u =>
 {
-    u.TokenValidationParameters = new TokenValidationParameters()
+    u.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
         ValidateIssuer = true,
@@ -86,7 +85,7 @@ builder.Services.AddAuthentication(u =>
         ClockSkew = TimeSpan.Zero,
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
     };
 });
 

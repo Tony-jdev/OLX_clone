@@ -1,4 +1,4 @@
-﻿namespace OLX_clone.Server.Models.Dtos;
+﻿namespace OLX_clone.Server.Models.Dtos.Post;
 
 public class GetPostDto
 {

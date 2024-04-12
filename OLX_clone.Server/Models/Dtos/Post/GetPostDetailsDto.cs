@@ -1,4 +1,6 @@
-﻿namespace OLX_clone.Server.Models.Dtos.Post;
+﻿using OLX_clone.Server.Models.Dtos.Category;
+
+namespace OLX_clone.Server.Models.Dtos.Post;
 
 public class GetPostDetailsDto
 {

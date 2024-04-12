@@ -17,18 +17,16 @@ public class AuthService: IAuthService
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitofwork;
     private readonly IConfiguration _configuration;
     
     public AuthService(ApplicationDbContext context, IConfiguration configuration,
-        UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IMapper mapper, IUnitOfWork unitofwork)
+        UserManager<ApplicationUser> userManager, IMapper mapper, IUnitOfWork unitofwork)
     {
         _context = context;
         _configuration = configuration;
         _userManager = userManager;
-        _roleManager = roleManager;
         _mapper = mapper;
         _unitofwork = unitofwork;
     }
@@ -48,7 +46,7 @@ public class AuthService: IAuthService
         try
         {
             var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
-            if (result.Succeeded)
+            if (result.Succeeded)   
             {
                 await _userManager.AddToRoleAsync(user, SD.Role_User);
             
@@ -96,10 +94,10 @@ public class AuthService: IAuthService
         
         var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id),
+                new(JwtRegisteredClaimNames.Sub, user.Email),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Email, user.Email),
+                new("uid", user.Id),
             }
             .Union(userClaims).Union(roleClaims);
         

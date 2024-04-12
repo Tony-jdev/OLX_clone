@@ -2,6 +2,7 @@
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.Auth;
+using OLX_clone.Server.Models.Dtos.Category;
 using OLX_clone.Server.Models.Dtos.Post;
 
 namespace OLX_clone.Server.Helpers;
