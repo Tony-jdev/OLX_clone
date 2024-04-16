@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OLX_clone.Server.Data;
 
@@ -11,9 +12,11 @@ using OLX_clone.Server.Data;
 namespace OLX_clone.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240416153053_ChatTableAdded")]
+    partial class ChatTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasIndex("PostsId");
 
-                    b.ToTable("CategoryPost", (string)null);
+                    b.ToTable("CategoryPost");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -271,7 +274,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.Chat", b =>
@@ -301,7 +304,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.ChatMessage", b =>
@@ -341,7 +344,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("ChatMessages", (string)null);
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.Post", b =>
@@ -378,7 +381,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.PostPhoto", b =>
@@ -400,7 +403,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostPhotos", (string)null);
+                    b.ToTable("PostPhotos");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.PostView", b =>
@@ -421,7 +424,7 @@ namespace OLX_clone.Server.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostViews", (string)null);
+                    b.ToTable("PostViews");
                 });
 
             modelBuilder.Entity("CategoryPost", b =>
