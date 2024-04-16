@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OLX_clone.Server.Data.Configurations;
 using OLX_clone.Server.Models;
 
 namespace OLX_clone.Server.Data;
@@ -14,4 +15,10 @@ public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
     public DbSet<Post> Posts { get; set; }
     public DbSet<PostView> PostViews { get; set; }
     public DbSet<PostPhoto> PostPhotos { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        builder.ApplyConfiguration(new RoleConfiguration());
+    }
 }

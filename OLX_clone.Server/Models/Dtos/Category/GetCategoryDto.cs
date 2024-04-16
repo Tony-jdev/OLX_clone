@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OLX_clone.Server.Models.Dtos;
+namespace OLX_clone.Server.Models.Dtos.Category;
 
 public class GetCategoryDto
 {

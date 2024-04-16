@@ -30,7 +30,7 @@ public class BlobService: IBlobService
     {
         BlobContainerClient blobContainerClient = _blobClient.GetBlobContainerClient(containerName);
         BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
-        var httpHeaders = new BlobHttpHeaders()
+        var httpHeaders = new BlobHttpHeaders
         {
             ContentType = file.ContentType
         };

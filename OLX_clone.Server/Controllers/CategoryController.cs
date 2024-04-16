@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
+using OLX_clone.Server.Models.Dtos.Category;
 using OLX_clone.Server.Services.CategoryService;
 
 namespace OLX_clone.Server.Controllers;
 
 [ApiController]
 [Route("api/categories")]
+[Authorize]
 public class CategoryController: ControllerBase
 {
     private readonly ICategoryService _categoryService;
