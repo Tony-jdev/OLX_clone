@@ -9,6 +9,7 @@ using OLX_clone.Server.Data;
 using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Data.Repositories;
 using OLX_clone.Server.Models;
+using OLX_clone.Server.Services;
 using OLX_clone.Server.Services.AuthService;
 using OLX_clone.Server.Services.BlobService;
 using OLX_clone.Server.Services.CategoryService;
@@ -67,6 +68,7 @@ builder.Services.AddSingleton<IBlobService, BlobService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

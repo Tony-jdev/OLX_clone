@@ -6,6 +6,8 @@ public interface IUnitOfWork: IDisposable
     IPostRepository PostRepository { get; }
     IPostViewRepository PostViewRepository { get; }
     IPostPhotoRepository PostPhotoRepository { get; }
+    IChatRepository ChatRepository { get; }
+    IChatMessageRepository ChatMessageRepository { get; }
 
     Task<int> SaveChangesAsync();
 }

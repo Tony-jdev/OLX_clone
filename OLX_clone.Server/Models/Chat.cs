@@ -21,4 +21,6 @@ public class Chat
     public string SellerId { get; set; }
     [ForeignKey("SellerId")]
     public ApplicationUser Seller { get; set; }
+    
+    public ICollection<ChatMessage> Messages { get; set; }
 }
