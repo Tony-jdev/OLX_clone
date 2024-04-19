@@ -63,6 +63,19 @@ public class ChatService: IChatService
         return new ApiResponse<GetChatDetailsDto> { Data = chatToView, Message = "Chat retrieved successfully." };
     }
     
+    public async Task<ApiResponse<GetChatDetailsDto>> GetChatWithMessagesByParticipantsAsync(string senderId, string receiverId)
+    {
+        var chat = await _unitOfWork.ChatRepository.GetChatWithMessagesByParticipantsAsync(senderId, receiverId);
+        if (chat == null)
+        {
+            return new ApiResponse<GetChatDetailsDto> { Success = false, Message = "Chat not found." };
+        }
+
+        var chatToView = _mapper.Map<Chat, GetChatDetailsDto>(chat);
+    
+        return new ApiResponse<GetChatDetailsDto> { Data = chatToView, Message = "Chat retrieved successfully." };
+    }
+    
     public async Task<ApiResponse<bool>> MarkMessagesAsRead(List<int> messageIds)
     {
         try

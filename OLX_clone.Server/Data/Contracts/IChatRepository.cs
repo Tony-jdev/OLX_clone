@@ -7,4 +7,5 @@ public interface IChatRepository: IGenericRepository<Chat>
 {
     Task<List<Chat>> GetAllChatsByUserIdAsync(string userId);
     Task<Chat> GetChatWithMessagesAsync(int id);
+    Task<Chat> GetChatWithMessagesByParticipantsAsync(string senderId, string receiverId);
 }

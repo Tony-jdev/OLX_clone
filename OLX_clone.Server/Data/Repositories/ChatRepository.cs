@@ -21,4 +21,13 @@ public class ChatRepository: GenericRepository<Chat>, IChatRepository
     {
         return await _context.Chats.Include(c => c.Messages).Where(c => c.Id == id).FirstOrDefaultAsync();
     }
+    
+    public async Task<Chat> GetChatWithMessagesByParticipantsAsync(string senderId, string receiverId)
+    {
+        return await _context.Chats
+            .Include(c => c.Messages)
+            .Where(c => (c.CustomerId == senderId && c.SellerId == receiverId) || (c.CustomerId == receiverId && c.SellerId == senderId))
+            .FirstOrDefaultAsync();
+    }
+
 }

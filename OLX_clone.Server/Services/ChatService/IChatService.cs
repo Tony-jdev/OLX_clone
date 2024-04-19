@@ -12,4 +12,5 @@ public interface IChatService
     Task<ApiResponse<List<GetChatDto>>> GetChatsByUserIdAsync(string userId);
     Task<ApiResponse<GetChatDetailsDto>> GetChatWithMessagesAsync(int id);
     Task<ApiResponse<bool>> MarkMessagesAsRead(List<int> messageIds);
+    Task<ApiResponse<GetChatDetailsDto>> GetChatWithMessagesByParticipantsAsync(string senderId, string receiverId);
 }
