@@ -18,4 +18,12 @@ public class ChatMessageRepository: GenericRepository<ChatMessage>, IChatMessage
             .OrderByDescending(m => m.CreatedAt)
             .FirstOrDefaultAsync();
     }
+    
+    public async Task<List<ChatMessage>> GetMessagesByIdsAsync(List<int> messageIds)
+    {
+        return await _context.ChatMessages
+            .Where(m => messageIds.Contains(m.Id))
+            .ToListAsync();
+    }
+
 }

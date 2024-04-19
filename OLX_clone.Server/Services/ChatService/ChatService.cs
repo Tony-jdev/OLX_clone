@@ -44,7 +44,7 @@ public class ChatService: IChatService
         foreach (var chat in getChatDtos)
         {
             var latestMessage = await _unitOfWork.ChatMessageRepository.GetLatestMessageByChatIdAsync(chat.Id);
-            chat.LatestMessage = latestMessage;
+            chat.LatestMessage = _mapper.Map<GetChatMessageDto>(latestMessage);
         }
 
         return new ApiResponse<List<GetChatDto>> { Data = getChatDtos, Message = "Chats retrieved successfully." };
@@ -61,5 +61,23 @@ public class ChatService: IChatService
         var chatToView = _mapper.Map<Chat, GetChatDetailsDto>(chat);
         
         return new ApiResponse<GetChatDetailsDto> { Data = chatToView, Message = "Chat retrieved successfully." };
+    }
+    
+    public async Task<ApiResponse<bool>> MarkMessagesAsRead(List<int> messageIds)
+    {
+        try
+        {
+            var messages = await _unitOfWork.ChatMessageRepository.GetMessagesByIdsAsync(messageIds);
+            foreach (var message in messages)
+            {
+                message.IsRead = true;
+            }
+            await _unitOfWork.SaveChangesAsync();
+            return new ApiResponse<bool> { Success = true, Message = "Messages marked as read successfully" };
+        }
+        catch (Exception ex)
+        {
+            return new ApiResponse<bool> { Success = false, Message = $"Failed to mark messages as read: {ex.Message}" };
+        }
     }
 }

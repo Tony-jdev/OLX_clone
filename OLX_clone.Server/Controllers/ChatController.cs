@@ -19,7 +19,7 @@ public class ChatController:ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<ApiResponse<Chat>>> CreateCategory([FromForm] CreateChatDto chatCreateDto)
+    public async Task<ActionResult<ApiResponse<Chat>>> CreateCategory([FromBody] CreateChatDto chatCreateDto)
     {
         var apiResponse = new ApiResponse<Chat>{ Success = false, Message = "Model is invalid" };
         try
@@ -53,5 +53,42 @@ public class ChatController:ControllerBase
         }
         
         return Ok(apiResponse);
+    }
+    
+    [HttpGet("user/{userId}", Name = "GetChatsByUserId")]
+    public async Task<ActionResult<ApiResponse<List<GetChatDto>>>> GetChatsByUserId(string userId)
+    {
+        var apiResponse = await _chatService.GetChatsByUserIdAsync(userId);
+        if (!apiResponse.Success)
+        {
+            return NotFound(apiResponse);
+        }
+        
+        return Ok(apiResponse);
+    }
+    
+    [HttpPost("mark-as-read")]
+    public async Task<ActionResult<ApiResponse<bool>>> MarkMessagesAsRead([FromBody] List<int> messageIds)
+    {
+        var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model is invalid" };
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                apiResponse = await _chatService.MarkMessagesAsRead(messageIds);
+                if (!apiResponse.Success)
+                {
+                    return NotFound(apiResponse);
+                }
+                return Ok(apiResponse);
+            }
+        }
+        catch (Exception ex)
+        {
+            apiResponse.Success = false;
+            apiResponse.Message = ex.Message;
+        }
+
+        return BadRequest(apiResponse);
     }
 }
