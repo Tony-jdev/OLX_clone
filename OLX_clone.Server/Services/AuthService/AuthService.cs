@@ -103,4 +103,23 @@ public class AuthService: IAuthService
         
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+    
+    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUser(UpdateUserDto userUpdateDto)
+    {
+        var apiResponse = new ApiResponse<IEnumerable<IdentityError>>();
+        
+        var userFromDb = await _userManager.FindByIdAsync(userUpdateDto.Id);
+        
+        if (userFromDb == null)
+            return new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "User not found." };
+        
+        userFromDb = _mapper.Map(userUpdateDto, userFromDb);
+        
+        var result = await _userManager.UpdateAsync(userFromDb);
+        
+        if (result.Succeeded)
+            return new ApiResponse<IEnumerable<IdentityError>> { Success = true, Message = "User updated successfully." };
+        
+        return new ApiResponse<IEnumerable<IdentityError>> { Data = result.Errors, Success = false, Message = "Error updating user." };
+    }
 }

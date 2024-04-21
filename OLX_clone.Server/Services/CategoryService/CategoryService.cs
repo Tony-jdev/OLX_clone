@@ -18,17 +18,20 @@ public class CategoryService: ICategoryService
         _mapper = mapper;
     }
     
-    public async Task<ApiResponse<List<Category>>> GetCategories()
+    public async Task<ApiResponse<List<GetCategoryDto>>> GetCategories()
     {
         var categories = await _unitOfWork.CategoryRepository.GetAllAsync();
-        return new ApiResponse<List<Category>> { Data = categories, Message = "Categories retrieved successfully." };
+
+        return new ApiResponse<List<GetCategoryDto>> { Data = _mapper.Map<List<GetCategoryDto>>(categories)
+            , Message = "Categories retrieved successfully." };
     }
     
-    public async Task<ApiResponse<Category>> GetCategory(int id)
+    public async Task<ApiResponse<GetCategoryDto>> GetCategory(int id)
     {
         var category = await _unitOfWork.CategoryRepository.GetAsync(id);
-        return category == null ? new ApiResponse<Category> { Success = false, Message = "Category not found." } 
-            : new ApiResponse<Category> { Data = category, Message = "Category retrieved successfully." };
+        return category == null ? new ApiResponse<GetCategoryDto> { Success = false, Message = "Category not found." } 
+            : new ApiResponse<GetCategoryDto> { Data = _mapper.Map<GetCategoryDto>(category),
+                Message = "Category retrieved successfully." };
     }
     
     public async Task<ApiResponse<Category>> CreateCategory(CreateCategoryDto categoryCreateDto)

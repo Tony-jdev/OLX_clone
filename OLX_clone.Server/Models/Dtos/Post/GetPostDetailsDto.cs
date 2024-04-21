@@ -10,7 +10,7 @@ public class GetPostDetailsDto
     public double Price { get; set; }
     public string Status { get; set; }
     public int ViewsCount { get; set; }
-    public List<GetCategoryDto> Categories { get; set; }
+    public GetCategoryDto Category { get; set; }
     public List<PostPhoto> Photos { get; set; }
     public ApplicationUser User { get; set; }
     public DateTime CreatedAt{ get; set; }

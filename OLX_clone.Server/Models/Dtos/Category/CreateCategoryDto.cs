@@ -4,6 +4,6 @@ namespace OLX_clone.Server.Models.Dtos.Category;
 
 public class CreateCategoryDto
 {
-    [Required]
     public string Title { get; set; }
+    public int? ParentId { get; set; }
 }

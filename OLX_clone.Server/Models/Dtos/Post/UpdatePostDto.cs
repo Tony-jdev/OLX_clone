@@ -14,7 +14,7 @@ public class UpdatePostDto
     [Required]
     public double Price { get; set; }
     [Required]
-    public List<int> CategoriesId { get; set; }
+    public int CategoryId { get; set; }
     [Required]
     public string Status{ get; set; }
     

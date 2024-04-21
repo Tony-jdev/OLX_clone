@@ -8,20 +8,33 @@ public class Post
 {
     [Key]
     public int Id { get; set; }
+
     [Required]
     public string Title { get; set; }
+    
+    [Required]
+    public int CategoryId { get; set; }
+
+    [ForeignKey("CategoryId")]
+    public Category Category { get; set; }
+
     [Required]
     public string Description { get; set; }
+
     [Required]
     public double Price { get; set; }
-    [Required] 
+
+    [Required]
     public string Status { get; set; } = SD.status_active;
+
     [Required]
     public string ApplicationUserId { get; set; }
+
     [ForeignKey("ApplicationUserId")]
     public ApplicationUser User { get; set; }
-    public DateTime CreatedAt{ get; set; } = DateTime.Now;
+
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     
-    public ICollection<Category> Categories{ get; set; }
-    public ICollection<PostView> PostViews{ get; set; }
+
+    public ICollection<PostView> PostViews { get; set; }
 }

@@ -10,7 +10,6 @@ namespace OLX_clone.Server.Controllers;
 
 [ApiController]
 [Route("api/categories")]
-[Authorize]
 public class CategoryController: ControllerBase
 {
     private readonly ICategoryService _categoryService;
