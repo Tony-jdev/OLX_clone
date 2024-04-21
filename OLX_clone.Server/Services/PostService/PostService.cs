@@ -57,7 +57,6 @@ public class PostService : IPostService
             return new ApiResponse<Post> { Success = false, Message = "There are no files provided" };
 
         var postToCreate = _mapper.Map<CreatePostDto, Post>(postCreateDto);
-        postToCreate.Categories = await GetCategoriesByIds(postCreateDto.CategoriesId);
         
         var createdPost = await _unitOfWork.PostRepository.AddAsync(postToCreate);
         
@@ -72,8 +71,6 @@ public class PostService : IPostService
         Post postFromDb = await _unitOfWork.PostRepository.GetDetailsAsync(id);
         if (postFromDb == null)
             return new ApiResponse<Post> { Success = false, Message = "Post not found." };
-        
-        postFromDb.Categories = await GetCategoriesByIds(postUpdateDto.CategoriesId);
         
         //Add new photos
         if (postUpdateDto.Files != null)

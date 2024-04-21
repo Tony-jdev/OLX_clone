@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OLX_clone.Server.Data;
 
@@ -11,9 +12,11 @@ using OLX_clone.Server.Data;
 namespace OLX_clone.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240416153053_ChatTableAdded")]
+    partial class ChatTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace OLX_clone.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CategoryPost", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PostsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoriesId", "PostsId");
+
+                    b.HasIndex("PostsId");
+
+                    b.ToTable("CategoryPost");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -51,13 +69,13 @@ namespace OLX_clone.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3b25357f-4d5f-4e80-a3e2-82fa547c9cae",
+                            Id = "92b0e2b0-3c7b-4e90-a544-71be5ffeb33c",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "5686374c-5d0a-4468-92b8-cb9e2c8aa1e6",
+                            Id = "7ee94fe8-06a2-4ca0-87bf-80d69caf55ca",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -250,16 +268,11 @@ namespace OLX_clone.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
                 });
@@ -346,9 +359,6 @@ namespace OLX_clone.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -370,8 +380,6 @@ namespace OLX_clone.Server.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Posts");
                 });
@@ -417,6 +425,21 @@ namespace OLX_clone.Server.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostViews");
+                });
+
+            modelBuilder.Entity("CategoryPost", b =>
+                {
+                    b.HasOne("OLX_clone.Server.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OLX_clone.Server.Models.Post", null)
+                        .WithMany()
+                        .HasForeignKey("PostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -470,15 +493,6 @@ namespace OLX_clone.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OLX_clone.Server.Models.Category", b =>
-                {
-                    b.HasOne("OLX_clone.Server.Models.Category", "ParentCategory")
-                        .WithMany("ChildCategories")
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("ParentCategory");
-                });
-
             modelBuilder.Entity("OLX_clone.Server.Models.Chat", b =>
                 {
                     b.HasOne("OLX_clone.Server.Models.ApplicationUser", "Customer")
@@ -509,7 +523,7 @@ namespace OLX_clone.Server.Migrations
             modelBuilder.Entity("OLX_clone.Server.Models.ChatMessage", b =>
                 {
                     b.HasOne("OLX_clone.Server.Models.Chat", "Chat")
-                        .WithMany("Messages")
+                        .WithMany()
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -541,14 +555,6 @@ namespace OLX_clone.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OLX_clone.Server.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
                     b.Navigation("User");
                 });
 
@@ -572,16 +578,6 @@ namespace OLX_clone.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("OLX_clone.Server.Models.Category", b =>
-                {
-                    b.Navigation("ChildCategories");
-                });
-
-            modelBuilder.Entity("OLX_clone.Server.Models.Chat", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.Post", b =>
