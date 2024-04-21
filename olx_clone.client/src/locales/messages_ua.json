@@ -1,0 +1,21 @@
+{
+    "header.addButtonLabel":  "Додати оголошення",
+    "header.locationLabel":   "Вся Україна",
+    "header.realEstateLabel": "Нерухомість",
+    "header.technologyLabel": "Техніка",
+    "header.kidsLabel":       "Дитячий світ",
+    "header.clothingLabel":   "Одяг і взуття",
+    "header.animalsLabel":    "Тварини",
+
+    "footer.vacancies": "Вакансії",
+    "footer.aboutUs": "Про нас",
+    "footer.news": "Новини",
+    "footer.contact": "Контакти",
+    "footer.information": "Інформація",
+    "footer.faqs": "Питання та відповіді",
+    "footer.blog": "Блог",
+    "footer.terms": "Умови сайту",
+    "footer.advertising": "Реклама на сайті",
+    "footer.followUs": "Підписуйся!",
+    "footer.freeApp": "Безкоштовний додаток у твоєму телефоні"
+}

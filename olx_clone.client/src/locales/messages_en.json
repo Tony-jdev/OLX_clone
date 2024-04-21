@@ -1,0 +1,23 @@
+{
+    "header.addButtonLabel":  "Add Announcement",
+    "header.locationLabel":   "All Ukraine",
+    "header.realEstateLabel": "Real Estate",
+    "header.technologyLabel": "Technology",
+    "header.kidsLabel":       "Kids World",
+    "header.clothingLabel":   "Clothing and Footwear",
+    "header.animalsLabel":    "Animals",
+
+    "footer.vacancies": "Vacancies",
+    "footer.aboutUs": "About Us",
+    "footer.news": "News",
+    "footer.contact": "Contact",
+    "footer.information": "Information",
+    "footer.faqs": "Questions and Answers",
+    "footer.blog": "Blog",
+    "footer.terms": "Terms of Service",
+    "footer.advertising": "Advertising on the site",
+    "footer.followUs": "Follow Us!",
+    "footer.freeApp": "Free app on your phone"
+    
+    
+}
