@@ -8,10 +8,10 @@ import messagesUa from '@/locales/messages_ua.json';
 
 const messages = {
     en: messagesEn,
-    ua: messagesUa,
+    uk: messagesUa,
 };
 const Layout = (props) => {
-    const [locale, setLocale] = useState('ua');
+    const [locale, setLocale] = useState('uk');
     
     return (
         <IntlProvider locale={locale} messages={messages[locale]} defoult>

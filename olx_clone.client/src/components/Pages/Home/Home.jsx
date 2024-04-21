@@ -1,8 +1,8 @@
 import React from 'react';
-import {Container} from '@mui/material';
-import ProductList from "@/components/ProductList/ProductList.jsx";
-import CategoryList from "@/components/CategoryList/CategoryList.jsx";
-import SearchComponent from "@/components/SearchComponent/SearchComponent.jsx";
+import { Container } from '@mui/material';
+import ProductList from "@/components/Tools/ProductList/ProductList.jsx";
+import CategoryList from "@/components/Tools/CategoryList/CategoryList.jsx";
+import SearchComponent from "@/components/Tools/SearchComponent/SearchComponent.jsx";
 import "./Home.css";
 
 function HomePage() {

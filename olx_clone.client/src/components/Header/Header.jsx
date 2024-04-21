@@ -5,7 +5,7 @@ import { AppBarStyle, ContainerStyle, ToolBarStyle, FirstGridStyle, BoxContainer
 import { useTheme } from '@mui/material/styles';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import ColorModeContext from "@/contexts/ColorModeContext.jsx";
-import {LocationIcon, AddIcon, ProfileIcon, SearchIcon} from '@/components/Icons/Icons.jsx';
+import {LocationIcon, AddIcon, ProfileIcon, SearchIcon} from '@/assets/Icons/Icons.jsx';
 const Header = ({changeLanguage, language}) => {
     const theme = useTheme();
     const { header } = theme.palette;
@@ -51,8 +51,8 @@ const Header = ({changeLanguage, language}) => {
                             <IconButton style={ProfileButtonStyle} sx={{ color: header.button.secondary }}>
                                 <ProfileIcon />
                             </IconButton>
-                            <Button onClick={() => changeLanguage(language === 'ua' ? 'en' : 'ua')} sx={{ color: header.button.secondary }}>
-                                <Typography sx={language === 'ua' ? {color: header.button.primary} : {color: header.button.secondary}}>Ua</Typography>
+                            <Button onClick={() => changeLanguage(language === 'uk' ? 'en' : 'uk')} sx={{ color: header.button.secondary }}>
+                                <Typography sx={language === 'uk' ? {color: header.button.primary} : {color: header.button.secondary}}>Ua</Typography>
                                 |
                                 <Typography sx={language === 'en' ? {color: header.button.primary} : {color: header.button.secondary}}>En</Typography>
                             </Button>
