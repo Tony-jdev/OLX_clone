@@ -16,6 +16,11 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
         return await _context.Posts.Include(p => p.User).ToListAsync();
     }
     
+    public async Task<List<Post>> GetAllByCategoryAsync(int categoryId)
+    {
+        return await _context.Posts.Where(p => p.CategoryId == categoryId).ToListAsync();
+    }
+    
     public async Task<Post> GetDetailsAsync(int? id)
     {
         if (id is null)

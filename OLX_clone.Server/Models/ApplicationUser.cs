@@ -9,4 +9,12 @@ public class ApplicationUser: IdentityUser
     public string Name { get; set; }
     [Required]
     public string Surname { get; set; }
+    
+    public double Balance { get; set; }
+
+    public bool Online { get; set; } = true;
+    
+    public DateTime LastSeenOnline { get; set; }
+    
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 } 

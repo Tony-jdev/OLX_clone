@@ -1,6 +1,6 @@
 ﻿namespace OLX_clone.Server.Models.Dtos.Auth;
 
-public class UpdateUserDto
+public class UpdateApplicationUserDto
 {
     public string Id;
     public string Name { get; set; }

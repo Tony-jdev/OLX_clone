@@ -6,6 +6,7 @@ using OLX_clone.Server.Models.Dtos.Category;
 using OLX_clone.Server.Models.Dtos.Chat;
 using OLX_clone.Server.Models.Dtos.ChatMessage;
 using OLX_clone.Server.Models.Dtos.Post;
+using OLX_clone.Server.Models.Dtos.User;
 
 namespace OLX_clone.Server.Helpers;
 
@@ -15,16 +16,22 @@ public class MapperConfiguration : Profile
     {
         CreateMap<CreateCategoryDto, Category>();
         CreateMap<UpdateCategoryDto, Category>();
+        CreateMap<Category, GetCategoryDto>();
+        
         CreateMap<CreatePostDto, Post>();
         CreateMap<UpdatePostDto, Post>();
         CreateMap<Post, GetPostDto>();
         CreateMap<Post, GetPostDetailsDto>();
-        CreateMap<Category, GetCategoryDto>();
+        
         CreateMap<RegisterRequestDto, ApplicationUser>()
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
+            .ForMember(dest => dest.UserName,
+                opt => opt.MapFrom(src => src.Email));
+        
         CreateMap<CreateChatDto, Chat>();
         CreateMap<Chat, GetChatDetailsDto>();
         CreateMap<Chat, GetChatDto>();
         CreateMap<ChatMessage, GetChatMessageDto>();
+
+        CreateMap<ApplicationUser, GetApplicationUserDto>();
     }
 }

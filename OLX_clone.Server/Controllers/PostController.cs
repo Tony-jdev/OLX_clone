@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
-using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.Post;
 using OLX_clone.Server.Services.PostService;
 
@@ -19,9 +18,21 @@ public class PostController: ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<Post>>>> GetPosts()
+    public async Task<ActionResult<ApiResponse<List<GetPostDto>>>> GetPosts()
     {
         var apiResponse = await _postService.GetPosts();
+        if (!apiResponse.Success)
+        {
+            return BadRequest(apiResponse);
+        }
+
+        return Ok(apiResponse);
+    }
+    
+    [HttpGet("category/{categoryId}", Name = "GetPostByCategory")]
+    public async Task<ActionResult<ApiResponse<List<GetPostDto>>>> GetPostsByCategory(int categoryId)
+    {
+        var apiResponse = await _postService.GetPostsByCategory(categoryId);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);

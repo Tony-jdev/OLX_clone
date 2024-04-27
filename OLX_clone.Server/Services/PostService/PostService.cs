@@ -35,6 +35,20 @@ public class PostService : IPostService
         
         return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
     }
+    
+    public async Task<ApiResponse<List<GetPostDto>>> GetPostsByCategory(int categoryId)
+    {
+        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryId);
+        var getPostDtos = new List<GetPostDto>();
+        foreach (var post in posts)
+        {
+            var getPost = _mapper.Map<Post, GetPostDto>(post);
+            getPost.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(getPost.Id);
+            getPostDtos.Add(getPost);
+        }
+        
+        return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
+    }
 
     public async Task<ApiResponse<GetPostDetailsDto>> GetPost(int id)
     {
