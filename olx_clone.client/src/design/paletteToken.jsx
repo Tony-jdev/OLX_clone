@@ -21,16 +21,16 @@ const getDesignTokens = (mode) => ({
                 },
                 body: {
                     background: '#fff',
-                    text: {
-                        h: {
+                    mtext: {
                             primary: '#313030',
-                            secondary: '#fffcf8'
-                        },
+                            secondary: '#fffcf8',
                     },
                     button: {
                         background: {
                             primary: '#fffcf8',
                             secondary: '#ff9d00',
+                            lightGradient: 'linear-gradient(45deg, #ffc66b  30%, #ff9d00 90%)',
+                            darkGradient: 'linear-gradient(45deg, #727171  30%, #313030 90%)',
                         },
                         text: {
                             primary: '#313030',
@@ -69,16 +69,16 @@ const getDesignTokens = (mode) => ({
                 },
                 body: {
                     background: '#fff',
-                    text: {
-                        h: {
-                            primary: '#313030',
-                            secondary: '#fffcf8'
-                        },
+                    mtext: {
+                        primary: '#313030',
+                        secondary: '#fffcf8',
                     },
                     button: {
                         background: {
                             primary: '#fffcf8',
                             secondary: '#ff9d00',
+                            lightGradient: 'linear-gradient(45deg, #ffc66b  30%, #ff9d00 90%)',
+                            darkGradient: 'linear-gradient(45deg, #727171  30%, #313030 90%)',
                         },
                         text: {
                             primary: '#313030',

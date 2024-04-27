@@ -126,3 +126,72 @@ export function AppStoreIcon(props) {
         </SvgIcon>
     );
 }
+
+export function NextArrowIcon(props) {
+    return (
+        <SvgIcon {...props} width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M29.52 11.9597C31.48 9.99975 34.64 9.99975 36.6 11.9597L69.84 45.1997C71.4 46.7597 71.4 49.2797 69.84 50.8397L36.6 84.0798C34.64 86.0397 31.48 86.0397 29.52 84.0798C27.56 82.1198 27.56 78.9597 29.52 76.9997L58.48 47.9997L29.48 18.9997C27.56 17.0797 27.56 13.8797 29.52 11.9597Z"
+                fill="#ADACAC"/>
+        </SvgIcon>
+    );
+}
+
+export function PrevArrowIcon(props) {
+    return (
+        <SvgIcon {...props} width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M66.48 84.0403C64.52 86.0003 61.36 86.0003 59.4 84.0403L26.16 50.8003C24.6 49.2403 24.6 46.7203 26.16 45.1603L59.4 11.9203C61.36 9.96025 64.52 9.96025 66.48 11.9203C68.44 13.8803 68.44 17.0403 66.48 19.0003L37.52 48.0003L66.52 77.0003C68.44 78.9203 68.44 82.1203 66.48 84.0403Z"
+                fill="#ADACAC"/>
+        </SvgIcon>
+    );
+}
+
+export function ActiveIndicatorIcon(props) {
+    return (
+        <SvgIcon {...props} width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g filter="url(#filter0_dddd_443_615)">
+                <circle cx="19" cy="10" r="8" fill="#FF9D00"/>
+            </g>
+            <defs>
+                <filter id="filter0_dddd_443_615" x="0" y="0" width="38" height="55" filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                   result="hardAlpha"/>
+                    <feOffset dy="2"/>
+                    <feGaussianBlur stdDeviation="2"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.615686 0 0 0 0 0 0 0 0 0.1 0"/>
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_443_615"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                   result="hardAlpha"/>
+                    <feOffset dy="7"/>
+                    <feGaussianBlur stdDeviation="3.5"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.615686 0 0 0 0 0 0 0 0 0.09 0"/>
+                    <feBlend mode="normal" in2="effect1_dropShadow_443_615" result="effect2_dropShadow_443_615"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                   result="hardAlpha"/>
+                    <feOffset dy="15"/>
+                    <feGaussianBlur stdDeviation="4.5"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.615686 0 0 0 0 0 0 0 0 0.05 0"/>
+                    <feBlend mode="normal" in2="effect2_dropShadow_443_615" result="effect3_dropShadow_443_615"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                   result="hardAlpha"/>
+                    <feOffset dy="26"/>
+                    <feGaussianBlur stdDeviation="5.5"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.615686 0 0 0 0 0 0 0 0 0.01 0"/>
+                    <feBlend mode="normal" in2="effect3_dropShadow_443_615" result="effect4_dropShadow_443_615"/>
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow_443_615" result="shape"/>
+                </filter>
+            </defs>
+        </SvgIcon>
+    );
+}
+
+export function InactiveIndicatorIcon(props) {
+    return (
+        <SvgIcon {...props} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="8" r="8" fill="#FFEBCC"/>
+        </SvgIcon>
+    );
+}
