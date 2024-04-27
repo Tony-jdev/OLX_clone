@@ -16,7 +16,6 @@ export function LocationIcon(props) {
         </SvgIcon>
     );
 }
-
 export function AddIcon(props) {
     return (
         <SvgIcon {...props} width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,7 +32,6 @@ export function AddIcon(props) {
         </SvgIcon>
     );
 }
-
 export function ProfileIcon(props) {
     return (
         <SvgIcon {...props} width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,7 +51,6 @@ export function ProfileIcon(props) {
         </SvgIcon>
     );
 }
-
 export function SearchIcon(props) {
     return (
         <SvgIcon {...props} width="48" height="48" viewBox="0 0 48 48">
@@ -68,7 +65,6 @@ export function SearchIcon(props) {
         </SvgIcon>
     );
 }
-
 export function InstagramIcon(props) {
     return (
         <SvgIcon {...props} width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +73,6 @@ export function InstagramIcon(props) {
         </SvgIcon>
     );
 }
-
 export function FacebookIcon(props) {
     return (
         <SvgIcon {...props} width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,7 +82,6 @@ export function FacebookIcon(props) {
         </SvgIcon>
     );
 }
-
 export function TikTokIcon(props) {
     return (
         <SvgIcon {...props} width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,7 +91,6 @@ export function TikTokIcon(props) {
         </SvgIcon>
     );
 }
-
 export function YoutubeIcon(props) {
     return (
         <SvgIcon {...props} width="45" height="31" viewBox="0 0 45 31" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -116,13 +109,86 @@ export function GooglePlayIcon(props) {
         </SvgIcon>
     );
 }
-
 export function AppStoreIcon(props) {
     return (
         <SvgIcon {...props} width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M15 0C6.7335 0 0 6.7335 0 15C0 23.2665 6.7335 30 15 30C23.2665 30 30 23.2665 30 15C30 6.7335 23.2665 0 15 0ZM15 3C21.6452 3 27 8.35482 27 15C27 21.6452 21.6452 27 15 27C8.35482 27 3 21.6452 3 15C3 8.35482 8.35482 3 15 3ZM14.083 5.46094L11.4609 6.91699L13.2832 10.2012L10.6172 15H14.0479L15 13.2891L16.7168 10.2012L18.5391 6.91699L15.917 5.46094L15 7.11035L14.083 5.46094ZM17.5752 11.7451L15.8584 14.833L16.3975 15.8027L18.4277 19.459C18.4217 19.4665 18.4103 19.4779 18.4043 19.4854C18.4013 19.4899 18.3985 19.4984 18.3955 19.5029H18.4512L20.417 23.0391L23.0391 21.583L21.8818 19.5H24V16.5H20.2148L17.5752 11.7451ZM6 16.5V19.5H8.11816L6.96094 21.583L9.58301 23.0391L11.5488 19.5H16.7344L15.0703 16.5H14.3906H13.2158H9.78516H7.5C7.479 16.5 7.46241 16.5102 7.44141 16.5117C7.43391 16.5072 7.4284 16.5045 7.4209 16.5H6Z"
                 fill="#FFFCF8"/>
+        </SvgIcon>
+    );
+}
+export function NextArrowIcon(props) {
+    return (
+        <SvgIcon {...props} width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M29.52 11.9597C31.48 9.99975 34.64 9.99975 36.6 11.9597L69.84 45.1997C71.4 46.7597 71.4 49.2797 69.84 50.8397L36.6 84.0798C34.64 86.0397 31.48 86.0397 29.52 84.0798C27.56 82.1198 27.56 78.9597 29.52 76.9997L58.48 47.9997L29.48 18.9997C27.56 17.0797 27.56 13.8797 29.52 11.9597Z"
+                fill="#ADACAC"/>
+        </SvgIcon>
+    );
+}
+export function PrevArrowIcon(props) {
+    return (
+        <SvgIcon {...props} width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M66.48 84.0403C64.52 86.0003 61.36 86.0003 59.4 84.0403L26.16 50.8003C24.6 49.2403 24.6 46.7203 26.16 45.1603L59.4 11.9203C61.36 9.96025 64.52 9.96025 66.48 11.9203C68.44 13.8803 68.44 17.0403 66.48 19.0003L37.52 48.0003L66.52 77.0003C68.44 78.9203 68.44 82.1203 66.48 84.0403Z"
+                fill="#ADACAC"/>
+        </SvgIcon>
+    );
+}
+export function ActiveIndicatorIcon(props) {
+    return (
+        <SvgIcon {...props} width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g filter="url(#filter0_dddd_443_615)">
+                <circle cx="19" cy="10" r="8" fill="#FF9D00"/>
+            </g>
+            <defs>
+                <filter id="filter0_dddd_443_615" x="0" y="0" width="38" height="55" filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                   result="hardAlpha"/>
+                    <feOffset dy="2"/>
+                    <feGaussianBlur stdDeviation="2"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.615686 0 0 0 0 0 0 0 0 0.1 0"/>
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_443_615"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                   result="hardAlpha"/>
+                    <feOffset dy="7"/>
+                    <feGaussianBlur stdDeviation="3.5"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.615686 0 0 0 0 0 0 0 0 0.09 0"/>
+                    <feBlend mode="normal" in2="effect1_dropShadow_443_615" result="effect2_dropShadow_443_615"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                   result="hardAlpha"/>
+                    <feOffset dy="15"/>
+                    <feGaussianBlur stdDeviation="4.5"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.615686 0 0 0 0 0 0 0 0 0.05 0"/>
+                    <feBlend mode="normal" in2="effect2_dropShadow_443_615" result="effect3_dropShadow_443_615"/>
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                   result="hardAlpha"/>
+                    <feOffset dy="26"/>
+                    <feGaussianBlur stdDeviation="5.5"/>
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.615686 0 0 0 0 0 0 0 0 0.01 0"/>
+                    <feBlend mode="normal" in2="effect3_dropShadow_443_615" result="effect4_dropShadow_443_615"/>
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow_443_615" result="shape"/>
+                </filter>
+            </defs>
+        </SvgIcon>
+    );
+}
+export function InactiveIndicatorIcon(props) {
+    return (
+        <SvgIcon {...props} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="8" r="8" fill="#FFEBCC"/>
+        </SvgIcon>
+    );
+}
+export function LikeIcon(props) {
+    return (
+        <SvgIcon {...props} width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M14.5 0C12.76 0 11.09 0.81 10 2.09C8.91 0.81 7.24 0 5.5 0C2.42 0 0 2.42 0 5.5C0 9.28 3.4 12.36 8.55 17.04L10 18.35L11.45 17.03C16.6 12.36 20 9.28 20 5.5C20 2.42 17.58 0 14.5 0ZM10.1 15.55L10 15.65L9.9 15.55C5.14 11.24 2 8.39 2 5.5C2 3.5 3.5 2 5.5 2C7.04 2 8.54 2.99 9.07 4.36H10.94C11.46 2.99 12.96 2 14.5 2C16.5 2 18 3.5 18 5.5C18 8.39 14.86 11.24 10.1 15.55Z"
+                fill="#313030"/>
         </SvgIcon>
     );
 }

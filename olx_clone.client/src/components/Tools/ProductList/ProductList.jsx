@@ -1,8 +1,7 @@
 import React from 'react';
 import {Grid, Typography} from '@mui/material';
-import ShortProduct from '../ShortProduct/ShortProduct.jsx'; // Передбачається, що компонент ShortProduct розміщено у відповідному файлі
+import ShortProduct from '../ShortProduct/ShortProduct.jsx'; 
 const ProductList = () => {
-    // Припустимі дані для кількох товарів
     const products = [
         {
             id: 1,
@@ -71,12 +70,12 @@ const ProductList = () => {
 
     return (
         <Grid container>
-            <Typography variant="h4" textAlign="center" width="100%" marginTop={5}>
+            <Typography variant="h4" textAlign="start" width="100%" marginTop={5}>
                 VIP товари
             </Typography>
-            <Grid container spacing={1} marginTop={2} marginBottom={5}>
+            <Grid container spacing={'20px'} marginTop={2} marginBottom={5}>
                 {products.map(product => (
-                    <Grid item key={product.id} xs={6} sm={6} md={3} lg={3}>
+                    <Grid item key={product.id} xs={6} sm={4} md={3} lg={2.4}>
                         <ShortProduct
                             photo={product.photo}
                             name={product.name}

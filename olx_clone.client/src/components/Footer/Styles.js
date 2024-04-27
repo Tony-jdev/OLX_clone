@@ -14,6 +14,9 @@ export const AppButtonStyle={
     fontWeight: 'bold',
     textTransform: 'none'
 };
+export const AppIconStyle={
+    height: 18
+};
 
 export const MainGridStyle={
     justifyContent: 'center',
