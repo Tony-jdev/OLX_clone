@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Services.UserService;
 
 namespace OLX_clone.Server.Controllers;
 
+[Authorize]
 public class UserController: ControllerBase
 {
     private readonly IUserService _userService;

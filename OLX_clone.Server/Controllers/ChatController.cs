@@ -9,6 +9,7 @@ namespace OLX_clone.Server.Controllers;
 
 [ApiController]
 [Route("api/chats")]
+[Authorize]
 public class ChatController:ControllerBase
 {
     private readonly IChatService _chatService;

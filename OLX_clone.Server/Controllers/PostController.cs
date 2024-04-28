@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos.Post;
@@ -80,6 +81,7 @@ public class PostController: ControllerBase
     }
     
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<ApiResponse<Post>>> UpdatePost(int id, [FromForm] UpdatePostDto postUpdateDto)
     {
         var apiResponse = new ApiResponse<Post> { Success = false, Message = "Model is invalid" };
@@ -110,6 +112,7 @@ public class PostController: ControllerBase
     }
     
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<ApiResponse<bool>>> DeletePost(int id)
     {
         var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };
@@ -137,9 +140,9 @@ public class PostController: ControllerBase
         return apiResponse;
     }
     
-    [ActionName("DeletePhoto")]
-    [Route("photo/{id:int}")]
+    [Route("photo/{id:int}", Name = "DeletePhoto")]
     [HttpDelete]
+    [Authorize]
     public async Task<ActionResult<ApiResponse<bool>>> DeletePhoto(int id)
     {
         var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models.Dtos.Auth;
 using OLX_clone.Server.Services.AuthService;
