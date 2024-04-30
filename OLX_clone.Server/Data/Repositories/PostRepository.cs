@@ -17,19 +17,28 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
             .Include(p => p.Category).Where(p => p.SKU == sku).FirstOrDefaultAsync();
     }
     
-    public async Task<List<Post>> GetAllDetailedAsync(string? searchTerm)
+    public async Task<List<Post>> GetAllAsync(string? searchTerm)
     {
         if (searchTerm is null)
         {
-            return await _context.Posts.Include(p => p.User).ToListAsync();
+            return await _context.Posts.ToListAsync();
         }
-        return await _context.Posts.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()))
-            .Include(p => p.User).ToListAsync();
+        return await _context.Posts
+            .Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()))
+            .ToListAsync();
     }
     
-    public async Task<List<Post>> GetAllByCategoryAsync(int categoryId)
+    public async Task<List<Post>> GetAllByCategoryAsync(string categorySku, string? searchTerm)
     {
-        return await _context.Posts.Where(p => p.CategoryId == categoryId).ToListAsync();
+        if (searchTerm is null)
+        {
+            return await _context.Posts
+                .Where(p => p.Category.SKU == categorySku)
+                .ToListAsync();
+        }
+        return await _context.Posts
+            .Where(p => p.Category.SKU == categorySku && p.Title.ToLower().Contains(searchTerm.ToLower()))
+            .ToListAsync();
     }
     
     public async Task<Post> GetDetailsAsync(int? id)

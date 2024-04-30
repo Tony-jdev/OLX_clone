@@ -37,6 +37,7 @@ public class CategoryService: ICategoryService
     public async Task<ApiResponse<Category>> CreateCategory(CreateCategoryDto categoryCreateDto)
     {
         var categoryToCreate = _mapper.Map<CreateCategoryDto, Category>(categoryCreateDto);
+        categoryToCreate.SKU = categoryToCreate.Title.ToLower().Replace(" ", "_");
         
         var createdCategory = await _unitOfWork.CategoryRepository.AddAsync(categoryToCreate);
 

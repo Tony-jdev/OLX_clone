@@ -8,7 +8,7 @@ namespace OLX_clone.Server.Services.PostService;
 public interface IPostService
 {
     Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, int page);
-    Task<ApiResponse<List<GetPostDto>>> GetPostsByCategory(int categoryId);
+    Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, string? searchTerm, int page);
     Task<ApiResponse<GetPostDetailsDto>> GetPost(string sku);
     Task<ApiResponse<Post>> CreatePost(CreatePostDto postCreateDto);
     Task<ApiResponse<Post>> UpdatePost(int id, UpdatePostDto postUpdateDto);

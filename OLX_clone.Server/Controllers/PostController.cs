@@ -31,10 +31,10 @@ public class PostController: ControllerBase
         return Ok(apiResponse);
     }
     
-    [HttpGet("category/{categoryId}", Name = "GetPostByCategory")]
-    public async Task<ActionResult<ApiResponse<List<GetPostDto>>>> GetPostsByCategory(int categoryId)
+    [HttpGet("category/{categorySku}", Name = "GetPostByCategory")]
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(string categorySku, string? searchTerm, int page = 1)
     {
-        var apiResponse = await _postService.GetPostsByCategory(categoryId);
+        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);

@@ -42,7 +42,7 @@ public class CategoryController: ControllerBase
     }
     
     [HttpPost]
-    [Authorize(Roles = SD.Role_Admin)]
+    /*[Authorize(Roles = SD.Role_Admin)]*/
     public async Task<ActionResult<ApiResponse<Category>>> CreateCategory([FromForm] CreateCategoryDto categoryCreateDto)
     {
         var apiResponse = new ApiResponse<Category>{ Success = false, Message = "Model is invalid" };
