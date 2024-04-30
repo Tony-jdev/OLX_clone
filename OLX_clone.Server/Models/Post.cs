@@ -12,6 +12,8 @@ public class Post
     [Required]
     public string Title { get; set; }
     
+    public string SKU { get; set; }
+    
     [Required]
     public int CategoryId { get; set; }
 

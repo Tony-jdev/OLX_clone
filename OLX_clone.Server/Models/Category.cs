@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace OLX_clone.Server.Models;
 
@@ -10,6 +9,9 @@ public class Category
     public int Id { get; set; }
     [Required]
     public string Title { get; set; }
+    
+    public string SKU { get; set; }
+    
     public int? ParentId { get; set; }
     
     [ForeignKey("ParentId")]

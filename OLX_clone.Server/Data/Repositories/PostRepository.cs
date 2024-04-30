@@ -11,9 +11,20 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
       
     }
     
-    public async Task<List<Post>> GetAllDetailedAsync()
+    public async Task<Post> GetPostDetailsBySkuAsync(string sku)
     {
-        return await _context.Posts.Include(p => p.User).ToListAsync();
+        return await _context.Posts.Include(p => p.User)
+            .Include(p => p.Category).Where(p => p.SKU == sku).FirstOrDefaultAsync();
+    }
+    
+    public async Task<List<Post>> GetAllDetailedAsync(string? searchTerm)
+    {
+        if (searchTerm is null)
+        {
+            return await _context.Posts.Include(p => p.User).ToListAsync();
+        }
+        return await _context.Posts.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()))
+            .Include(p => p.User).ToListAsync();
     }
     
     public async Task<List<Post>> GetAllByCategoryAsync(int categoryId)

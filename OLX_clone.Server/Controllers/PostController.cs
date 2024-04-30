@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
+using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.Post;
 using OLX_clone.Server.Services.PostService;
 
@@ -19,9 +20,9 @@ public class PostController: ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<GetPostDto>>>> GetPosts()
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(string? searchTerm, int page = 1)
     {
-        var apiResponse = await _postService.GetPosts();
+        var apiResponse = await _postService.GetPosts(searchTerm, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);
@@ -42,15 +43,15 @@ public class PostController: ControllerBase
         return Ok(apiResponse);
     }
     
-    [HttpGet("{id:int}", Name = "GetPost")]
-    public async Task<ActionResult<ApiResponse<GetPostDetailsDto>>> GetPost(int id)
+    [HttpGet("{sku}", Name = "GetPost")]
+    public async Task<ActionResult<ApiResponse<GetPostDetailsDto>>> GetPost(string sku)
     {
-        var apiResponse = await _postService.GetPost(id);
+        var apiResponse = await _postService.GetPost(sku);
         if (!apiResponse.Success)
         {
             return NotFound(apiResponse);
         }
-        await _postService.AddPostView(id);
+        await _postService.AddPostView(apiResponse.Data.Id);
         
         return Ok(apiResponse);
     }
