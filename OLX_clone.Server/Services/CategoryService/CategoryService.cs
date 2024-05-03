@@ -51,6 +51,7 @@ public class CategoryService: ICategoryService
             return new ApiResponse<Category> { Success = false, Message = "Category not found." };
 
         categoryFromDb = _mapper.Map(categoryUpdateDto, categoryFromDb);
+        categoryFromDb.SKU = categoryFromDb.Title.ToLower().Replace(" ", "_");
 
         var updatedCategory = await _unitOfWork.CategoryRepository.UpdateAsync(categoryFromDb);
 

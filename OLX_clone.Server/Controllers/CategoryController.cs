@@ -68,7 +68,7 @@ public class CategoryController: ControllerBase
     }
     
     [HttpPut("{id:int}")]
-    [Authorize(Roles = SD.Role_Admin)]
+    /*[Authorize(Roles = SD.Role_Admin)]*/
     public async Task<ActionResult<ApiResponse<Category>>> UpdateCategory(int id, [FromForm] UpdateCategoryDto categoryUpdateDto)
     {
         var apiResponse = new ApiResponse<Category> { Success = false, Message = "Model is invalid" };

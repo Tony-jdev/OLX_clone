@@ -22,9 +22,9 @@ public class PostService : IPostService
         _blobService = blobService;
     }
     
-    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, int page)
+    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, string? orderBy, int page)
     {
-        var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm);
+        var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 20);
         
@@ -36,9 +36,10 @@ public class PostService : IPostService
         return new ApiResponse<PagedList<GetPostDto>> { Data = pagedPosts, Message = "Posts retrieved successfully." };
     }
     
-    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, string? searchTerm, int page)
+    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 
+        string? searchTerm, string? orderBy, int page)
     {
-        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categorySku, searchTerm);
+        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categorySku, searchTerm, orderBy);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 20);
         

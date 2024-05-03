@@ -17,28 +17,60 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
             .Include(p => p.Category).Where(p => p.SKU == sku).FirstOrDefaultAsync();
     }
     
-    public async Task<List<Post>> GetAllAsync(string? searchTerm)
+    public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy)
     {
-        if (searchTerm is null)
+        IQueryable<Post> query = _context.Posts;
+
+        if (!string.IsNullOrEmpty(searchTerm))
         {
-            return await _context.Posts.ToListAsync();
+            query = query.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()));
         }
-        return await _context.Posts
-            .Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()))
-            .ToListAsync();
+
+        if (!string.IsNullOrEmpty(orderBy))
+        {
+            switch (orderBy.ToLower())
+            {
+                case "asc":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                case "desc":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    query = query.OrderBy(p => p.Id);
+                    break;
+            }
+        }
+
+        return await query.ToListAsync();
     }
     
-    public async Task<List<Post>> GetAllByCategoryAsync(string categorySku, string? searchTerm)
+    public async Task<List<Post>> GetAllByCategoryAsync(string categorySku, string? searchTerm, string? orderBy)
     {
-        if (searchTerm is null)
+        IQueryable<Post> query = _context.Posts.Where(p => p.Category.SKU == categorySku);
+
+        if (!string.IsNullOrEmpty(searchTerm))
         {
-            return await _context.Posts
-                .Where(p => p.Category.SKU == categorySku)
-                .ToListAsync();
+            query = query.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()));
         }
-        return await _context.Posts
-            .Where(p => p.Category.SKU == categorySku && p.Title.ToLower().Contains(searchTerm.ToLower()))
-            .ToListAsync();
+
+        if (!string.IsNullOrEmpty(orderBy))
+        {
+            switch (orderBy.ToLower())
+            {
+                case "asc":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                case "вуіс":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    query = query.OrderBy(p => p.Id);
+                    break;
+            }
+        }
+
+        return await query.ToListAsync();
     }
     
     public async Task<Post> GetDetailsAsync(int? id)
