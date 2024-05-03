@@ -17,6 +17,7 @@ public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
     public DbSet<PostPhoto> PostPhotos { get; set; }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

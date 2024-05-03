@@ -14,6 +14,7 @@ using OLX_clone.Server.Services.AuthService;
 using OLX_clone.Server.Services.BlobService;
 using OLX_clone.Server.Services.CategoryService;
 using OLX_clone.Server.Services.PostService;
+using OLX_clone.Server.Services.TransactionService;
 using OLX_clone.Server.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,6 +72,7 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSignalR();

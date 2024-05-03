@@ -13,6 +13,7 @@ public class UnitOfWork: IUnitOfWork
     public IPostPhotoRepository PostPhotoRepository { get; }
     public IChatRepository ChatRepository { get; }
     public IChatMessageRepository ChatMessageRepository { get; }
+    public ITransactionRepository TransactionRepository { get; }
 
     public UnitOfWork(ApplicationDbContext context)
     {
@@ -23,6 +24,7 @@ public class UnitOfWork: IUnitOfWork
         PostPhotoRepository = new PostPhotoRepository(_context);
         ChatRepository = new ChatRepository(_context);
         ChatMessageRepository = new ChatMessageRepository(_context);
+        TransactionRepository = new TransactionRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync()
