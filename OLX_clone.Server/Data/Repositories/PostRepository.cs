@@ -11,12 +11,6 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
       
     }
     
-    public async Task<Post> GetPostDetailsBySkuAsync(string sku)
-    {
-        return await _context.Posts.Include(p => p.User)
-            .Include(p => p.Category).Where(p => p.SKU == sku).FirstOrDefaultAsync();
-    }
-    
     public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy)
     {
         IQueryable<Post> query = _context.Posts;
@@ -45,13 +39,15 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
         return await query.ToListAsync();
     }
     
-    public async Task<List<Post>> GetAllByCategoryAsync(string categorySku, string? searchTerm, string? orderBy)
+    public async Task<List<Post>> GetAllByCategoryAsync(List<int> categoryIds, string? searchTerm, string? orderBy, int page)
     {
-        IQueryable<Post> query = _context.Posts.Where(p => p.Category.SKU == categorySku);
+        var query = _context.Posts
+            .Include(p => p.Category)
+            .Where(p => categoryIds.Contains(p.CategoryId));
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()));
+            query = query.Where(p => p.Title.Contains(searchTerm));
         }
 
         if (!string.IsNullOrEmpty(orderBy))
@@ -61,7 +57,7 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
                 case "asc":
                     query = query.OrderBy(p => p.Price);
                     break;
-                case "вуіс":
+                case "desc":
                     query = query.OrderByDescending(p => p.Price);
                     break;
                 default:
@@ -73,14 +69,9 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
         return await query.ToListAsync();
     }
     
-    public async Task<Post> GetDetailsAsync(int? id)
+    public async Task<Post> GetPostDetailsBySkuAsync(string sku)
     {
-        if (id is null)
-        {
-            return null;
-        }
-
         return await _context.Posts.Include(p => p.User)
-            .Include(p => p.Category).Where(p => p.Id == id).FirstOrDefaultAsync();
+            .Include(p => p.Category).Where(p => p.SKU == sku).FirstOrDefaultAsync();
     }
 }

@@ -39,7 +39,9 @@ public class PostService : IPostService
     public async Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 
         string? searchTerm, string? orderBy, int page)
     {
-        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categorySku, searchTerm, orderBy);
+        var categoryIds = await _unitOfWork.CategoryRepository.GetCategoryAndChildrenIds(categorySku);
+        
+        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy, page);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 20);
         
@@ -84,7 +86,7 @@ public class PostService : IPostService
 
     public async Task<ApiResponse<Post>> UpdatePost(int id, UpdatePostDto postUpdateDto)
     {
-        Post postFromDb = await _unitOfWork.PostRepository.GetDetailsAsync(id);
+        Post postFromDb = await _unitOfWork.PostRepository.GetAsync(id);
         if (postFromDb == null)
             return new ApiResponse<Post> { Success = false, Message = "Post not found." };
         
