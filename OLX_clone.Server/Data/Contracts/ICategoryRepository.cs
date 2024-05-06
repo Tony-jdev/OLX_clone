@@ -4,5 +4,5 @@ namespace OLX_clone.Server.Data.Contracts;
 
 public interface ICategoryRepository : IGenericRepository<Category>
 {
-    
+    Task<List<int>> GetCategoryAndChildrenIds(string categorySKU);
 }

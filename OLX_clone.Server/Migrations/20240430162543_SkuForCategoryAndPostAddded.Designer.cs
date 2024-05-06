@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OLX_clone.Server.Data;
 
@@ -11,9 +12,11 @@ using OLX_clone.Server.Data;
 namespace OLX_clone.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240430162543_SkuForCategoryAndPostAddded")]
+    partial class SkuForCategoryAndPostAddded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace OLX_clone.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "01a83159-c864-4055-99d7-8cb006946ca0",
+                            Id = "b476d37f-b187-4e14-b241-b4e159c07433",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "2c79ec0e-07de-4d4b-9005-432bfe60cc3b",
+                            Id = "4083b2ff-d9a3-430a-9633-8687a8dbcc64",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -443,35 +446,6 @@ namespace OLX_clone.Server.Migrations
                     b.ToTable("PostViews");
                 });
 
-            modelBuilder.Entity("OLX_clone.Server.Models.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Transactions");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -625,17 +599,6 @@ namespace OLX_clone.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("OLX_clone.Server.Models.Transaction", b =>
-                {
-                    b.HasOne("OLX_clone.Server.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.Category", b =>

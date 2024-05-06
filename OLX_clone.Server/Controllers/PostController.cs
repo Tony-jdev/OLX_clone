@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
@@ -19,9 +20,9 @@ public class PostController: ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<Post>>>> GetPosts()
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(string? searchTerm, string? orderBy, int page = 1)
     {
-        var apiResponse = await _postService.GetPosts();
+        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);
@@ -30,15 +31,28 @@ public class PostController: ControllerBase
         return Ok(apiResponse);
     }
     
-    [HttpGet("{id:int}", Name = "GetPost")]
-    public async Task<ActionResult<ApiResponse<GetPostDetailsDto>>> GetPost(int id)
+    [HttpGet("category/{categorySku}", Name = "GetPostByCategory")]
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(string categorySku,
+        string? searchTerm, string? orderBy, int page = 1)
     {
-        var apiResponse = await _postService.GetPost(id);
+        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, page);
+        if (!apiResponse.Success)
+        {
+            return BadRequest(apiResponse);
+        }
+
+        return Ok(apiResponse);
+    }
+    
+    [HttpGet("{sku}", Name = "GetPost")]
+    public async Task<ActionResult<ApiResponse<GetPostDetailsDto>>> GetPost(string sku)
+    {
+        var apiResponse = await _postService.GetPost(sku);
         if (!apiResponse.Success)
         {
             return NotFound(apiResponse);
         }
-        await _postService.AddPostView(id);
+        await _postService.AddPostView(apiResponse.Data.Id);
         
         return Ok(apiResponse);
     }
@@ -69,6 +83,7 @@ public class PostController: ControllerBase
     }
     
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<ApiResponse<Post>>> UpdatePost(int id, [FromForm] UpdatePostDto postUpdateDto)
     {
         var apiResponse = new ApiResponse<Post> { Success = false, Message = "Model is invalid" };
@@ -99,6 +114,7 @@ public class PostController: ControllerBase
     }
     
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<ApiResponse<bool>>> DeletePost(int id)
     {
         var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };
@@ -126,9 +142,9 @@ public class PostController: ControllerBase
         return apiResponse;
     }
     
-    [ActionName("DeletePhoto")]
-    [Route("photo/{id:int}")]
+    [Route("photo/{id:int}", Name = "DeletePhoto")]
     [HttpDelete]
+    [Authorize]
     public async Task<ActionResult<ApiResponse<bool>>> DeletePhoto(int id)
     {
         var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };

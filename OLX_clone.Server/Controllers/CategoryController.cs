@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
-using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.Category;
 using OLX_clone.Server.Services.CategoryService;
 
@@ -41,8 +40,9 @@ public class CategoryController: ControllerBase
         }
         return Ok(apiResponse);
     }
-
+    
     [HttpPost]
+    /*[Authorize(Roles = SD.Role_Admin)]*/
     public async Task<ActionResult<ApiResponse<Category>>> CreateCategory([FromForm] CreateCategoryDto categoryCreateDto)
     {
         var apiResponse = new ApiResponse<Category>{ Success = false, Message = "Model is invalid" };
@@ -68,6 +68,7 @@ public class CategoryController: ControllerBase
     }
     
     [HttpPut("{id:int}")]
+    /*[Authorize(Roles = SD.Role_Admin)]*/
     public async Task<ActionResult<ApiResponse<Category>>> UpdateCategory(int id, [FromForm] UpdateCategoryDto categoryUpdateDto)
     {
         var apiResponse = new ApiResponse<Category> { Success = false, Message = "Model is invalid" };
@@ -98,6 +99,7 @@ public class CategoryController: ControllerBase
     }
     
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = SD.Role_Admin)]
     public async Task<ActionResult<ApiResponse<bool>>> DeleteCategory(int id)
     {
         var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };

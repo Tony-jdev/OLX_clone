@@ -11,19 +11,67 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
       
     }
     
-    public async Task<List<Post>> GetAllDetailedAsync()
+    public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy)
     {
-        return await _context.Posts.Include(p => p.User).ToListAsync();
-    }
-    
-    public async Task<Post> GetDetailsAsync(int? id)
-    {
-        if (id is null)
+        IQueryable<Post> query = _context.Posts;
+
+        if (!string.IsNullOrEmpty(searchTerm))
         {
-            return null;
+            query = query.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()));
         }
 
+        if (!string.IsNullOrEmpty(orderBy))
+        {
+            switch (orderBy.ToLower())
+            {
+                case "asc":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                case "desc":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    query = query.OrderBy(p => p.Id);
+                    break;
+            }
+        }
+
+        return await query.ToListAsync();
+    }
+    
+    public async Task<List<Post>> GetAllByCategoryAsync(List<int> categoryIds, string? searchTerm, string? orderBy, int page)
+    {
+        var query = _context.Posts
+            .Include(p => p.Category)
+            .Where(p => categoryIds.Contains(p.CategoryId));
+
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(p => p.Title.Contains(searchTerm));
+        }
+
+        if (!string.IsNullOrEmpty(orderBy))
+        {
+            switch (orderBy.ToLower())
+            {
+                case "asc":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                case "desc":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    query = query.OrderBy(p => p.Id);
+                    break;
+            }
+        }
+
+        return await query.ToListAsync();
+    }
+    
+    public async Task<Post> GetPostDetailsBySkuAsync(string sku)
+    {
         return await _context.Posts.Include(p => p.User)
-            .Include(p => p.Category).Where(p => p.Id == id).FirstOrDefaultAsync();
+            .Include(p => p.Category).Where(p => p.SKU == sku).FirstOrDefaultAsync();
     }
 }

@@ -18,17 +18,15 @@ public class AuthService: IAuthService
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitofwork;
     private readonly IConfiguration _configuration;
     
     public AuthService(ApplicationDbContext context, IConfiguration configuration,
-        UserManager<ApplicationUser> userManager, IMapper mapper, IUnitOfWork unitofwork)
+        UserManager<ApplicationUser> userManager, IMapper mapper)
     {
         _context = context;
         _configuration = configuration;
         _userManager = userManager;
         _mapper = mapper;
-        _unitofwork = unitofwork;
     }
     
     public async Task<ApiResponse<IEnumerable<IdentityError>>> Register(RegisterRequestDto registerRequestDto)
@@ -102,24 +100,5 @@ public class AuthService: IAuthService
         );
         
         return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-    
-    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUser(UpdateUserDto userUpdateDto)
-    {
-        var apiResponse = new ApiResponse<IEnumerable<IdentityError>>();
-        
-        var userFromDb = await _userManager.FindByIdAsync(userUpdateDto.Id);
-        
-        if (userFromDb == null)
-            return new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "User not found." };
-        
-        userFromDb = _mapper.Map(userUpdateDto, userFromDb);
-        
-        var result = await _userManager.UpdateAsync(userFromDb);
-        
-        if (result.Succeeded)
-            return new ApiResponse<IEnumerable<IdentityError>> { Success = true, Message = "User updated successfully." };
-        
-        return new ApiResponse<IEnumerable<IdentityError>> { Data = result.Errors, Success = false, Message = "Error updating user." };
     }
 }

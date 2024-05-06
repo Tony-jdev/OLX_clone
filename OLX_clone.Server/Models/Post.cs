@@ -12,6 +12,8 @@ public class Post
     [Required]
     public string Title { get; set; }
     
+    public string SKU { get; set; }
+    
     [Required]
     public int CategoryId { get; set; }
 
@@ -23,6 +25,8 @@ public class Post
 
     [Required]
     public double Price { get; set; }
+    [Required]
+    public string Type { get; set; }
 
     [Required]
     public string Status { get; set; } = SD.status_active;
