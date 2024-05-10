@@ -13,6 +13,8 @@ public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
     
     public DbSet<Category> Categories { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<BoostPackage> BoostPackages { get; set; }
+    public DbSet<PostBoost> PostBoosts { get; set; }
     public DbSet<PostView> PostViews { get; set; }
     public DbSet<PostPhoto> PostPhotos { get; set; }
     public DbSet<Chat> Chats { get; set; }

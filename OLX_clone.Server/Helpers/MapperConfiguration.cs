@@ -2,6 +2,7 @@
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.Auth;
+using OLX_clone.Server.Models.Dtos.BoostPackage;
 using OLX_clone.Server.Models.Dtos.Category;
 using OLX_clone.Server.Models.Dtos.Chat;
 using OLX_clone.Server.Models.Dtos.ChatMessage;
@@ -33,5 +34,8 @@ public class MapperConfiguration : Profile
         CreateMap<ChatMessage, GetChatMessageDto>();
 
         CreateMap<ApplicationUser, GetApplicationUserDto>();
+
+        CreateMap<CreateBoostPackageDto, BoostPackage>();
+        CreateMap<UpdateBoostPackageDto, BoostPackage>();
     }
 }

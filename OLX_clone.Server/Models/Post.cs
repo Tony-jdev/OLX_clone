@@ -36,6 +36,9 @@ public class Post
 
     [ForeignKey("ApplicationUserId")]
     public ApplicationUser User { get; set; }
+    
+    public bool IsTop { get; set; }
+    public bool IsVip { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     

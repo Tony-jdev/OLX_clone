@@ -14,6 +14,8 @@ public class UnitOfWork: IUnitOfWork
     public IChatRepository ChatRepository { get; }
     public IChatMessageRepository ChatMessageRepository { get; }
     public ITransactionRepository TransactionRepository { get; }
+    public IBoostPackageRepository BoostPackageRepository { get; }
+    public IPostBoostRepository PostBoostRepository { get; }
 
     public UnitOfWork(ApplicationDbContext context)
     {
@@ -25,6 +27,8 @@ public class UnitOfWork: IUnitOfWork
         ChatRepository = new ChatRepository(_context);
         ChatMessageRepository = new ChatMessageRepository(_context);
         TransactionRepository = new TransactionRepository(_context);
+        BoostPackageRepository = new BoostPackageRepositoory(_context);
+        PostBoostRepository = new PostBoostRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync()
