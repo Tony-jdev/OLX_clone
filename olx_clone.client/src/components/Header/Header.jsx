@@ -6,13 +6,31 @@ import { useTheme } from '@mui/material/styles';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import ColorModeContext from "@/contexts/ColorModeContext.jsx";
 import {LocationIcon, AddIcon, ProfileIcon, SearchIcon} from '@/assets/Icons/Icons.jsx';
-const Header = ({changeLanguage, language}) => {
+import SButton from "@/components/Tools/Button/SButton.jsx";
+import {useDispatch, useSelector} from "react-redux";
+import {changeLocale, changeTheme, selectLocale, selectTheme} from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
+const Header = () => {
+
+    const mode = useSelector(selectTheme) ?? 'light';
+    const locale = useSelector(selectLocale) ?? 'uk';
+    const dispatch = useDispatch();
+    
     const theme = useTheme();
-    const { header } = theme.palette;
+    const { colors } = theme.palette;
     const colorMode = useContext(ColorModeContext);
+
+    const toggleTheme = () => {
+        const newTheme = mode === 'light' ? 'dark' : 'light';
+        dispatch(changeTheme(newTheme));
+    };
+
+    const toggleLocale = () => {
+        const newLocale = locale === 'en' ? 'uk' : 'en';
+        dispatch(changeLocale(newLocale));
+    };
     
     return (
-        <AppBar style={AppBarStyle} sx={{ backgroundColor: header.background.primary }}>
+        <AppBar style={AppBarStyle} sx={{ backgroundColor: colors.background.primary }}>
             <Container style={ContainerStyle}>
                 <Toolbar style={ToolBarStyle}>
                     <Grid container style={FirstGridStyle}>
@@ -23,68 +41,79 @@ const Header = ({changeLanguage, language}) => {
                                 alt='Logo'
                                 sx={LogoStyle}
                             />
-                            <TextField
+                            <TextField title='non'
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <IconButton>
-                                                <SearchIcon />
-                                            </IconButton>
+                                            <SButton isIconButton={true} icon={ <SearchIcon style={{fill: colors.text.orange}}/>}/>
                                         </InputAdornment>
                                     ),
                                     style: PropsFieldStyle,
-                                    sx: { backgroundColor: header.background.secondary }
+                                    sx: { backgroundColor: colors.background.secondary }
                                 }}
                                 style={FieldStyle}
-                                sx={{ color: header.text.input }}>
+                                sx={{ color: colors.text.input }}>
                             </TextField>
                         </Box>
                         <Box style={FlexBoxStyle}>
-                            <Button style={AddButtonStyle} sx={{ backgroundColor: header.button.primary, color: header.text.input }}>
-                                <AddIcon style={AddIconStyle} sx={{ color: header.text.primary }} />
-                                <FormattedMessage id="header.addButtonLabel"/>
-                            </Button>
+                            <SButton
+                              type='orangeRoundButton'
+                              sl={ {backgroundColor: colors.background.orange, color: colors.text.input} }
+                              prew={<AddIcon style={AddIconStyle} sx={{ color: colors.text.primary }} />}
+                              text={<FormattedMessage id="header.addButtonLabel"/>}
+                            />
 
-                            <IconButton onClick={colorMode.toggleColorMode} color='inherit' sx={{ border: 'none' }}>
-                                {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-                            </IconButton>
-                            <IconButton style={ProfileButtonStyle} sx={{ color: header.button.secondary }}>
-                                <ProfileIcon />
-                            </IconButton>
-                            <Button onClick={() => changeLanguage(language === 'uk' ? 'en' : 'uk')} sx={{ color: header.button.secondary }}>
-                                <Typography sx={language === 'uk' ? {color: header.button.primary} : {color: header.button.secondary}}>Ua</Typography>
-                                |
-                                <Typography sx={language === 'en' ? {color: header.button.primary} : {color: header.button.secondary}}>En</Typography>
-                            </Button>
+                            <SButton isIconButton={true} 
+                                     action={toggleTheme} 
+                                     icon={mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+                                     sl={{...ProfileButtonStyle, color: colors.text.primary}}
+                            />
+                            
+                            <SButton
+                                isIconButton={true}
+                                icon={ <ProfileIcon /> }
+                                sl={{...ProfileButtonStyle, color: colors.text.primary}}
+                            />
+                            
+                            <SButton
+                                type='transparentButton'
+                                action={toggleLocale}
+                                prew={<Typography sx={locale === 'uk' ? {color: colors.text.orange} : {color: colors.text.primary}}>Ua</Typography>}
+                                text='|'
+                                next={ <Typography sx={locale === 'en' ? {color: colors.text.orange} : {color: colors.text.primary}}>En</Typography>}
+                                sl={{color: colors.text.primary }}
+                            />
                         </Box>
                     </Grid>
                 </Toolbar>
                 <Toolbar style={ToolBarStyle}>
                     <Grid container style={BottomGridStyle}>
                         <Box>
-                            <IconButton sx={{ color: header.button.primary }}>
-                                <LocationIcon />
-                                <Typography sx={{ color: header.text.primary }}>
-                                    <FormattedMessage id="header.locationLabel"/>
-                                </Typography>
-                            </IconButton>
+                            <SButton type='transparentButton'
+                                     text={
+                                         <Typography sx={{ color: colors.text.primary }}>
+                                             <FormattedMessage id="header.locationLabel"/>
+                                         </Typography>
+                                     } 
+                                     prew={<LocationIcon sx={{ color: colors.background.orange }} />} />
                         </Box>
                         <Box style={LastBoxStyle} >
-                            <Button sx={{ color: header.text.primary }}>
-                                <FormattedMessage id="header.realEstateLabel"/>
-                            </Button>
-                            <Button sx={{ color: header.text.primary }}>
-                                <FormattedMessage id="header.technologyLabel"/>
-                            </Button>
-                            <Button sx={{ color: header.text.primary }}>
-                                <FormattedMessage id="header.kidsLabel"/>
-                            </Button>
-                            <Button sx={{ color: header.text.primary }}>
-                                <FormattedMessage id="header.clothingLabel"/>
-                            </Button>
-                            <Button sx={{ color: header.text.primary }}>
-                                <FormattedMessage id="header.animalsLabel"/>
-                            </Button>
+                            
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="header.realEstateLabel"/>}
+                                     sl={{ color: colors.text.primary }}/>
+                            <SButton type='transparentButton' 
+                                     text={<FormattedMessage id="header.technologyLabel"/>}
+                                     sl={{ color: colors.text.primary }}/>
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="header.kidsLabel"/>}
+                                     sl={{ color: colors.text.primary }}/>
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="header.clothingLabel"/>}
+                                     sl={{ color: colors.text.primary }}/>
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="header.animalsLabel"/>}
+                                     sl={{ color: colors.text.primary }}/>
                         </Box>
                     </Grid>
                 </Toolbar>

@@ -11,7 +11,7 @@ function CarouselItem(props) {
                         <Typography style={TopTextStyle} sx={{color: props.item.textColor}}>{props.item.name}</Typography>
                         <Typography style={BottomTextStyle} sx={{color: props.item.textColor}}>{props.item.description}</Typography>
                     </Container>
-                    <Button style={props.btnSx} sx={{color: props.item.btnTextColor, background: props.item.btnColor}}>{props.item.btnText}</Button>
+                    {props.btn}
                 </Grid>
             </Grid>
         </Paper>

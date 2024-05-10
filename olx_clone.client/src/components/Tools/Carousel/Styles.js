@@ -1,3 +1,6 @@
+export const DefoultBtnStyle = {
+    '&:focus': {outline: 'none'}
+}
 export const CarouselStyle={
     maxHeight: 600
 }
@@ -13,11 +16,19 @@ export const IndicatorContainerStyle={
     height: 24,
     borderRadius: 16
 }
-export const IndicatorIconButtonStyle={
+export const IndicatorIconButtonStyle= {
     fontSize:24, 
     zIndex: 2, 
     color: '#ffebcc'
 }
-export const activeIndicatorIconButtonStyle={
+export const activeIndicatorIconButtonStyle= {
     color: '#ff9d00'
+}
+export const PaperWideStyle= {
+    border: 'none',
+    maxWidth: '100%',
+    maxHeight: 234,
+    minHeight: 234,
+    height: '100%',
+    backgroundSize: 'cover'
 }

@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
@@ -33,19 +32,52 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
 const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
     env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7051';
 
+
 const databaseRoutes = {
-    '^/weatherforecast': {
+    '^/register': {
         target,
         secure: false
     },
-    '^/users': {
-        target, 
+    '^/login': {
+        target,
         secure: false
     },
-    '^/products': {
-        target, 
+    '^/api/categories': {
+        target,
         secure: false
-    }
+    },
+    '^/api/categories/{id}': {
+        target,
+        secure: false
+    },
+    '^/api/chats': {
+        target,
+        secure: false
+    },
+    '^/api/chats/{id}': {
+        target,
+        secure: false
+    },
+    '^/api/chats/user/{userId}': {
+        target,
+        secure: false
+    },
+    '^/api/chats/mark-as-read': {
+        target,
+        secure: false
+    },
+    '^/api/posts': {
+        target,
+        secure: false
+    },
+    '^/api/posts/{id}': {
+        target,
+        secure: false
+    },
+    '^/api/posts/photo/{id}': {
+        target,
+        secure: false
+    },
 };
 
 // https://vitejs.dev/config/

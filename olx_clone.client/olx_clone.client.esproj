@@ -9,7 +9,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\components\Pages\" />
+    <Folder Include="src\components\Pages\PostPage\" />
     <Folder Include="src\providers\" />
   </ItemGroup>
 </Project>

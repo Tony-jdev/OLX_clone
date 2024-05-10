@@ -9,14 +9,25 @@ import {
     GridC2Style, GridC3Style,
     GridMainStyle, TextStyle
 } from '@/components/Tools/CategoryMasonry/Styles.js';
+import { useNavigate } from 'react-router-dom';
+import {FormattedMessage} from "react-intl";
+
 
 const buttons = [
-    'Одяг та взуття',
-    'Електроніка',
-    'Тварини',
-    'Дитячий світ',
-    'Нерухомість'
+    <FormattedMessage id='masonry.1'/>,
+    <FormattedMessage id='masonry.2'/>,
+    <FormattedMessage id='masonry.3'/>,
+    <FormattedMessage id='masonry.4'/>,
+    <FormattedMessage id='masonry.5'/>,
 ];
+
+const navigates = [
+    '/search',
+    '/search',
+    '/search',
+    '/search',
+    '/search',
+]
 
 const images = [
     '@/../public/Categories/car.png',
@@ -29,14 +40,16 @@ const images = [
 ];
 
 
-
 const CategoryMasonry = () => {
+    const navigate = useNavigate();
+
     return (
         <Grid container direction='row' justifyContent='space-between' style={GridMainStyle}>
             <Grid container justifyContent='space-between' style={GridC1Style}>
                 <Button
                     component="span"
                     sx={{...ButtonMainStyle, width: 467, height: 290 }}
+                    onClick={()=> navigate(navigates[0])}
                 >
                     <Box
                         display='flex'
@@ -60,6 +73,7 @@ const CategoryMasonry = () => {
                     <Button
                         component="span"
                         sx={{...ButtonMainStyle, width: 223, height: 290 }}
+                        onClick={()=> navigate(navigates[1])}
                     >
                         <Box
                             display='flex'
@@ -87,6 +101,7 @@ const CategoryMasonry = () => {
                     <Button
                         component="span"
                         sx={{...ButtonMainStyle, width: 290, height: 180 }}
+                        onClick={()=> navigate(navigates[2])}
                     >
                         <Box
                             display='flex'
@@ -119,6 +134,7 @@ const CategoryMasonry = () => {
                     <Button
                         component="span"
                         sx={{...ButtonMainStyle, width: 223, height: 290 }}
+                        onClick={()=> navigate(navigates[3])}
                     >
                         <Box
                             display='flex'
@@ -152,6 +168,7 @@ const CategoryMasonry = () => {
                 <Button
                     component="span"
                     sx={{...ButtonMainStyle, width: 396, height: 180 }}
+                    onClick={()=> navigate(navigates[4])}
                 >
                     <Box
                         display='flex'

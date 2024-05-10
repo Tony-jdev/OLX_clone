@@ -17,7 +17,31 @@
     "footer.terms": "Terms of Service",
     "footer.advertising": "Advertising on the site",
     "footer.followUs": "Follow Us!",
-    "footer.freeApp": "Free app on your phone"
-    
-    
+    "footer.freeApp": "Free app on your phone",
+
+    "masonry.1": "Clothing and Footwear",
+    "masonry.2": "Electronics",
+    "masonry.3": "Animals",
+    "masonry.4": "Children’s World",
+    "masonry.5": "Property",
+
+    "btn.add": "Add Listing",
+    "btn.see": "View Now",
+
+    "ad1.name": "Got a pile of clothes at home and don’t know where to put them?",
+    "ad1.description": "Our eVse platform is your solution! Post your listing and free up space for something new.",
+    "ad2.name": "Fluffy awaits you!",
+    "ad2.description": "Visit our classifieds website and find your future furry companion today!",
+    "ad3.name": "Open up a world of excitement and joy for your child!",
+    "ad3.description": "Browse the listings on our website and discover interesting hobbies for little explorers.",
+
+    "home.vip.header": "Top 10 VIP posts!",
+    "home.vip.btn": "Check all",
+
+    "about.title": "About Us",
+    "about.description": "Welcome to eVSE, your number one source for buying and selling online! We're dedicated to giving you the very best experience, with a focus on reliability, convenience, and security.",
+    "about.button": "Back to Home",
+
+    "productPage.chatWithSeller": "Chat with Seller",
+    "productPage.goBack": "Go Back"
 }

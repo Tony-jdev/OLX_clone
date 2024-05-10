@@ -1,41 +1,25 @@
 import './App.css';
 import * as React from 'react';
-import { useMemo, useState, createContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AppRoutes from './AppRoutes.jsx';
 import Layout from './components/Layout/Layout';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import ColorModeContext from "@/contexts/ColorModeContext.jsx";
-import getDesignTokens from "@/design/paletteToken.jsx";
-
+import {Provider} from "react-redux";
+import store, {persistor} from "@/Storage/Redux/store.js";
+import {PersistGate} from "redux-persist/integration/react";
 function App() {
-    const [mode, setMode] = useState('light');
-    const colorMode = useMemo(
-        () => ({
-            toggleColorMode: () => {
-                setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-            },
-        }),
-        [],
-    );
-    
-    const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
     return (
-        <ColorModeContext.Provider value={colorMode}>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline />
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
                     <Layout>
                         <Routes>
                             {AppRoutes.map((route, index) => {
-                                const { element, ...rest } = route;
-                                return <Route key={index} {...rest} element={element} />;
+                                const { element, path, ...rest } = route;
+                                return <Route key={index}  element={element} path={path} {...rest}/>;
                             })}
                         </Routes>
                     </Layout>
-                </ThemeProvider>
-        </ColorModeContext.Provider>
+                </PersistGate>
+            </Provider>
     );
 }
 
