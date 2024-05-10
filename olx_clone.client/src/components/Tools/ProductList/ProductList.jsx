@@ -1,91 +1,37 @@
 import React from 'react';
 import {Grid, Typography} from '@mui/material';
-import ShortProduct from '../ShortProduct/ShortProduct.jsx'; 
-const ProductList = () => {
-    const products = [
-        {
-            id: 1,
-            photo: '../../../public/product.jpeg',
-            name: 'Product 1',
-            price: '$10',
-            publicationDate: '2024-04-07',
-            condition: 'New',
-            city: 'City A'
-        },
-        {
-            id: 2,
-            photo: '../../../public/product.jpeg',
-            name: 'Product 2',
-            price: '$20',
-            publicationDate: '2024-04-06',
-            condition: 'Used',
-            city: 'City B'
-        },
-        {
-            id: 3,
-            photo: '../../../public/product.jpeg',
-            name: 'Product 1',
-            price: '$10',
-            publicationDate: '2024-04-07',
-            condition: 'New',
-            city: 'City A'
-        },
-        {
-            id: 4,
-            photo: '../../../public/product.jpeg',
-            name: 'Product 2',
-            price: '$20',
-            publicationDate: '2024-04-06',
-            condition: 'Used',
-            city: 'City B'
-        },
-        {
-            id: 5,
-            photo: '../../../public/product.jpeg',
-            name: 'Product 3',
-            price: '$15',
-            publicationDate: '2024-04-05',
-            condition: 'New',
-            city: 'City C'
-        },
-        {
-            id: 6,
-            photo: '../../../public/product.jpeg',
-            name: 'Product 4',
-            price: '$25',
-            publicationDate: '2024-04-04',
-            condition: 'Used',
-            city: 'City D'
-        },
-        {
-            id: 7,
-            photo: '../../../public/product.jpeg',
-            name: 'Product 5',
-            price: '$12',
-            publicationDate: '2024-04-03',
-            condition: 'New',
-            city: 'City E'
-        },
-    ];
+import ShortProduct from '../ShortProduct/ShortProduct.jsx';
+import ContainerHeader from "@/components/Tools/ContainerHeader/ContainerHeader.jsx";
+import {GridStyle} from "@/components/Tools/ProductList/Styles.js";
 
+
+const ProductList = ({loading, error, posts, headerText, headerBtn, isShort}) => {
+    
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+    
     return (
-        <Grid container>
-            <Typography variant="h4" textAlign="start" width="100%" marginTop={5}>
-                VIP товари
-            </Typography>
-            <Grid container spacing={'20px'} marginTop={2} marginBottom={5}>
-                {products.map(product => (
-                    <Grid item key={product.id} xs={6} sm={4} md={3} lg={2.4}>
+        <Grid container style={{ width: '80%', }}>
+            {headerBtn != null && headerText != null && <ContainerHeader text={headerText} btn={headerBtn}/>}
+            <Grid container style={GridStyle} spacing={1}>
+                {posts.length > 0 ? posts.map(product => (
+                    <Grid item key={product.id} style={{width: 'fit-content'}} xs={6} sm={4} md={3} lg={isShort ? 3 : 2.4} >
                         <ShortProduct
-                            photo={product.photo}
-                            name={product.name}
+                            id = {product.id}
+                            photo={product.photoUrl}
+                            name={product.title}
                             price={product.price}
                             publicationDate={product.publicationDate}
-                            condition={product.condition}
+                            condition={product.status}
                             city={product.city}
                         />
                     </Grid>
-                ))}
+                )) :  <Typography>No Posts!...</Typography>}
             </Grid>
         </Grid>
     );
