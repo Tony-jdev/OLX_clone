@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
+using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos.Payment;
 using OLX_clone.Server.Services.TransactionService;
 using OLX_clone.Server.Services.UserService;
@@ -43,7 +44,8 @@ public class PaymentController : ControllerBase
             
             if (charge.Status == "succeeded")
             {
-                var apiResponse = await _userService.UpdateBalance(paymentRequest.UserId, paymentRequest.Amount);
+                var apiResponse = await _userService.UpdateBalance(
+                    new Transaction{Amount = paymentRequest.Amount, UserId = paymentRequest.UserId});
                 if (apiResponse.Success)
                 {
                     return Ok(apiResponse);

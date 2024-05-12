@@ -3,6 +3,7 @@ using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos.BoostPackage;
+using OLX_clone.Server.Services.UserService;
 
 namespace OLX_clone.Server.Services.BoostService;
 
@@ -10,12 +11,15 @@ public class BoostPackageService: IBoostPackageService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IBoostService _boostService;
+    private readonly IUserService _userService;
     private readonly IMapper _mapper;
     
-    public BoostPackageService(IUnitOfWork unitOfWork, IMapper mapper, IBoostService boostService)
+    public BoostPackageService(IUnitOfWork unitOfWork, IMapper mapper,
+        IBoostService boostService, IUserService userService)
     {
         _unitOfWork = unitOfWork;
         _boostService = boostService;
+        _userService = userService;
         _mapper = mapper;
     }
     
@@ -26,19 +30,10 @@ public class BoostPackageService: IBoostPackageService
         {
             return new ApiResponse<bool> { Success = false, Message = "Boost package not found." };
         }
-
-        /*// Перевірка чи користувач має достатньо коштів
-        var user = await _userService.GetUserById(userId);
-        if (user.Balance < boostPackage.Price)
-        {
-            return new ApiResponse<bool> { Success = false, Message = "Insufficient balance." };
-        }
-
-        // Здійснення оплати
-        user.Balance -= boostPackage.Price;
-        await _userService.UpdateUser(user);*/
-
-        // Додавання пакету просування користувачеві для конкретного поста
+        
+        await _userService.UpdateBalance(
+            new Transaction{Amount = boostPackage.Price, UserId = userId, Type = TransactionType.AdvertisementPayment});
+        
         var result = await _boostService.CreatePostBoost(postId, boostPackage);
 
         if (result.Success)
@@ -47,9 +42,6 @@ public class BoostPackageService: IBoostPackageService
         }
         else
         {
-            /*// Повернення грошей користувачу у разі невдачі
-            user.Balance += boostPackage.Price;
-            await _userService.UpdateUser(user);*/
             return new ApiResponse<bool> { Success = false, Message = "Failed to buy boost package." };
         }
     }

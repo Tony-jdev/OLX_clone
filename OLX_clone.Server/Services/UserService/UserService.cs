@@ -72,19 +72,19 @@ public class UserService: IUserService
         return new ApiResponse<IEnumerable<IdentityError>> { Data = result.Errors, Success = false, Message = "Error updating user." };
     }
     
-    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateBalance(string userId, double amount)
+    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateBalance(Transaction transaction)
     {
-        var userFromDb = await _userManager.FindByIdAsync(userId);
+        var userFromDb = await _userManager.FindByIdAsync(transaction.UserId);
         if (userFromDb == null)
             return new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "User not found." };
         
-        userFromDb.Balance += amount;
+        if(transaction.Type == TransactionType.AdvertisementPayment && transaction.Amount < userFromDb.Balance)
+            userFromDb.Balance -= transaction.Amount;
+        else if(transaction.Type == TransactionType.Deposit)
+            userFromDb.Balance += transaction.Amount;
+        else
+            return new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "Insufficient balance." };
         
-        var transaction = new Transaction
-        {
-            UserId = userId,
-            Amount = amount
-        };
         var transactionResult = await _transactionService.RecordTransaction(transaction);
 
         if (!transactionResult.Success)

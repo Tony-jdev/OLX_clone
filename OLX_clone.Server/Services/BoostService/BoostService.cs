@@ -41,13 +41,11 @@ public class BoostService: IBoostService
             return new ApiResponse<PostBoost> { Success = false, Message = "Post not found" };
         }
         
-        // Якщо це VIP-пакет, то додати дату закінчення VIP-просування
         if (boostPackage.Type == BoostType.VIP)
         {
             postBoost.VipExpiryDate = DateTime.Now.AddDays(boostPackage.VipDurationInDays);
         }
-
-        // Додати запис про просування в базу даних
+        
         var createdPostBoost = await _unitOfWork.PostBoostRepository.AddAsync(postBoost);
 
         return new ApiResponse<PostBoost> { Data = createdPostBoost, Message = "Post boost created successfully" };
