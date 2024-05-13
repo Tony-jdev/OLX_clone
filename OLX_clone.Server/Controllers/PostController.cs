@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.Post;
+using OLX_clone.Server.Services.BoostService;
 using OLX_clone.Server.Services.PostService;
 
 namespace OLX_clone.Server.Controllers;
@@ -13,10 +15,12 @@ namespace OLX_clone.Server.Controllers;
 public class PostController: ControllerBase
 {
     private readonly IPostService _postService;
+    private readonly IBoostService _boostService;
     
-    public PostController(IPostService postService)
+    public PostController(IPostService postService, IBoostService boostService)
     {
         _postService = postService;
+        _boostService = boostService;
     }
     
     [HttpGet]
@@ -170,5 +174,20 @@ public class PostController: ControllerBase
         }
 
         return apiResponse;
+    }
+    
+    [HttpPost("{postId}/boost")]
+    public async Task<ActionResult<ApiResponse<bool>>> BoostPost(int postId)
+    {
+        var response = await _boostService.BoostPost(postId);
+
+        if (response.Success)
+        {
+            return Ok(response);
+        }
+        else
+        {
+            return BadRequest(response);
+        }
     }
 }

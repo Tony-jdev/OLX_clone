@@ -36,14 +36,12 @@ public class BoostPackageService: IBoostPackageService
         
         var result = await _boostService.CreatePostBoost(postId, boostPackage);
 
-        if (result.Success)
-        {
-            return new ApiResponse<bool> { Success = true, Message = "Boost package bought successfully." };
-        }
-        else
+        if (!result.Success)
         {
             return new ApiResponse<bool> { Success = false, Message = "Failed to buy boost package." };
         }
+        
+        return new ApiResponse<bool> { Success = true, Message = "Boost package bought successfully." };
     }
     
     public async Task<ApiResponse<List<BoostPackage>>> GetBoostPackages()

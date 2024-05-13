@@ -24,8 +24,7 @@ public class BoostService: IBoostService
             AvailableBoostsCount = boostPackage.BoostCount,
             TopExpiryDate = DateTime.Now.AddDays(boostPackage.TopDurationInDays),
         };
-
-        // Оновити поле IsTop у пості
+        
         var postToUpdate = await _unitOfWork.PostRepository.GetAsync(postId);
         if (postToUpdate != null)
         {
@@ -52,39 +51,32 @@ public class BoostService: IBoostService
     }
 
     
-    /*public async Task<ApiResponse<bool>> BoostPost(int postId, int boostPackageId)
+    public async Task<ApiResponse<bool>> BoostPost(int postId)
     {
         try
         {
-            // Отримати інформацію про оголошення та пакет просування
+            var postBoost = await _unitOfWork.PostBoostRepository.GetPostBoostByPostId(postId);
+            
+            if (postBoost.AvailableBoostsCount <= 0)
+            {
+                return new ApiResponse<bool> { Success = false, Message = "No available boosts left for this post." };
+            }
+
+            if(postBoost.TopExpiryDate < DateTime.Now)
+                postBoost.TopExpiryDate = DateTime.Now.AddDays(1);
+            else postBoost.TopExpiryDate = postBoost.TopExpiryDate.Value.AddDays(1);
+            
+            postBoost.AvailableBoostsCount--;
+            
+            await _unitOfWork.PostBoostRepository.UpdateAsync(postBoost);
+            
             var post = await _unitOfWork.PostRepository.GetAsync(postId);
-            var boostPackage = await _unitOfWork.BoostPackageRepository.GetAsync(boostPackageId);
-
-            if (post == null || boostPackage == null)
+            
+            if (!post.IsTop)
             {
-                return new ApiResponse<bool> { Success = false, Message = "Post or boost package not found." };
+                post.IsTop = true;
+                await _unitOfWork.PostRepository.UpdateAsync(post);
             }
-
-            // Перевірити, чи користувач має достатньо підйомів для виконання операції
-            if (post.AvailableBoostsCount < boostPackage.BoostCount)
-            {
-                return new ApiResponse<bool> { Success = false, Message = "Not enough boosts available." };
-            }
-
-            // Оновити баланс користувача
-            post.AvailableBoostsCount -= boostPackage.BoostCount;
-
-            // Додати запис в таблицю просування
-            var boost = new Boost
-            {
-                ApplicationUserId = post.ApplicationUserId,
-                PostId = postId,
-                BoostPackageId = boostPackageId,
-                ExpirationDate = DateTime.Now.AddDays(boostPackage.DurationInDays)
-            };
-
-            await _unitOfWork.BoostRepository.AddAsync(boost);
-            await _unitOfWork.SaveChangesAsync();
 
             return new ApiResponse<bool> { Success = true, Message = "Post boosted successfully." };
         }
@@ -92,5 +84,5 @@ public class BoostService: IBoostService
         {
             return new ApiResponse<bool> { Success = false, Message = $"Error boosting post: {ex.Message}" };
         }
-    }*/
+    }
 }
