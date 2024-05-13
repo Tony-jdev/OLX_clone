@@ -15,4 +15,11 @@ public class PostBoostRepository: GenericRepository<PostBoost>, IPostBoostReposi
     {
         return await _context.PostBoosts.Where(pb => pb.PostId == postId).FirstOrDefaultAsync();
     }
+    
+    public async Task<List<PostBoost>> GetExpiredBoostsAsync()
+    {
+        return await _context.PostBoosts
+            .Where(b => b.TopExpiryDate != null && b.TopExpiryDate <= DateTime.Now || b.VipExpiryDate != null && b.VipExpiryDate <= DateTime.Now)
+            .ToListAsync();
+    }
 }
