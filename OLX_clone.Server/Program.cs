@@ -1,5 +1,8 @@
 using System.Text;
 using Azure.Storage.Blobs;
+using Hangfire;
+using Hangfire.Storage.SQLite;
+using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -76,9 +79,18 @@ builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IBoostPackageService, BoostPackageService>();
 builder.Services.AddScoped<IBoostService, BoostService>();
+builder.Services.AddScoped<IBoostExpirationService, BoostExpirationService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSignalR();
+
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSQLiteStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
+
+builder.Services.AddHangfireServer();
 
 builder.Services.AddAuthentication(u =>
 {
@@ -115,6 +127,22 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHangfireDashboard();
+app.MapHangfireDashboard("/hangfiredashboard", new DashboardOptions()
+{
+    DashboardTitle = "eVSE Dashboard",
+    Authorization = new []
+    {
+        new HangfireCustomBasicAuthenticationFilter()
+        {
+            Pass = "evseadmin",
+            User = "eVSEAdmin"
+        }
+    }
+});
+
+RecurringJob.AddOrUpdate<IBoostExpirationService>(x => x.CheckBoostExpiration(), Cron.Minutely);   
 
 app.MapControllers();
 
