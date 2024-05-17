@@ -10,6 +10,8 @@ public class PostBoost
     public int PostId { get; set; }
     [ForeignKey("PostId")]
     public Post Post { get; set; }
+    
+    public int NumberOfDays { get; set; }
         
     public int AvailableBoostsCount { get; set; }
     

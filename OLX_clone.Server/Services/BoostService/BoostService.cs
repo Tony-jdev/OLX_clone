@@ -18,9 +18,16 @@ public class BoostService: IBoostService
     
     public async Task<ApiResponse<PostBoost>> CreatePostBoost(int postId, BoostPackage boostPackage)
     {
+        var postBoostFromDb = await _unitOfWork.PostBoostRepository.GetPostBoostByPostId(postId);
+        if (postBoostFromDb != null)
+        {
+            await _unitOfWork.PostBoostRepository.DeleteAsync(postBoostFromDb.Id);
+        }
+        
         var postBoost = new PostBoost()
         {
             PostId = postId,
+            NumberOfDays = boostPackage.NumberOfDays,
             AvailableBoostsCount = boostPackage.BoostCount,
             TopExpiryDate = DateTime.Now.AddDays(boostPackage.TopDurationInDays),
         };
@@ -59,12 +66,13 @@ public class BoostService: IBoostService
             
             if (postBoost.AvailableBoostsCount <= 0)
             {
-                return new ApiResponse<bool> { Success = false, Message = "No available boosts left for this post." };
+                await _unitOfWork.PostBoostRepository.DeleteAsync(postBoost.Id);
+                return new ApiResponse<bool> { Success = false, Message = "No boosts left for this post." };
             }
 
             if(postBoost.TopExpiryDate < DateTime.Now)
-                postBoost.TopExpiryDate = DateTime.Now.AddDays(1);
-            else postBoost.TopExpiryDate = postBoost.TopExpiryDate.Value.AddDays(1);
+                postBoost.TopExpiryDate = DateTime.Now.AddDays(postBoost.NumberOfDays);
+            else postBoost.TopExpiryDate = postBoost.TopExpiryDate.Value.AddDays(postBoost.NumberOfDays);
             
             postBoost.AvailableBoostsCount--;
             

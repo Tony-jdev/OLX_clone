@@ -51,13 +51,13 @@ namespace OLX_clone.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a9945cc8-6845-43ee-8fde-8742a621b244",
+                            Id = "bad4c371-392d-4680-8273-001c8462977c",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "cf262570-5a3a-4657-9438-83de6487efe2",
+                            Id = "f38fde2d-cf40-4a9d-b3cf-3ee72200314e",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -451,6 +451,9 @@ namespace OLX_clone.Server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AvailableBoostsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
 
                     b.Property<int>("PostId")

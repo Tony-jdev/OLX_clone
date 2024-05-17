@@ -53,6 +53,7 @@ namespace OLX_clone.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PostId = table.Column<int>(type: "int", nullable: false),
+                    NumberOfDays = table.Column<int>(type: "int", nullable: false),
                     AvailableBoostsCount = table.Column<int>(type: "int", nullable: false),
                     TopExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     VipExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true)
