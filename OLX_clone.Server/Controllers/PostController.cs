@@ -23,6 +23,18 @@ public class PostController: ControllerBase
         _boostService = boostService;
     }
     
+    [HttpGet("vip")]
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetVipPosts()
+    {
+        var apiResponse = await _postService.GetVipPosts();
+        if (!apiResponse.Success)
+        {
+            return BadRequest(apiResponse);
+        }
+
+        return Ok(apiResponse);
+    }
+    
     [HttpGet]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(string? searchTerm, string? orderBy, int page = 1)
     {

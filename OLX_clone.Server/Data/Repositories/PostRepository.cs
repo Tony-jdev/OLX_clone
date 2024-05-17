@@ -11,6 +11,15 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
       
     }
     
+    public async Task<List<Post>> GetVipPostsAsync()
+    {
+        return await _context.Posts
+            .Where(p => p.IsVip)
+            .OrderBy(p => Guid.NewGuid())
+            .Take(20)
+            .ToListAsync();
+    }
+    
     public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy)
     {
         IQueryable<Post> query = _context.Posts;
@@ -35,6 +44,7 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
                     break;
             }
         }
+        else query = query.OrderBy(p => Guid.NewGuid());
 
         return await query.ToListAsync();
     }
@@ -65,13 +75,16 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
                     break;
             }
         }
+        else query = query.OrderBy(p => Guid.NewGuid());
 
         return await query.ToListAsync();
     }
     
     public async Task<Post> GetPostDetailsBySkuAsync(string sku)
     {
-        return await _context.Posts.Include(p => p.User)
-            .Include(p => p.Category).Where(p => p.SKU == sku).FirstOrDefaultAsync();
+        return await _context.Posts
+            .Include(p => p.User)
+            .Include(p => p.Category)
+            .Where(p => p.SKU == sku).FirstOrDefaultAsync();
     }
 }

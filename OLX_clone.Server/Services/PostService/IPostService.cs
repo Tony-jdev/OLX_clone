@@ -7,6 +7,7 @@ namespace OLX_clone.Server.Services.PostService;
 
 public interface IPostService
 {
+    Task<ApiResponse<List<GetPostDto>>> GetVipPosts();
     Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, string? orderBy, int page);
     Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 
         string? searchTerm, string? orderBy, int page);

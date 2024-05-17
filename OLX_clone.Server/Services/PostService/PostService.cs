@@ -22,6 +22,19 @@ public class PostService : IPostService
         _blobService = blobService;
     }
     
+    public async Task<ApiResponse<List<GetPostDto>>> GetVipPosts()
+    {
+        var posts = await _unitOfWork.PostRepository.GetVipPostsAsync();
+        var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
+        
+        foreach (var post in getPostDtos)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+        }
+        
+        return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
+    }
+    
     public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, string? orderBy, int page)
     {
         var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy);

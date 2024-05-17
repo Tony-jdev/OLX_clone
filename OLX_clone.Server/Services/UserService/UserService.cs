@@ -78,7 +78,7 @@ public class UserService: IUserService
         if (userFromDb == null)
             return new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "User not found." };
         
-        if(transaction.Type == TransactionType.AdvertisementPayment && transaction.Amount < userFromDb.Balance)
+        if(transaction.Type == TransactionType.AdvertisementPayment && transaction.Amount <= userFromDb.Balance)
             userFromDb.Balance -= transaction.Amount;
         else if(transaction.Type == TransactionType.Deposit)
             userFromDb.Balance += transaction.Amount;

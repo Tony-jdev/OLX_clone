@@ -31,8 +31,10 @@ public class BoostPackageService: IBoostPackageService
             return new ApiResponse<bool> { Success = false, Message = "Boost package not found." };
         }
         
-        await _userService.UpdateBalance(
+        var response = await _userService.UpdateBalance(
             new Transaction{Amount = boostPackage.Price, UserId = userId, Type = TransactionType.AdvertisementPayment});
+        if (!response.Success)
+            return new ApiResponse<bool> { Success = false, Message = response.Message };;
         
         var result = await _boostService.CreatePostBoost(postId, boostPackage);
 
