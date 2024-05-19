@@ -36,9 +36,10 @@ public class PostController: ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(string? searchTerm, string? orderBy, int page = 1)
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(
+        string? searchTerm, string? orderBy, string? status, int page = 1)
     {
-        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, page);
+        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, status, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);
@@ -49,9 +50,9 @@ public class PostController: ControllerBase
     
     [HttpGet("category/{categorySku}", Name = "GetPostByCategory")]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(string categorySku,
-        string? searchTerm, string? orderBy, int page = 1)
+        string? searchTerm, string? orderBy, string? status, int page = 1)
     {
-        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, page);
+        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, status, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);

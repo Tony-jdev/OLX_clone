@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OLX_clone.Server.Data.Contracts;
+using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 
 namespace OLX_clone.Server.Data.Repositories;
@@ -20,13 +21,19 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
             .ToListAsync();
     }
     
-    public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy)
+    public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy, string? status)
     {
         IQueryable<Post> query = _context.Posts;
 
+        if (!string.IsNullOrEmpty(status))
+        {
+            query = query.Where(p => p.Status == status.ToLower());
+        }
+        else query = query.Where(p => p.Status == SD.status_active);
+        
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(p => p.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+            query = query.Where(p => p.Title.Contains(searchTerm.ToLower()));
         }
 
         if (!string.IsNullOrEmpty(orderBy))
@@ -60,14 +67,20 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
         return topPosts.Concat(remainingPosts).ToList();
     }
     
-    public async Task<List<Post>> GetAllByCategoryAsync(List<int> categoryIds, string? searchTerm, string? orderBy)
+    public async Task<List<Post>> GetAllByCategoryAsync(List<int> categoryIds, string? searchTerm, string? orderBy, string? status)
     {
         var query = _context.Posts
             .Where(p => categoryIds.Contains(p.CategoryId));
 
+        if (!string.IsNullOrEmpty(status))
+        {
+            query = query.Where(p => p.Status == status.ToLower());
+        }
+        else query = query.Where(p => p.Status == SD.status_active);
+        
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(p => p.Title.Contains(searchTerm));
+            query = query.Where(p => p.Title.Contains(searchTerm.ToLower()));
         }
 
         if (!string.IsNullOrEmpty(orderBy))

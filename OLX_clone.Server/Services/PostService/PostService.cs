@@ -35,9 +35,9 @@ public class PostService : IPostService
         return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
     }
     
-    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, string? orderBy, int page)
+    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, string? orderBy, string? status, int page)
     {
-        var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy);
+        var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy, status);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
         
@@ -50,11 +50,11 @@ public class PostService : IPostService
     }
     
     public async Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 
-        string? searchTerm, string? orderBy, int page)
+        string? searchTerm, string? orderBy, string? status, int page)
     {
         var categoryIds = await _unitOfWork.CategoryRepository.GetCategoryAndChildrenIds(categorySku);
         
-        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy);
+        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy, status);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
         
