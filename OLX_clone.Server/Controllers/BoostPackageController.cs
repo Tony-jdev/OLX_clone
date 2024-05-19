@@ -16,6 +16,18 @@ public class BoostPackageController: ControllerBase
     {
         _boostPackageService = boostPackageService;
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<ApiResponse<List<BoostPackage>>>> GetBoostPackages()
+    {
+        var apiResponse = await _boostPackageService.GetBoostPackages();
+        if (!apiResponse.Success)
+        {
+            return BadRequest(apiResponse);
+        }
+
+        return Ok(apiResponse);
+    }
 
     [HttpPost]
     public async Task<ActionResult<ApiResponse<BoostPackage>>> CreateBoostPackage(CreateBoostPackageDto boostPackageCreateDto)

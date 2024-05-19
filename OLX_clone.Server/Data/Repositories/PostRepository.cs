@@ -26,7 +26,7 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()));
+            query = query.Where(p => p.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
         }
 
         if (!string.IsNullOrEmpty(orderBy))
@@ -43,16 +43,26 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
                     query = query.OrderBy(p => p.Id);
                     break;
             }
+            
+            return await query.ToListAsync();
         }
-        else query = query.OrderBy(p => Guid.NewGuid());
+        
+        query = query.OrderBy(p => Guid.NewGuid());
+        
+        var topPosts = await query.Where(p => p.IsTop)
+            .Take(4).ToListAsync();
+        
+        var topPostIds = topPosts.Select(p => p.Id).ToList();
 
-        return await query.ToListAsync();
+        var remainingPosts = await query
+            .Where(p => !topPostIds.Contains(p.Id)).ToListAsync();
+
+        return topPosts.Concat(remainingPosts).ToList();
     }
     
-    public async Task<List<Post>> GetAllByCategoryAsync(List<int> categoryIds, string? searchTerm, string? orderBy, int page)
+    public async Task<List<Post>> GetAllByCategoryAsync(List<int> categoryIds, string? searchTerm, string? orderBy)
     {
         var query = _context.Posts
-            .Include(p => p.Category)
             .Where(p => categoryIds.Contains(p.CategoryId));
 
         if (!string.IsNullOrEmpty(searchTerm))
@@ -74,10 +84,21 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
                     query = query.OrderBy(p => p.Id);
                     break;
             }
+            
+            return await query.ToListAsync();
         }
-        else query = query.OrderBy(p => Guid.NewGuid());
 
-        return await query.ToListAsync();
+        query = query.OrderBy(p => Guid.NewGuid());
+        
+        var topPosts = await query.Where(p => p.IsTop)
+            .Take(4).ToListAsync();
+        
+        var topPostIds = topPosts.Select(p => p.Id).ToList();
+
+        var remainingPosts = await query
+            .Where(p => !topPostIds.Contains(p.Id)).ToListAsync();
+
+        return topPosts.Concat(remainingPosts).ToList();
     }
     
     public async Task<Post> GetPostDetailsBySkuAsync(string sku)

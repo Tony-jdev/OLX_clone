@@ -39,7 +39,7 @@ public class PostService : IPostService
     {
         var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 20);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
         
         foreach (var post in pagedPosts.Items)
         {
@@ -54,9 +54,9 @@ public class PostService : IPostService
     {
         var categoryIds = await _unitOfWork.CategoryRepository.GetCategoryAndChildrenIds(categorySku);
         
-        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy, page);
+        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 20);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
         
         foreach (var post in pagedPosts.Items)
         {
