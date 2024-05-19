@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
+using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.BoostPackage;
 using OLX_clone.Server.Services.BoostService;
 
@@ -18,7 +19,7 @@ public class BoostPackageController: ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<BoostPackage>>>> GetBoostPackages()
+    public async Task<ActionResult<ApiResponse<List<GetBoostPackageDto>>>> GetBoostPackages()
     {
         var apiResponse = await _boostPackageService.GetBoostPackages();
         if (!apiResponse.Success)
@@ -26,6 +27,17 @@ public class BoostPackageController: ControllerBase
             return BadRequest(apiResponse);
         }
 
+        return Ok(apiResponse);
+    }
+    
+    [HttpGet("{id:int}", Name = "GetBoostPackage")]
+    public async Task<ActionResult<ApiResponse<Category>>> GetBoostPackage(int id)
+    {
+        var apiResponse = await _boostPackageService.GetBoostPackage(id);
+        if (!apiResponse.Success)
+        {
+            return NotFound(apiResponse);
+        }
         return Ok(apiResponse);
     }
 

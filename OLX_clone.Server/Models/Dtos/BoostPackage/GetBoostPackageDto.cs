@@ -1,6 +1,6 @@
-﻿namespace OLX_clone.Server.Models.Dtos.BoostPackage;
+﻿namespace OLX_clone.Server.Models.Dtos;
 
-public class UpdateBoostPackageDto
+public class GetBoostPackageDto
 {
     public int Id { get; set; }
     public string Name { get; set; }

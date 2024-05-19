@@ -35,6 +35,8 @@ public class MapperConfiguration : Profile
 
         CreateMap<ApplicationUser, GetApplicationUserDto>();
 
+        CreateMap<BoostPackage, GetBoostPackageDto>();
+        CreateMap<BoostPackage, GetBoostPackageDetailsDto>();
         CreateMap<CreateBoostPackageDto, BoostPackage>();
         CreateMap<UpdateBoostPackageDto, BoostPackage>();
     }

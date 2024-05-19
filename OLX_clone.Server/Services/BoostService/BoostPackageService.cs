@@ -2,6 +2,7 @@
 using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
+using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.BoostPackage;
 using OLX_clone.Server.Services.UserService;
 
@@ -46,20 +47,20 @@ public class BoostPackageService: IBoostPackageService
         return new ApiResponse<bool> { Success = true, Message = "Boost package bought successfully." };
     }
     
-    public async Task<ApiResponse<List<BoostPackage>>> GetBoostPackages()
+    public async Task<ApiResponse<List<GetBoostPackageDto>>> GetBoostPackages()
     {
         var boostPackages = await _unitOfWork.BoostPackageRepository.GetAllAsync();
 
-        return new ApiResponse<List<BoostPackage>> { Data = boostPackages
+        return new ApiResponse<List<GetBoostPackageDto>> { Data = _mapper.Map<List<GetBoostPackageDto>>(boostPackages)
             , Message = "Packages retrieved successfully." };
     }
     
-    public async Task<ApiResponse<BoostPackage>> GetBoostPackage(int id)
+    public async Task<ApiResponse<GetBoostPackageDetailsDto>> GetBoostPackage(int id)
     {
         var boostPackage = await _unitOfWork.BoostPackageRepository.GetAsync(id);
         
-        return boostPackage == null ? new ApiResponse<BoostPackage> { Success = false, Message = "Package not found." } 
-            : new ApiResponse<BoostPackage> { Data = _mapper.Map<BoostPackage>(boostPackage),
+        return boostPackage == null ? new ApiResponse<GetBoostPackageDetailsDto> { Success = false, Message = "Package not found." } 
+            : new ApiResponse<GetBoostPackageDetailsDto> { Data = _mapper.Map<GetBoostPackageDetailsDto>(boostPackage),
                 Message = "Package retrieved successfully." };
     }
     
