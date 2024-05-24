@@ -1,7 +1,6 @@
 export const LocationInfoContainer = {
     padding: '20px',
     marginBottom: '20px',
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
     borderRadius: '8px',
 };
 
@@ -11,7 +10,6 @@ export const LocationInfoTitle = {
     fontWeight: 'bold',
     fontSize: '24px',
     lineHeight: '28px',
-    color: '#313030',
 };
 
 export const LocationInfoTextStyle = {
@@ -20,5 +18,4 @@ export const LocationInfoTextStyle = {
     fontWeight: 'normal',
     fontSize: '16px',
     lineHeight: '20px',
-    color: '#313030',
 };

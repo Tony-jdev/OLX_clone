@@ -19,6 +19,7 @@ const getDesignTokens = (mode) => ({
                         input: '#313030',
                         revers: '#313030',
                     },
+                    boxShadow: '0px 26px 11px rgba(49, 48, 48, 0.01), 0px 15px 9px rgba(49, 48, 48, 0.05), 0px 7px 7px rgba(49, 48, 48, 0.09), 0px 2px 4px rgba(49, 48, 48, 0.1)',
                 },
             }
             : {
@@ -38,6 +39,7 @@ const getDesignTokens = (mode) => ({
                         input: '#313030',
                         revers: '#fffcf8',
                     },
+                    boxShadow: '0px 26px 11px rgba(255, 200, 10, 0.05), 0px 15px 9px rgba(255, 200, 10, 0.1), 0px 7px 7px rgba(255, 200, 10, 0.15), 0px 2px 4px rgba(255, 200, 10, 0.25)',
                 },
             }),
     },

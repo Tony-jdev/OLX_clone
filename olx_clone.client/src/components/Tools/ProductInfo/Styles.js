@@ -1,7 +1,6 @@
 export const ProductInfoContainer = {
     padding: '20px',
     marginBottom: '20px',
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
     borderRadius: '8px',
 };
 
@@ -11,7 +10,6 @@ export const TitleStyle = {
     fontWeight: 'bold',
     fontSize: '24px',
     lineHeight: '28px',
-    color: '#313030',
 };
 
 export const DescriptionStyle = {
@@ -20,7 +18,6 @@ export const DescriptionStyle = {
     fontWeight: 'normal',
     fontSize: '16px',
     lineHeight: '20px',
-    color: '#313030',
 };
 
 export const PriceStyle = {
@@ -29,5 +26,4 @@ export const PriceStyle = {
     fontWeight: 'bold',
     fontSize: '20px',
     lineHeight: '24px',
-    color: '#313030',
 };

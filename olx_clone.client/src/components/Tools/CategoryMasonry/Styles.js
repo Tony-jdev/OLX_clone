@@ -35,7 +35,6 @@ export const ButtonMainStyle={
     borderRadius: '20px', 
     overflow: "hidden",
     background: 'linear-gradient(288.4deg, #FF9D00 27.9%, #FFEBCC 140.56%)',
-    boxShadow: "0px 26px 11px rgba(49, 48, 48, 0.01), 0px 15px 9px rgba(49, 48, 48, 0.05), 0px 7px 7px rgba(49, 48, 48, 0.09), 0px 2px 4px rgba(49, 48, 48, 0.1)",
 }
 export const BoxImgMainStyle={
     objectFit: "fill"
@@ -43,7 +42,6 @@ export const BoxImgMainStyle={
 export const BoxMainStyle={
     objectFit: "cover", 
     borderRadius: '20px',
-    boxShadow: "0px 26px 11px rgba(49, 48, 48, 0.01), 0px 15px 9px rgba(49, 48, 48, 0.05), 0px 7px 7px rgba(49, 48, 48, 0.09), 0px 2px 4px rgba(49, 48, 48, 0.1)",
 }
 export const TextStyle={
     fontFamily: 'Roboto',

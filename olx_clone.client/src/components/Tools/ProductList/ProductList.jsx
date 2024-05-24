@@ -16,18 +16,18 @@ const ProductList = ({loading, error, posts, headerText, headerBtn, isShort}) =>
     }
     
     return (
-        <Grid container style={{ width: '80%', }}>
+        <Grid container>
             {headerBtn != null && headerText != null && <ContainerHeader text={headerText} btn={headerBtn}/>}
-            <Grid container style={GridStyle} spacing={1}>
+            <Grid container style={GridStyle} spacing={3} direction='row'>
                 {posts.length > 0 ? posts.map(product => (
-                    <Grid item key={product.id} style={{width: 'fit-content'}} xs={6} sm={4} md={3} lg={isShort ? 3 : 2.4} >
+                    <Grid item key={product.id} style={{width: 'fit-content'}}>
                         <ShortProduct
-                            id = {product.id}
+                            id = {product.sku}
                             photo={product.photoUrl}
                             name={product.title}
                             price={product.price}
-                            publicationDate={product.publicationDate}
-                            condition={product.status}
+                            publicationDate={product.createdAt}
+                            condition={product.type}
                             city={product.city}
                         />
                     </Grid>

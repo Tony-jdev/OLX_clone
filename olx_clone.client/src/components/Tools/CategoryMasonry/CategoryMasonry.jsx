@@ -11,6 +11,7 @@ import {
 } from '@/components/Tools/CategoryMasonry/Styles.js';
 import { useNavigate } from 'react-router-dom';
 import {FormattedMessage} from "react-intl";
+import {useTheme} from "@mui/material/styles";
 
 
 const buttons = [
@@ -41,6 +42,8 @@ const images = [
 
 
 const CategoryMasonry = () => {
+    const theme = useTheme();
+    const { colors } = theme.palette;
     const navigate = useNavigate();
 
     return (
@@ -48,7 +51,7 @@ const CategoryMasonry = () => {
             <Grid container justifyContent='space-between' style={GridC1Style}>
                 <Button
                     component="span"
-                    sx={{...ButtonMainStyle, width: 467, height: 290 }}
+                    sx={{...ButtonMainStyle, width: 467, height: 290, boxShadow: colors.boxShadow }}
                     onClick={()=> navigate(navigates[0])}
                 >
                     <Box
@@ -67,12 +70,12 @@ const CategoryMasonry = () => {
                         component="img"
                         src={images[5]}
                         alt="alt"
-                        sx={{...BoxMainStyle, width: 223, height: 290, }}
+                        sx={{...BoxMainStyle, width: 223, height: 290, boxShadow: colors.boxShadow }}
                     />
                     
                     <Button
                         component="span"
-                        sx={{...ButtonMainStyle, width: 223, height: 290 }}
+                        sx={{...ButtonMainStyle, width: 223, height: 290, boxShadow: colors.boxShadow}}
                         onClick={()=> navigate(navigates[1])}
                     >
                         <Box
@@ -95,12 +98,12 @@ const CategoryMasonry = () => {
                         component="img"
                         src={images[1]}
                         alt="alt"
-                        sx={{...BoxMainStyle, width: 290, height: 90}}
+                        sx={{...BoxMainStyle, width: 290, height: 90, boxShadow: colors.boxShadow}}
                     />
 
                     <Button
                         component="span"
-                        sx={{...ButtonMainStyle, width: 290, height: 180 }}
+                        sx={{...ButtonMainStyle, width: 290, height: 180, boxShadow: colors.boxShadow }}
                         onClick={()=> navigate(navigates[2])}
                     >
                         <Box
@@ -119,7 +122,7 @@ const CategoryMasonry = () => {
                         component="img"
                         src={images[2]}
                         alt="alt"
-                        sx={{...BoxMainStyle, width: 290, height: 290,}}
+                        sx={{...BoxMainStyle, width: 290, height: 290, boxShadow: colors.boxShadow}}
                     />
                 </Grid>
                 
@@ -128,12 +131,12 @@ const CategoryMasonry = () => {
                         component="img"
                         src={images[0]}
                         alt="alt"
-                        sx={{...BoxMainStyle, width: 223, height: 180,}}
+                        sx={{...BoxMainStyle, width: 223, height: 180, boxShadow: colors.boxShadow}}
                     />
 
                     <Button
                         component="span"
-                        sx={{...ButtonMainStyle, width: 223, height: 290 }}
+                        sx={{...ButtonMainStyle, width: 223, height: 290, boxShadow: colors.boxShadow }}
                         onClick={()=> navigate(navigates[3])}
                     >
                         <Box
@@ -152,7 +155,7 @@ const CategoryMasonry = () => {
                         component="img"
                         src={images[3]}
                         alt="alt"
-                        sx={{...BoxMainStyle, width: 225, height: 90, }}
+                        sx={{...BoxMainStyle, width: 225, height: 90 , boxShadow: colors.boxShadow}}
                     />
                 </Grid>
             </Grid>
@@ -162,12 +165,12 @@ const CategoryMasonry = () => {
                     component="img"
                     src={images[4]}
                     alt="alt"
-                    sx={{...BoxMainStyle, width: 389, height: 90, }}
+                    sx={{...BoxMainStyle, width: 389, height: 90, boxShadow: colors.boxShadow }}
                 />
 
                 <Button
                     component="span"
-                    sx={{...ButtonMainStyle, width: 396, height: 180 }}
+                    sx={{...ButtonMainStyle, width: 396, height: 180, boxShadow: colors.boxShadow }}
                     onClick={()=> navigate(navigates[4])}
                 >
                     <Box
@@ -186,7 +189,7 @@ const CategoryMasonry = () => {
                     component="img"
                     src={images[6]}
                     alt="alt"
-                    sx={{...BoxMainStyle, width: 398, height: 290, }}
+                    sx={{...BoxMainStyle, width: 398, height: 290, boxShadow: colors.boxShadow }}
                 />
             </Grid>
         </Grid>
