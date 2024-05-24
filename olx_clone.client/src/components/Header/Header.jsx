@@ -9,7 +9,11 @@ import {LocationIcon, AddIcon, ProfileIcon, SearchIcon} from '@/assets/Icons/Ico
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {changeLocale, changeTheme, selectLocale, selectTheme} from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
+import LocationPickerButton from "@/components/Tools/LocationPickerButton/LocationPickerButton.jsx";
+import {useNavigate} from "react-router-dom";
+import {selectSearchText, setSearchText} from "@/Storage/Redux/Slices/postSlice.js";
 const Header = () => {
+    const navigate = useNavigate();
 
     const mode = useSelector(selectTheme) ?? 'light';
     const locale = useSelector(selectLocale) ?? 'uk';
@@ -19,6 +23,7 @@ const Header = () => {
     const { colors } = theme.palette;
     const colorMode = useContext(ColorModeContext);
 
+    const searchText = useSelector(selectSearchText) ?? '';
     const toggleTheme = () => {
         const newTheme = mode === 'light' ? 'dark' : 'light';
         dispatch(changeTheme(newTheme));
@@ -27,6 +32,16 @@ const Header = () => {
     const toggleLocale = () => {
         const newLocale = locale === 'en' ? 'uk' : 'en';
         dispatch(changeLocale(newLocale));
+    };
+    
+    const searchThings = () => {
+        navigate('./search');
+        window.location.reload();
+    }
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            searchThings();
+        }
     };
     
     return (
@@ -40,20 +55,42 @@ const Header = () => {
                                 image='../../../public/LogoBar1.png'
                                 alt='Logo'
                                 sx={LogoStyle}
+                                onClick={()=>{navigate('./')}}
                             />
-                            <TextField title='non'
+                            <TextField title='non' 
+                                       value={searchText} 
+                                       onChange={(e)=>dispatch(setSearchText(e.target.value))}
+                                       onKeyDown={handleKeyDown}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <SButton isIconButton={true} icon={ <SearchIcon style={{fill: colors.text.orange}}/>}/>
+                                            <SButton isIconButton={true} 
+                                                     icon={ <SearchIcon style={{fill: colors.text.orange}}/>}
+                                                     action={searchThings}
+                                            />
                                         </InputAdornment>
                                     ),
                                     style: PropsFieldStyle,
                                     sx: { backgroundColor: colors.background.secondary }
                                 }}
                                 style={FieldStyle}
-                                sx={{ color: colors.text.input }}>
+                                sx={{ color: colors.text.input,
+                                    '& input:-internal-autofill-selected': {
+                                        paddingTop: 1,
+                                        paddingBottom: 1,
+                                        paddingLeft: 7.5,
+                                        marginLeft: -7.5,
+                                    },
+                                    '& .MuiInputBase-input.MuiOutlinedInput-input': {
+                                        paddingTop: 1,
+                                        paddingBottom: 1,
+                                        paddingLeft: 7.5,
+                                        marginLeft: -7.5,
+                                    },
+                                }} 
+                            >
                             </TextField>
+                            <LocationPickerButton/>
                         </Box>
                         <Box style={FlexBoxStyle}>
                             <SButton
@@ -88,15 +125,6 @@ const Header = () => {
                 </Toolbar>
                 <Toolbar style={ToolBarStyle}>
                     <Grid container style={BottomGridStyle}>
-                        <Box>
-                            <SButton type='transparentButton'
-                                     text={
-                                         <Typography sx={{ color: colors.text.primary }}>
-                                             <FormattedMessage id="header.locationLabel"/>
-                                         </Typography>
-                                     } 
-                                     prew={<LocationIcon sx={{ color: colors.background.orange }} />} />
-                        </Box>
                         <Box style={LastBoxStyle} >
                             
                             <SButton type='transparentButton'

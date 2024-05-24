@@ -14,7 +14,7 @@ export const ToolBarStyle= {
 export const BoxContainerStyle={
     display:'flex',
     height: 72, 
-    maxWidth: 709,
+    maxWidth: 950,
     width: '100%',
     justifyContent: 'space-between',
 };
@@ -34,7 +34,7 @@ export const LogoStyle={
 };
 export const LastBoxStyle={
     display:'flex',
-    maxWidth: 1197,
+    maxWidth: 'auto',
     width: '100%',
     justifyContent: 'space-around'
 };

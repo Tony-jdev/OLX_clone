@@ -2,15 +2,20 @@ import React from 'react';
 import { Typography, Accordion, AccordionSummary, AccordionDetails, Checkbox, Slider, Box } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {BoxStyle} from "@/components/Tools/SideFilters/Styles.js";
+import {useTheme} from "@mui/material/styles";
 
 const SideFilters = () => {
+    const theme = useTheme();
+    const { colors } = theme.palette;
+    
     return (
-        <Box style={BoxStyle}>
-            <Typography variant="h6" gutterBottom>Фільтри</Typography>
+        <Box style={BoxStyle} sx={{background: colors.background.secondary, boxShadow: colors.boxShadow}}>
+            <Typography variant="h6" sx={{paddingLeft: '16px', paddingTop: '16px'}}>Фільтри</Typography>
 
-            {/* Перший акордеон */}
-            <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Accordion sx={{ width: '100%', background: 'inherit', boxShadow: 'none', border: 'none', '&::before': {
+                    display: 'none',
+                } }}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} >
                     <Typography>Характеристики</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -18,13 +23,13 @@ const SideFilters = () => {
                         <Checkbox /> Характеристика 1
                         <br />
                         <Checkbox /> Характеристика 2
-                        {/* Додайте інші чекбокси за необхідності */}
                     </div>
                 </AccordionDetails>
             </Accordion>
 
-            {/* Другий акордеон */}
-            <Accordion>
+            <Accordion sx={{ width: '100%', background: 'inherit', boxShadow: 'none', border: 'none', '&::before': {
+                    display: 'none',
+                } }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography>Ціна</Typography>
                 </AccordionSummary>
@@ -40,8 +45,9 @@ const SideFilters = () => {
                 </AccordionDetails>
             </Accordion>
 
-            {/* Третій акордеон */}
-            <Accordion>
+            <Accordion sx={{ width: '100%', background: 'inherit', boxShadow: 'none', border: 'none', '&::before': {
+                    display: 'none',
+                } }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography>Характеристики 2</Typography>
                 </AccordionSummary>
@@ -50,7 +56,6 @@ const SideFilters = () => {
                         <Checkbox /> Характеристика 3
                         <br />
                         <Checkbox /> Характеристика 4
-                        {/* Додайте інші чекбокси за необхідності */}
                     </div>
                 </AccordionDetails>
             </Accordion>

@@ -1,12 +1,11 @@
 {
-    "header.addButtonLabel":  "Додати оголошення",
-    "header.locationLabel":   "Вся Україна",
+    "header.addButtonLabel": "Додати оголошення",
+    "header.locationLabel": "Вся Україна",
     "header.realEstateLabel": "Нерухомість",
     "header.technologyLabel": "Техніка",
-    "header.kidsLabel":       "Дитячий світ",
-    "header.clothingLabel":   "Одяг і взуття",
-    "header.animalsLabel":    "Тварини",
-
+    "header.kidsLabel": "Дитячий світ",
+    "header.clothingLabel": "Одяг і взуття",
+    "header.animalsLabel": "Тварини",
     "footer.vacancies": "Вакансії",
     "footer.aboutUs": "Про нас",
     "footer.news": "Новини",
@@ -18,30 +17,35 @@
     "footer.advertising": "Реклама на сайті",
     "footer.followUs": "Підписуйся!",
     "footer.freeApp": "Безкоштовний додаток у твоєму телефоні",
-    
     "masonry.1": "Одяг та взуття",
     "masonry.2": "Електроніка",
     "masonry.3": "Тварини",
     "masonry.4": "Дитячий світ",
     "masonry.5": "Нерухомість",
-    
     "btn.add": "Додати оголошення",
     "btn.see": "Переглянути зараз",
-
     "ad1.name": "Вдома купа одягу і ти не знаєш куди подіти?",
     "ad1.description": "Наш eVse - ваш порятунок! Розмістіть оголошення та звільніть простір для чогось нового.",
     "ad2.name": "Пухнастик чекає на тебе!",
     "ad2.description": "Завітайте на наш сайт оголошень та знайдіть свого майбутнього улюбленця вже сьогодні!",
     "ad3.name": "Відкрийте для вашої дитини світ захоплень та радості!",
     "ad3.description": "Перегляньте оголошення на нашому сайті і знайдіть цікаве хоббі для маленьких дослідників.",
-    
     "home.vip.header": "Топ 10 VIP оголошень!",
     "home.vip.btn": "Подивитись всі",
-
     "about.title": "Про нас",
     "about.description": "Ласкаво просимо до eVSE, вашого основного джерела для купівлі та продажу онлайн! Ми присвячені наданню вам найкращого досвіду, з фокусом на надійності, зручності та безпеці.",
-    "about.button": "На головну",
-
+    "about.button": "Повернутися на попередню сторінку",
     "productPage.chatWithSeller": "Чат з продавцем",
-    "productPage.goBack": "Повернутися"
+    "productPage.goBack": "Повернутися",
+    "map.locationLabel": "Виберіть місцезнаходження",
+    "selectedLocation": "Вибране місцезнаходження: {city}, {region}",
+    "tutorialPanel.howItWorks": "Як працює",
+    "tutorialPanel.register": "ЗАРЕЄСТРУЙСЯ",
+    "tutorialPanel.createAccount": "Створи свій особистий кабінет",
+    "tutorialPanel.takePhoto": "СФОТОГРАФУЙ",
+    "tutorialPanel.takePhotoOfWhatYouWantToSell": "Зроби фото того, що хочеш продати",
+    "tutorialPanel.add": "ДОДАЙ",
+    "tutorialPanel.createAdOnYourPage": "Створи оголошення на своїй сторінці",
+    "tutorialPanel.addAd": "Додай оголошення",
+    "tutorialPanel.addAdNowAndGetWhatYouWant": "Прямо зараз та отримай бажане!"
 }

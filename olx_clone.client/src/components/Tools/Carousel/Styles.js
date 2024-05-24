@@ -30,5 +30,14 @@ export const PaperWideStyle= {
     maxHeight: 234,
     minHeight: 234,
     height: '100%',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover'
+}
+export const PaperNormalStyle= {
+    border: 'none',
+    height: '50vh',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'auto 50vh'
 }

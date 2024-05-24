@@ -5,7 +5,6 @@ export const HTextStyle ={
     fontSize: '16px',
     lineHeight: '24px',
     letterSpacing: '0.15px',
-    color: '#313030',
 }
 export const PTextStyle={
     fontFamily: 'Roboto',
@@ -16,7 +15,6 @@ export const PTextStyle={
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-    color: '#313030',
 }
 export const STextStyle ={
     fontFamily: 'Roboto',
@@ -27,21 +25,19 @@ export const STextStyle ={
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-    color: '#313030',
 }
 export const CardStyle = {
-boxShadow: '0px 26px 11px rgba(49, 48, 48, 0.01), 0px 15px 9px rgba(49, 48, 48, 0.05), 0px 7px 7px rgba(49, 48, 48, 0.09), 0px 2px 4px rgba(49, 48, 48, 0.1)',
 borderRadius: '12px',
 }
 export const CardImgStyle={
-    objectFit: 'fill', 
+    objectFit: 'cover', 
     width: '100%', 
     height: '100%', 
     borderRadius: '8px 8px 0px 0px'
 }
 export const CardContentStyle={
-    width: 272, 
-    height: 190, 
+    width: 340, 
+    height: 'auto', 
     padding: 20, 
     paddingTop: 0
 }

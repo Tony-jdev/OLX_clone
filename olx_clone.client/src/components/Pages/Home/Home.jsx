@@ -4,11 +4,12 @@ import ProductList from "@/components/Tools/ProductList/ProductList.jsx";
 import Carousel from '@/components/Tools/Carousel/Carousel.jsx';
 import CategoryMasonry from "@/components/Tools/CategoryMasonry/CategoryMasonry.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchPostsAsync, selectError, selectLoading, selectPosts} from "@/Storage/Redux/Slices/postSlice.js";
+import {clearData, fetchPostsAsync, selectError, selectLoading, selectPosts} from "@/Storage/Redux/Slices/postSlice.js";
 import SButton from '../../Tools/Button/SButton.jsx';
 import {useTheme} from "@mui/material/styles";
 import {FormattedMessage} from "react-intl";
 import {ContainerStyle} from "@/components/Pages/Home/Styles.jsx";
+import TutorialPanel from "@/components/Tools/TutorialPanel/TutorialPanel.jsx";
 
 function HomePage() {
     const theme = useTheme();
@@ -21,6 +22,7 @@ function HomePage() {
     const error = useSelector(selectError);
 
     useEffect(  () => {
+        dispatch(clearData());
         dispatch(fetchPostsAsync());
     }, [dispatch]);
     
@@ -74,6 +76,7 @@ function HomePage() {
             <Carousel items={items} />
             <CategoryMasonry/>
             <ProductList posts={posts} error={error} loading={loading} headerText={<FormattedMessage id='home.vip.header' />} headerBtn={HeaderBtn}/>
+            <TutorialPanel/>
         </Container>
     );
 }

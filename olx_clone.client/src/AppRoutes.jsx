@@ -1,7 +1,7 @@
 import Home  from "./components/Pages/Home/Home";
 import SearchPage from "@/components/Pages/SearchPage/SearchPage.jsx";
 import About from "@/components/Pages/About/About.jsx";
-import ProductInfo from "@/components/Tools/ProductInfo/ProductInfo.jsx";
+import Product from "@/components/Pages/Product/Product.jsx";
 
 const AppRoutes = [
     {
@@ -19,7 +19,7 @@ const AppRoutes = [
     },
     {
         path: 'post/:id',
-        element: <ProductInfo/>
+        element: <Product/>
     },
 ];
 

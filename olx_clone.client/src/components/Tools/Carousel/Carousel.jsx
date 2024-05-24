@@ -6,11 +6,11 @@ import {
     IndicatorIconButtonStyle,
     CarouselStyle,
     activeIndicatorIconButtonStyle,
-    DefoultBtnStyle, PaperWideStyle
+    DefoultBtnStyle, PaperWideStyle, PaperNormalStyle
 } from "@/components/Tools/Carousel/Styles.js";
 import CarouselItem from "@/components/Tools/Carousel/CarouselItem/CarouselItem.jsx";
 import {Paper} from "@mui/material";
-function MyCarousel({items, isOnlyImg}) {
+function MyCarousel({items, isOnlyImg, isWide}) {
     return (
         <Carousel
             style={{CarouselStyle}}
@@ -22,7 +22,7 @@ function MyCarousel({items, isOnlyImg}) {
         >
             {items.map((item, i) => (
                 isOnlyImg ? 
-                <Paper key={i} style={PaperWideStyle} sx={{background: 'red', backgroundImage: `url(${item})`}}/>
+                <Paper key={i} style={isWide ? PaperWideStyle : PaperNormalStyle} sx={{background: 'inherit', backgroundImage: `url(${item})`}}/>
                     :
                 <CarouselItem key={i} item={item} btn={item.btn}/>
             ))}
