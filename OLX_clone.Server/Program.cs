@@ -17,9 +17,11 @@ using OLX_clone.Server.Services.AuthService;
 using OLX_clone.Server.Services.BlobService;
 using OLX_clone.Server.Services.BoostService;
 using OLX_clone.Server.Services.CategoryService;
+using OLX_clone.Server.Services.PaymentService;
 using OLX_clone.Server.Services.PostService;
 using OLX_clone.Server.Services.TransactionService;
 using OLX_clone.Server.Services.UserService;
+using OLX_clone.Server.Data.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,8 +82,10 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IBoostPackageService, BoostPackageService>();
 builder.Services.AddScoped<IBoostService, BoostService>();
 builder.Services.AddScoped<IBoostExpirationService, BoostExpirationService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddSignalR();
 
 builder.Services.AddHangfire(configuration => configuration
@@ -121,6 +125,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+if (builder.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        await UserSeeder.Initialize(services, userManager, roleManager);
+    }
 }
 
 app.UseHttpsRedirection();

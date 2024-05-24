@@ -35,34 +35,6 @@
     <ProjectReference Include="..\olx_clone.client\olx_clone.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </ItemGroup>
-
-
-
 
 </Project>
