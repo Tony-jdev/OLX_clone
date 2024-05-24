@@ -35,11 +35,25 @@ public class PostService : IPostService
         return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
     }
     
-    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, string? orderBy, string? status, int page)
+    public async Task<List<GetPostDto>> GetPostsByUser(string userId)
+    {
+        var posts = await _unitOfWork.PostRepository.GetPostsByUserIdAsync(userId);
+        var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
+        
+        foreach (var post in getPostDtos)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+        }
+        
+        return getPostDtos;
+    }
+    
+    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(
+        string? searchTerm, string? orderBy, string? status, int page)
     {
         var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy, status);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 15);
         
         foreach (var post in pagedPosts.Items)
         {

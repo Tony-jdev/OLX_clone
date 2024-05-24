@@ -16,15 +16,23 @@ public class PostRepository: GenericRepository<Post>, IPostRepository
     {
         return await _context.Posts
             .Where(p => p.IsVip)
+            .Where(p => p.Status == SD.status_active)
             .OrderBy(p => Guid.NewGuid())
             .Take(20)
+            .ToListAsync();
+    }
+    
+    public async Task<List<Post>> GetPostsByUserIdAsync(string userId)
+    {
+        return await _context.Posts
+            .Where(p => p.ApplicationUserId == userId)
             .ToListAsync();
     }
     
     public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy, string? status)
     {
         IQueryable<Post> query = _context.Posts;
-
+        
         if (!string.IsNullOrEmpty(status))
         {
             query = query.Where(p => p.Status == status.ToLower());
