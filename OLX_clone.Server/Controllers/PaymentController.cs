@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OLX_clone.Server.Helpers;
+using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos.Payment;
+using OLX_clone.Server.Services.PaymentService;
 using OLX_clone.Server.Services.TransactionService;
 using OLX_clone.Server.Services.UserService;
 using Stripe;
@@ -12,38 +14,26 @@ namespace OLX_clone.Server.Controllers;
 [ApiController]
 public class PaymentController : ControllerBase
 {
-    private readonly IConfiguration _congifuration;
+    private readonly IPaymentService _paymentService;
     private readonly IUserService _userService;
 
-    public PaymentController(IConfiguration configuration, IUserService userService)
+    public PaymentController(IPaymentService paymentService, IUserService userService)
     {
-        _congifuration = configuration;
+        _paymentService = paymentService;
         _userService = userService;
     }
     
     [HttpPost("charge")]
     public async Task<ActionResult<ApiResponse<IEnumerable<IdentityError>>>> Charge([FromBody] PaymentRequest paymentRequest)
     {
-        StripeConfiguration.ApiKey = _congifuration["StripeSettings:SecretKey"];
         try
         {
-            var options = new ChargeCreateOptions
-            {
-                Amount = (int)(paymentRequest.Amount * 100),
-                Currency = "uah",
-                Source = paymentRequest.Token,
-                Description = "Payment for account replenishment",
-                Metadata = new Dictionary<string, string>
-                {
-                    { "UserId", paymentRequest.UserId }
-                }
-            };
-            var service = new ChargeService();
-            var charge = await service.CreateAsync(options);
+            var charge = await _paymentService.CreateCharge(paymentRequest);
             
             if (charge.Status == "succeeded")
             {
-                var apiResponse = await _userService.UpdateBalance(paymentRequest.UserId, paymentRequest.Amount);
+                var apiResponse = await _userService.UpdateBalance(
+                    new Transaction{Amount = paymentRequest.Amount, UserId = paymentRequest.UserId});
                 if (apiResponse.Success)
                 {
                     return Ok(apiResponse);

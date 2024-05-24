@@ -23,5 +23,5 @@ public class Transaction
 public enum TransactionType
 {
     Deposit,
-    Other
+    AdvertisementPayment 
 }

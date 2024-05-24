@@ -1,5 +1,8 @@
 using System.Text;
 using Azure.Storage.Blobs;
+using Hangfire;
+using Hangfire.Storage.SQLite;
+using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +15,13 @@ using OLX_clone.Server.Models;
 using OLX_clone.Server.Services;
 using OLX_clone.Server.Services.AuthService;
 using OLX_clone.Server.Services.BlobService;
+using OLX_clone.Server.Services.BoostService;
 using OLX_clone.Server.Services.CategoryService;
+using OLX_clone.Server.Services.PaymentService;
 using OLX_clone.Server.Services.PostService;
 using OLX_clone.Server.Services.TransactionService;
 using OLX_clone.Server.Services.UserService;
+using OLX_clone.Server.Data.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,9 +79,22 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IBoostPackageService, BoostPackageService>();
+builder.Services.AddScoped<IBoostService, BoostService>();
+builder.Services.AddScoped<IBoostExpirationService, BoostExpirationService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddSignalR();
+
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSQLiteStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
+
+builder.Services.AddHangfireServer();
 
 builder.Services.AddAuthentication(u =>
 {
@@ -108,10 +127,37 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (builder.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        await UserSeeder.Initialize(services, userManager, roleManager);
+    }
+}
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHangfireDashboard();
+app.MapHangfireDashboard("/hangfiredashboard", new DashboardOptions()
+{
+    DashboardTitle = "eVSE Dashboard",
+    Authorization = new []
+    {
+        new HangfireCustomBasicAuthenticationFilter()
+        {
+            Pass = "evseadmin",
+            User = "eVSEAdmin"
+        }
+    }
+});
+
+RecurringJob.AddOrUpdate<IBoostExpirationService>(x => x.CheckBoostExpiration(), Cron.Minutely);   
 
 app.MapControllers();
 

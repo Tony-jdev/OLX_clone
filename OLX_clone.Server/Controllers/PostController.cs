@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.Post;
+using OLX_clone.Server.Services.BoostService;
 using OLX_clone.Server.Services.PostService;
 
 namespace OLX_clone.Server.Controllers;
@@ -13,16 +15,31 @@ namespace OLX_clone.Server.Controllers;
 public class PostController: ControllerBase
 {
     private readonly IPostService _postService;
+    private readonly IBoostService _boostService;
     
-    public PostController(IPostService postService)
+    public PostController(IPostService postService, IBoostService boostService)
     {
         _postService = postService;
+        _boostService = boostService;
+    }
+    
+    [HttpGet("vip")]
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetVipPosts()
+    {
+        var apiResponse = await _postService.GetVipPosts();
+        if (!apiResponse.Success)
+        {
+            return BadRequest(apiResponse);
+        }
+
+        return Ok(apiResponse);
     }
     
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(string? searchTerm, string? orderBy, int page = 1)
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(
+        string? searchTerm, string? orderBy, string? status, int page = 1)
     {
-        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, page);
+        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, status, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);
@@ -33,9 +50,9 @@ public class PostController: ControllerBase
     
     [HttpGet("category/{categorySku}", Name = "GetPostByCategory")]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(string categorySku,
-        string? searchTerm, string? orderBy, int page = 1)
+        string? searchTerm, string? orderBy, string? status, int page = 1)
     {
-        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, page);
+        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, status, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);
@@ -170,5 +187,20 @@ public class PostController: ControllerBase
         }
 
         return apiResponse;
+    }
+    
+    [HttpPost("{postId}/boost")]
+    public async Task<ActionResult<ApiResponse<bool>>> BoostPost(int postId)
+    {
+        var response = await _boostService.BoostPost(postId);
+
+        if (response.Success)
+        {
+            return Ok(response);
+        }
+        else
+        {
+            return BadRequest(response);
+        }
     }
 }

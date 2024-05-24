@@ -10,6 +10,7 @@ public class GetPostDetailsDto
     public string Description { get; set; }
     public double Price { get; set; }
     public string Type { get; set; }
+    public bool IsTop { get; set; }
     public int ViewsCount { get; set; }
     public GetCategoryDto Category { get; set; }
     public List<PostPhoto> Photos { get; set; }

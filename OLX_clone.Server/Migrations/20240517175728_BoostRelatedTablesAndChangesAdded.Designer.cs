@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OLX_clone.Server.Data;
 
@@ -11,9 +12,11 @@ using OLX_clone.Server.Data;
 namespace OLX_clone.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240517175728_BoostRelatedTablesAndChangesAdded")]
+    partial class BoostRelatedTablesAndChangesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,6 +50,20 @@ namespace OLX_clone.Server.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "bad4c371-392d-4680-8273-001c8462977c",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "f38fde2d-cf40-4a9d-b3cf-3ee72200314e",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -300,68 +317,6 @@ namespace OLX_clone.Server.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            SKU = "electronics",
-                            Title = "Electronics"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            SKU = "fashion",
-                            Title = "Fashion"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            SKU = "home",
-                            Title = "Home and Garden"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            SKU = "real_estate",
-                            Title = "Real estate"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            SKU = "cars",
-                            Title = "Cars"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            SKU = "animals",
-                            Title = "Animals"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            SKU = "job",
-                            Title = "Job"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            SKU = "business_and_services",
-                            Title = "Business and services"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            SKU = "childrens_world",
-                            Title = "Children's world"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            SKU = "sport",
-                            Title = "Sport"
-                        });
                 });
 
             modelBuilder.Entity("OLX_clone.Server.Models.Chat", b =>

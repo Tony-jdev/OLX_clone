@@ -22,11 +22,38 @@ public class PostService : IPostService
         _blobService = blobService;
     }
     
-    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, string? orderBy, int page)
+    public async Task<ApiResponse<List<GetPostDto>>> GetVipPosts()
     {
-        var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy);
+        var posts = await _unitOfWork.PostRepository.GetVipPostsAsync();
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 20);
+        
+        foreach (var post in getPostDtos)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+        }
+        
+        return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
+    }
+    
+    public async Task<List<GetPostDto>> GetPostsByUser(string userId)
+    {
+        var posts = await _unitOfWork.PostRepository.GetPostsByUserIdAsync(userId);
+        var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
+        
+        foreach (var post in getPostDtos)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+        }
+        
+        return getPostDtos;
+    }
+    
+    public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(
+        string? searchTerm, string? orderBy, string? status, int page)
+    {
+        var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy, status);
+        var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 15);
         
         foreach (var post in pagedPosts.Items)
         {
@@ -37,13 +64,13 @@ public class PostService : IPostService
     }
     
     public async Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 
-        string? searchTerm, string? orderBy, int page)
+        string? searchTerm, string? orderBy, string? status, int page)
     {
         var categoryIds = await _unitOfWork.CategoryRepository.GetCategoryAndChildrenIds(categorySku);
         
-        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy, page);
+        var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy, status);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 20);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
         
         foreach (var post in pagedPosts.Items)
         {

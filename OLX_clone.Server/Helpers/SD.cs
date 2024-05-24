@@ -9,6 +9,6 @@ public static class SD
     public const string status_active = "Active";
     public const string status_sold = "Sold";
     
-    public const string type_new = "Sold";
+    public const string type_new = "New";
     public const string type_used = "Used";
 }

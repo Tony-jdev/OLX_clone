@@ -29,6 +29,7 @@ public class CategoryService: ICategoryService
     public async Task<ApiResponse<GetCategoryDto>> GetCategory(int id)
     {
         var category = await _unitOfWork.CategoryRepository.GetAsync(id);
+        
         return category == null ? new ApiResponse<GetCategoryDto> { Success = false, Message = "Category not found." } 
             : new ApiResponse<GetCategoryDto> { Data = _mapper.Map<GetCategoryDto>(category),
                 Message = "Category retrieved successfully." };

@@ -9,8 +9,8 @@ public class ApplicationUser: IdentityUser
     public string Name { get; set; }
     [Required]
     public string Surname { get; set; }
-    
-    public double Balance { get; set; }
+
+    public double Balance { get; set; } = 0;
 
     public bool Online { get; set; } = true;
     
