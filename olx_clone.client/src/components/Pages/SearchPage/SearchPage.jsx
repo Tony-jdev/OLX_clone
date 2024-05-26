@@ -8,15 +8,13 @@ import SideFilters from "@/components/Tools/SideFilters/SideFilters.jsx";
 import SubCategoryList from "@/components/Tools/SubCategoryList/SubCategoryList.jsx";
 import {ContainerStyle} from "@/components/Pages/SearchPage/Styles.js";
 import {useParams} from "react-router-dom";
-import {FormattedMessage} from "react-intl";
-import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    fetchPostsAsync,
+    fetchPostsAsync, fetchPostsByCategoryAsync, selectCategorySku,
     selectError,
     selectLoading, selectOrderBy, selectPage, selectPageCount, selectPageSize,
     selectPosts,
-    selectSearchText, setPage
+    selectSearchText, selectSubCategorySku, setCategorySku, setPage, setSubCategorySku
 } from "@/Storage/Redux/Slices/postSlice.js";
 
 function SearchPage() {
@@ -24,12 +22,14 @@ function SearchPage() {
     const way = ['search', category ?? null, subCategory ?? null];
 
     const items = [
-            "@/../public/Ads/Ads0.png",
-            "@/../public/Ads/Ads1.png",
-            "@/../public/Ads/Ads2.png"
+        "../../../../public/Ads/Ads0.png",
+        "../../../../public/Ads/Ads1.png",
+        "../../../../public/Ads/Ads2.png"
     ];
 
     const dispatch = useDispatch();
+    const categorySku = useSelector(selectCategorySku);
+    const subCategorySku = useSelector(selectSubCategorySku);
     const searchText = useSelector(selectSearchText);
     const posts = useSelector(selectPosts);
     const orderBy = useSelector(selectOrderBy);
@@ -41,9 +41,29 @@ function SearchPage() {
     const [count, setCount] = useState(1);
 
     useEffect(  () => {
-        dispatch(fetchPostsAsync());
+        dispatch(setCategorySku(category));
+        dispatch(setSubCategorySku(subCategory));
+    }, [dispatch, category, subCategory, ]);
+    
+    useEffect(  () => {
+        const last = subCategory ? subCategory : category ? category : null;
+        if(last)
+        {
+            dispatch(fetchPostsByCategoryAsync())
+        }
+        else
+        {
+            dispatch(fetchPostsAsync());
+        }
+    }, [dispatch, orderBy, page, category, subCategory, searchText]);
+    
+    useEffect(  () => {
         setCount(parseInt(Math.ceil(pageCount / pageSize)));
-    }, [dispatch, orderBy, page]);
+    }, [dispatch, page, pageCount, pageSize, category, subCategory]);
+
+    useEffect(  () => {
+        dispatch(setPage(1));
+    }, [category, subCategory]);
     
     const handleChange = (event, value) => {
         dispatch(setPage(value));
@@ -57,7 +77,7 @@ function SearchPage() {
             <Carousel items={items} isOnlyImg={true} isWide={true}/>
             <Container style={ContainerStyle}>
                 <TopFilters/>
-                <SubCategoryList/>
+                { categorySku && !subCategorySku && <SubCategoryList /> }
                 <Grid container direction='row' justifyContent='space-between' style={{flexWrap: 'nowrap'}}>
                     <SideFilters/>
                     <Grid container justifyContent='center' marginLeft={2}>

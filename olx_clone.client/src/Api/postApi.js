@@ -10,6 +10,15 @@ export const GetPosts = async (queryParams) => {
         throw new Error('Failed to fetch posts');
     }
 };
+export const GetVIPPosts = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/posts/vip`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        throw new Error('Failed to fetch posts');
+    }
+};
 
 export const GetPostById = async (id) => {
     try {

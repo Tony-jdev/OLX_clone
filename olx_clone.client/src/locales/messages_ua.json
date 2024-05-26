@@ -47,5 +47,16 @@
     "tutorialPanel.add": "ДОДАЙ",
     "tutorialPanel.createAdOnYourPage": "Створи оголошення на своїй сторінці",
     "tutorialPanel.addAd": "Додай оголошення",
-    "tutorialPanel.addAdNowAndGetWhatYouWant": "Прямо зараз та отримай бажане!"
+    "tutorialPanel.addAdNowAndGetWhatYouWant": "Прямо зараз та отримай бажане!",
+    "noDataFound": "Даних не знайдено...",
+    "category.electronics": "Електроніка",
+    "category.fashion": "Мода",
+    "category.homeAndGarden": "Дім та сад",
+    "category.realEstate": "Нерухомість",
+    "category.cars": "Автомобілі",
+    "category.animals": "Тварини",
+    "category.job": "Робота",
+    "category.businessAndServices": "Бізнес та послуги",
+    "category.childrensWorld": "Дитячий світ",
+    "category.sport": "Спорт"
 }

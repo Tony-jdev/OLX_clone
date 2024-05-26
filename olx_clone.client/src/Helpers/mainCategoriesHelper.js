@@ -1,9 +1,14 @@
 const Categories = [
-    "clothingandfootwear",
     "electronics",
+    "fashion",
+    "home",
+    "real_estate",
+    "cars",
     "animals",
-    "childrensworld",
-    "property",
+    "job",
+    "business_and_services",
+    "childrens_world",
+    "sport",
 ];
 
 export default Categories;

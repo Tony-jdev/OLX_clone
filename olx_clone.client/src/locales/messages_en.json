@@ -47,5 +47,16 @@
     "tutorialPanel.add": "ADD",
     "tutorialPanel.createAdOnYourPage": "Create an advertisement on your page",
     "tutorialPanel.addAd": "Add an advertisement",
-    "tutorialPanel.addAdNowAndGetWhatYouWant": "Right now and get what you want!"
+    "tutorialPanel.addAdNowAndGetWhatYouWant": "Right now and get what you want!",
+    "noDataFound": "No data found...",
+    "category.electronics": "Electronics",
+    "category.fashion": "Fashion",
+    "category.homeAndGarden": "Home and Garden",
+    "category.realEstate": "Real estate",
+    "category.cars": "Cars",
+    "category.animals": "Animals",
+    "category.job": "Job",
+    "category.businessAndServices": "Business and services",
+    "category.childrensWorld": "Children's world",
+    "category.sport": "Sport"
 }

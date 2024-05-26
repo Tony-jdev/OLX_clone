@@ -4,17 +4,26 @@ import ProductList from "@/components/Tools/ProductList/ProductList.jsx";
 import Carousel from '@/components/Tools/Carousel/Carousel.jsx';
 import CategoryMasonry from "@/components/Tools/CategoryMasonry/CategoryMasonry.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {clearData, fetchPostsAsync, selectError, selectLoading, selectPosts} from "@/Storage/Redux/Slices/postSlice.js";
+import {
+    clearData,
+    fetchPostsAsync,
+    fetchVipPostsAsync,
+    selectError,
+    selectLoading,
+    selectPosts
+} from "@/Storage/Redux/Slices/postSlice.js";
 import SButton from '../../Tools/Button/SButton.jsx';
 import {useTheme} from "@mui/material/styles";
 import {FormattedMessage} from "react-intl";
 import {ContainerStyle} from "@/components/Pages/Home/Styles.jsx";
 import TutorialPanel from "@/components/Tools/TutorialPanel/TutorialPanel.jsx";
+import {useNavigate} from "react-router-dom";
 
 function HomePage() {
     const theme = useTheme();
     const { colors } = theme.palette;
     
+    const navigate = useNavigate();
     
     const dispatch = useDispatch();
     const posts = useSelector(selectPosts);
@@ -22,12 +31,19 @@ function HomePage() {
     const error = useSelector(selectError);
 
     useEffect(  () => {
-        dispatch(clearData());
-        dispatch(fetchPostsAsync());
+        //dispatch(clearData());
+        dispatch(fetchVipPostsAsync());
     }, [dispatch]);
     
     const HeaderBtn = (
-        <SButton type='whiteOutlinedBB' text={<FormattedMessage id='home.vip.btn' />} sl={{background: 'white'}}/>
+        <SButton
+            type='whiteOutlinedBB' 
+            text={<FormattedMessage id='home.vip.btn' />}
+            sl={{background: 'white'}}
+            action={()=> {
+                navigate('./search');
+            }}
+        />
     );
 
     const items = [
