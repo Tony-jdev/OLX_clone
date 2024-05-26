@@ -12,17 +12,17 @@ namespace OLX_clone.Server.Controllers;
 
 [ApiController]
 [Route("api/posts")]
-public class PostController: ControllerBase
+public class PostController : ControllerBase
 {
     private readonly IPostService _postService;
     private readonly IBoostService _boostService;
-    
+
     public PostController(IPostService postService, IBoostService boostService)
     {
         _postService = postService;
         _boostService = boostService;
     }
-    
+
     [HttpGet("vip")]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetVipPosts()
     {
@@ -31,10 +31,9 @@ public class PostController: ControllerBase
         {
             return BadRequest(apiResponse);
         }
-
         return Ok(apiResponse);
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(
         string? searchTerm, string? orderBy, string? status, int page = 1)
@@ -44,10 +43,9 @@ public class PostController: ControllerBase
         {
             return BadRequest(apiResponse);
         }
-
         return Ok(apiResponse);
     }
-    
+
     [HttpGet("category/{categorySku}", Name = "GetPostByCategory")]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(string categorySku,
         string? searchTerm, string? orderBy, string? status, int page = 1)
@@ -57,10 +55,9 @@ public class PostController: ControllerBase
         {
             return BadRequest(apiResponse);
         }
-
         return Ok(apiResponse);
     }
-    
+
     [HttpGet("{sku}", Name = "GetPost")]
     public async Task<ActionResult<ApiResponse<GetPostDetailsDto>>> GetPost(string sku)
     {
@@ -70,137 +67,116 @@ public class PostController: ControllerBase
             return NotFound(apiResponse);
         }
         await _postService.AddPostView(apiResponse.Data.Id);
-        
         return Ok(apiResponse);
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<ApiResponse<Post>>> CreatePost([FromForm] CreatePostDto postCreateDto)
     {
-        var apiResponse = new ApiResponse<Post>{ Success = false, Message = "Model is invalid" };
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Model is invalid"});
+        }
+
         try
         {
-            if (ModelState.IsValid)
+            var apiResponse = await _postService.CreatePost(postCreateDto);
+            if (!apiResponse.Success)
             {
-                apiResponse = await _postService.CreatePost(postCreateDto);
-                if (!apiResponse.Success)
-                {
-                    return NotFound(apiResponse);
-                }
-                return Ok(apiResponse);
+                return BadRequest(apiResponse);
             }
+            return Ok(apiResponse);
         }
         catch (Exception ex)
         {
-            apiResponse.Success = false;
-            apiResponse.Message = ex.Message;
+            return StatusCode(500, new ApiResponse<Post> { Success = false, Message = ex.Message});
         }
-
-        return BadRequest(apiResponse);
     }
-    
+
     [HttpPut("{id:int}")]
-    [Authorize]
     public async Task<ActionResult<ApiResponse<Post>>> UpdatePost(int id, [FromForm] UpdatePostDto postUpdateDto)
     {
-        var apiResponse = new ApiResponse<Post> { Success = false, Message = "Model is invalid" };
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Model is invalid"});
+        }
+
+        if (id != postUpdateDto.Id)
+        {
+            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Wrong post"});
+        }
+
         try
         {
-            if (ModelState.IsValid)
+            var apiResponse = await _postService.UpdatePost(id, postUpdateDto);
+            if (!apiResponse.Success)
             {
-                if (id != postUpdateDto.Id){
-                    apiResponse.Message = "Wrong post";
-                    return BadRequest(apiResponse);
-                }
-
-                apiResponse = await _postService.UpdatePost(id, postUpdateDto);
-                if (!apiResponse.Success)
-                {
-                    return BadRequest(apiResponse);
-                }
-                return Ok(apiResponse);
+                return BadRequest(apiResponse);
             }
+            return Ok(apiResponse);
         }
         catch (Exception ex)
         {
-            apiResponse.Success = false;
-            apiResponse.Message = ex.Message;
+            return StatusCode(500, new ApiResponse<Post> { Success = false, Message = ex.Message, Data = null });
         }
-
-        return BadRequest(apiResponse);
     }
-    
+
     [HttpDelete("{id:int}")]
     [Authorize]
     public async Task<ActionResult<ApiResponse<bool>>> DeletePost(int id)
     {
-        var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };
+        if (id == 0)
+        {
+            return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid post ID"});
+        }
+
         try
         {
-            if (id == 0)
-                return BadRequest(apiResponse);
-
-            apiResponse = await _postService.DeletePost(id);
-            if (!apiResponse.Success && apiResponse.Message == "Post not found.")
+            var apiResponse = await _postService.DeletePost(id);
+            if (!apiResponse.Success)
             {
-                return NotFound(apiResponse);
+                return apiResponse.Message == "Post not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
             }
-
-            if(!apiResponse.Success) return BadRequest(apiResponse);
-
             return Ok(apiResponse);
         }
         catch (Exception ex)
         {
-            apiResponse.Success = false;
-            apiResponse.Message = ex.Message;
+            return StatusCode(500, new ApiResponse<bool> { Success = false, Message = ex.Message});
         }
-
-        return apiResponse;
     }
-    
-    [Route("photo/{id:int}", Name = "DeletePhoto")]
-    [HttpDelete]
+
+    [HttpDelete("photo/{id:int}", Name = "DeletePhoto")]
     [Authorize]
     public async Task<ActionResult<ApiResponse<bool>>> DeletePhoto(int id)
     {
-        var apiResponse = new ApiResponse<bool> { Success = false, Message = "Model not found" };
+        if (id == 0)
+        {
+            return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid photo ID"});
+        }
+
         try
         {
-            if (id == 0)
-                return BadRequest(apiResponse);
-
-            apiResponse = await _postService.DeletePhoto(id);
-            if (!apiResponse.Success && apiResponse.Message == "Photo not found.")
+            var apiResponse = await _postService.DeletePhoto(id);
+            if (!apiResponse.Success)
             {
-                return NotFound(apiResponse);
+                return apiResponse.Message == "Photo not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
             }
-
-            if(!apiResponse.Success) return BadRequest(apiResponse);
-
             return Ok(apiResponse);
         }
         catch (Exception ex)
         {
-            apiResponse.Success = false;
-            apiResponse.Message = ex.Message;
+            return StatusCode(500, new ApiResponse<bool> { Success = false, Message = ex.Message});
         }
-
-        return apiResponse;
     }
-    
+
     [HttpPost("{postId}/boost")]
     public async Task<ActionResult<ApiResponse<bool>>> BoostPost(int postId)
     {
         var response = await _boostService.BoostPost(postId);
-
         if (response.Success)
         {
             return Ok(response);
         }
-        else
-        {
-            return BadRequest(response);
-        }
+        return BadRequest(response);
     }
 }

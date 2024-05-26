@@ -27,10 +27,7 @@ public class PostService : IPostService
         var posts = await _unitOfWork.PostRepository.GetVipPostsAsync();
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         
-        foreach (var post in getPostDtos)
-        {
-            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
-        }
+        await SetPhotoUrls(getPostDtos);
         
         return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
     }
@@ -40,10 +37,7 @@ public class PostService : IPostService
         var posts = await _unitOfWork.PostRepository.GetPostsByUserIdAsync(userId);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         
-        foreach (var post in getPostDtos)
-        {
-            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
-        }
+        await SetPhotoUrls(getPostDtos);
         
         return getPostDtos;
     }
@@ -55,10 +49,7 @@ public class PostService : IPostService
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 15);
         
-        foreach (var post in pagedPosts.Items)
-        {
-            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
-        }
+        await SetPhotoUrls(pagedPosts.Items);
         
         return new ApiResponse<PagedList<GetPostDto>> { Data = pagedPosts, Message = "Posts retrieved successfully." };
     }
@@ -72,10 +63,7 @@ public class PostService : IPostService
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
         
-        foreach (var post in pagedPosts.Items)
-        {
-            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
-        }
+        await SetPhotoUrls(pagedPosts.Items);
         
         return new ApiResponse<PagedList<GetPostDto>> { Data = pagedPosts, Message = "Posts retrieved successfully." };
     }
@@ -199,5 +187,13 @@ public class PostService : IPostService
         string sku = $"ID{guid}";
 
         return sku;
+    }
+    
+    private async Task SetPhotoUrls(IEnumerable<GetPostDto> posts)
+    {
+        foreach (var post in posts)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+        }
     }
 }

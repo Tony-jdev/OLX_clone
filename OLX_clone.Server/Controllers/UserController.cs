@@ -6,7 +6,8 @@ using OLX_clone.Server.Models.Dtos.User;
 using OLX_clone.Server.Services.UserService;
 
 namespace OLX_clone.Server.Controllers;
-    
+   
+[ApiController]
 [Route("api/users")]
 public class UserController: ControllerBase
 {
