@@ -19,7 +19,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<Category>>>> GetCategories()
+    public async Task<ActionResult<ApiResponse<List<GetCategoryDetailsDto>>>> GetCategories()
     {
         var apiResponse = await _categoryService.GetCategories();
         if (!apiResponse.Success)
@@ -30,7 +30,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{id:int}", Name = "GetCategory")]
-    public async Task<ActionResult<ApiResponse<Category>>> GetCategory(int id)
+    public async Task<ActionResult<ApiResponse<GetCategoryDto>>> GetCategory(int id)
     {
         var apiResponse = await _categoryService.GetCategory(id);
         if (!apiResponse.Success)

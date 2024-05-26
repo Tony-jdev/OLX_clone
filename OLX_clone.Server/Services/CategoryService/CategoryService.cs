@@ -18,11 +18,11 @@ public class CategoryService: ICategoryService
         _mapper = mapper;
     }
     
-    public async Task<ApiResponse<List<GetCategoryDto>>> GetCategories()
+    public async Task<ApiResponse<List<GetCategoryDetailsDto>>> GetCategories()
     {
-        var categories = await _unitOfWork.CategoryRepository.GetAllAsync();
+        var categories = await _unitOfWork.CategoryRepository.GetParentCategories();
 
-        return new ApiResponse<List<GetCategoryDto>> { Data = _mapper.Map<List<GetCategoryDto>>(categories)
+        return new ApiResponse<List<GetCategoryDetailsDto>> { Data = _mapper.Map<List<GetCategoryDetailsDto>>(categories)
             , Message = "Categories retrieved successfully." };
     }
     

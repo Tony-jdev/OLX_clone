@@ -61,7 +61,7 @@ public class PostService : IPostService
         
         var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy, status);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 15);
         
         await SetPhotoUrls(pagedPosts.Items);
         

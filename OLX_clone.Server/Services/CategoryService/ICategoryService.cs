@@ -7,7 +7,7 @@ namespace OLX_clone.Server.Services.CategoryService;
 
 public interface ICategoryService
 {
-    Task<ApiResponse<List<GetCategoryDto>>> GetCategories();
+    Task<ApiResponse<List<GetCategoryDetailsDto>>> GetCategories();
     Task<ApiResponse<GetCategoryDto>> GetCategory(int id);
     Task<ApiResponse<Category>> CreateCategory(CreateCategoryDto category);
     Task<ApiResponse<Category>> UpdateCategory(int id, UpdateCategoryDto categoryUpdateDto);
