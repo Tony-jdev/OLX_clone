@@ -2,9 +2,8 @@ export const BoxStyle ={
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    marginRight: 10, 
-    marginTop: 10, 
-    marginBottom:10, 
+    marginTop: '20px',
+    marginRight: '5px',
     width: '19%',
     borderRadius: '20px',
 }

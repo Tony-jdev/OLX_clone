@@ -214,7 +214,7 @@ export function RegistrationIcon(props) {
     return (
         <SvgIcon {...props} width="322" height="322" viewBox="0 0 322 322" fill="none"
                  xmlns="http://www.w3.org/2000/svg"
-                 xmlns:xlink="http://www.w3.org/1999/xlink">
+                 xmlnsXlink="http://www.w3.org/1999/xlink">
             <rect width="322" height="322" fill="url(#pattern0_1850_4057)"/>
             <defs>
                 <pattern id="pattern0_1850_4057" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -231,7 +231,7 @@ export function DoPhotoIcon(props) {
     return (
         <SvgIcon {...props} width="322" height="322" viewBox="0 0 322 322" fill="none"
                  xmlns="http://www.w3.org/2000/svg"
-                 xmlns:xlink="http://www.w3.org/1999/xlink">
+                 xmlnsXlink="http://www.w3.org/1999/xlink">
             <rect width="322" height="322" fill="url(#pattern0_1850_2304)"/>
             <defs>
                 <pattern id="pattern0_1850_2304" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -249,7 +249,7 @@ export function DoAddIcon(props) {
     return (
         <SvgIcon {...props} width="322" height="322" viewBox="0 0 322 322" fill="none"
                  xmlns="http://www.w3.org/2000/svg"
-                 xmlns:xlink="http://www.w3.org/1999/xlink">
+                 xmlnsXlink="http://www.w3.org/1999/xlink">
             <rect width="322" height="322" fill="url(#pattern0_1850_3884)"/>
             <defs>
                 <pattern id="pattern0_1850_3884" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -268,6 +268,18 @@ export function ArrowIcon(props) {
             <path
                 d="M2.02001 1.95974C3.98001 -0.000260827 7.14001 -0.000260275 9.10001 1.95974L42.34 35.1997C43.9 36.7597 43.9 39.2797 42.34 40.8397L9.1 74.0797C7.14 76.0397 3.98 76.0397 2.02 74.0797C0.0599965 72.1197 0.059997 68.9597 2.02 66.9997L30.98 37.9997L1.98002 8.99974C0.0600155 7.07974 0.0600084 3.87974 2.02001 1.95974Z"
                 fill="#ADACAC"/>
+        </SvgIcon>
+    );
+}
+export function NoDataFoundIcon(props) {
+    return (
+        <SvgIcon {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0V0z" fill="none"/>
+            <path
+                d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.89 2 1.99 2H20c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V6h5.17l2 2H20v10z"/>
+            <circle cx="12" cy="12" r="3.2"/>
+            <path
+                d="M14.78 14.58c-.39.38-1.04.38-1.42 0-.38-.38-.38-1.04 0-1.42.38-.38 1.04-.38 1.42 0 .39.38.39 1.04 0 1.42z"/>
         </SvgIcon>
     );
 }

@@ -1,17 +1,18 @@
-import React, { useContext } from 'react';
+import React, {useContext, useState} from 'react';
 import { FormattedMessage } from 'react-intl';
 import { AppBar, Toolbar, IconButton, Typography, TextField, Box, InputAdornment, Button, Grid, CardMedia, Container } from '@mui/material';
 import { AppBarStyle, ContainerStyle, ToolBarStyle, FirstGridStyle, BoxContainerStyle, LogoStyle, PropsFieldStyle, FieldStyle, FlexBoxStyle, AddButtonStyle, AddIconStyle, ProfileButtonStyle, BottomGridStyle, LastBoxStyle } from "@/components/Header/Styles.js";
 import { useTheme } from '@mui/material/styles';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import ColorModeContext from "@/contexts/ColorModeContext.jsx";
-import {LocationIcon, AddIcon, ProfileIcon, SearchIcon} from '@/assets/Icons/Icons.jsx';
+import {AddIcon, ProfileIcon, SearchIcon} from '@/assets/Icons/Icons.jsx';
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {changeLocale, changeTheme, selectLocale, selectTheme} from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
 import LocationPickerButton from "@/components/Tools/LocationPickerButton/LocationPickerButton.jsx";
 import {useNavigate} from "react-router-dom";
 import {selectSearchText, setSearchText} from "@/Storage/Redux/Slices/postSlice.js";
+import Categories from "@/Helpers/mainCategoriesHelper.js";
 const Header = () => {
     const navigate = useNavigate();
 
@@ -24,6 +25,8 @@ const Header = () => {
     const colorMode = useContext(ColorModeContext);
 
     const searchText = useSelector(selectSearchText) ?? '';
+    const [text, setText] = useState(searchText ?? '');
+    
     const toggleTheme = () => {
         const newTheme = mode === 'light' ? 'dark' : 'light';
         dispatch(changeTheme(newTheme));
@@ -35,14 +38,18 @@ const Header = () => {
     };
     
     const searchThings = () => {
+        dispatch(setSearchText(text));
         navigate('./search');
-        window.location.reload();
     }
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             searchThings();
         }
     };
+    
+    const authHandle = ()=>  {
+        navigate('./auth');
+    }
     
     return (
         <AppBar style={AppBarStyle} sx={{ backgroundColor: colors.background.primary }}>
@@ -58,8 +65,8 @@ const Header = () => {
                                 onClick={()=>{navigate('./')}}
                             />
                             <TextField title='non' 
-                                       value={searchText} 
-                                       onChange={(e)=>dispatch(setSearchText(e.target.value))}
+                                       value={text} 
+                                       onChange={(e)=>setText(e.target.value)}
                                        onKeyDown={handleKeyDown}
                                 InputProps={{
                                     startAdornment: (
@@ -95,7 +102,7 @@ const Header = () => {
                         <Box style={FlexBoxStyle}>
                             <SButton
                               type='orangeRoundButton'
-                              sl={ {backgroundColor: colors.background.orange, color: colors.text.input} }
+                              sl={ {backgroundColor: colors.background.orange, color: colors.text.primary} }
                               prew={<AddIcon style={AddIconStyle} sx={{ color: colors.text.primary }} />}
                               text={<FormattedMessage id="header.addButtonLabel"/>}
                             />
@@ -110,6 +117,7 @@ const Header = () => {
                                 isIconButton={true}
                                 icon={ <ProfileIcon /> }
                                 sl={{...ProfileButtonStyle, color: colors.text.primary}}
+                                action={authHandle}
                             />
                             
                             <SButton
@@ -126,22 +134,68 @@ const Header = () => {
                 <Toolbar style={ToolBarStyle}>
                     <Grid container style={BottomGridStyle}>
                         <Box style={LastBoxStyle} >
-                            
                             <SButton type='transparentButton'
-                                     text={<FormattedMessage id="header.realEstateLabel"/>}
-                                     sl={{ color: colors.text.primary }}/>
+                                     text={<FormattedMessage id="category.electronics"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{ 
+                                         navigate('./search/'+Categories[0]);
+                                     }}
+                            />
                             <SButton type='transparentButton' 
-                                     text={<FormattedMessage id="header.technologyLabel"/>}
-                                     sl={{ color: colors.text.primary }}/>
+                                     text={<FormattedMessage id="category.fashion"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[1]);
+                                     }}                            />
                             <SButton type='transparentButton'
-                                     text={<FormattedMessage id="header.kidsLabel"/>}
-                                     sl={{ color: colors.text.primary }}/>
+                                     text={<FormattedMessage id="category.homeAndGarden"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[2]);
+                                     }}                            />
                             <SButton type='transparentButton'
-                                     text={<FormattedMessage id="header.clothingLabel"/>}
-                                     sl={{ color: colors.text.primary }}/>
+                                     text={<FormattedMessage id="category.realEstate"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[3]);
+                                     }}                            />
                             <SButton type='transparentButton'
-                                     text={<FormattedMessage id="header.animalsLabel"/>}
-                                     sl={{ color: colors.text.primary }}/>
+                                     text={<FormattedMessage id="category.cars"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[4]);
+                                     }}                            />
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="category.animals"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[5]);
+                                     }}                            />
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="category.job"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[6]);
+                                     }}                            />
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="category.businessAndServices"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[7]);
+                                     }}                            />
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="category.childrensWorld"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[8]);
+                                     }}                            />
+                            <SButton type='transparentButton'
+                                     text={<FormattedMessage id="category.sport"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{
+                                         navigate('./search/'+Categories[9]);
+                                     }}                            
+                            />
                         </Box>
                     </Grid>
                 </Toolbar>

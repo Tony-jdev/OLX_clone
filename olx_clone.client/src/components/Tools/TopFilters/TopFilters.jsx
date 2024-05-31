@@ -9,7 +9,7 @@ const TopFilters = () => {
     const orderBy = useSelector(selectOrderBy);
     
     const sortingOptions = [
-        { value: '', label: 'Товар: рекомендовані' },
+        { value: 'def', label: 'Товар: рекомендовані' },
         { value: 'asc', label: 'Ціна: за зростанням' },
         { value: 'desc', label: 'Ціна: за спаданням' },
     ];

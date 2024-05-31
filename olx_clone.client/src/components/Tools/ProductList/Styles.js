@@ -1,5 +1,5 @@
 export const GridStyle={
-    width: 'auto',
+    width: '100%',
     marginTop: 2,
     marginBottom: 5
 }

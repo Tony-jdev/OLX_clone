@@ -28,6 +28,7 @@ const ProductPage = () => {
     useEffect(() => {
         dispatch(setSelectedPostId(id));
         dispatch(fetchPostByIdAsync(id));
+        window.scrollTo(0, 0);
     }, [dispatch, id]);
     
     if (post === null) {

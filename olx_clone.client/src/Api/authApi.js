@@ -1,35 +1,27 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import axios from 'axios';
+import baseUrl from "@/Helpers/baseUrlHelper.js";
 
-const authApi = createApi({
-    reducerPath: "authApi",
-    baseQuery: fetchBaseQuery({
-        baseUrl: "/",
-    }),
-    endpoints: (builder) => ({
-        registerUser: builder.mutation({
-            query: (userData) => ({
-                url: "/",
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: userData,
-            }),
-        }),
-        loginUser: builder.mutation({
-            query: (userCredentials) => ({
-                url: "/",
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: userCredentials,
-            }),
-        }),
-    }),
-});
+export const RegUser = async (user) => {
+    try {
+        console.log('Sending user data:', user); // Додано логування
+        const response = await axios.post(`${baseUrl}/register`, user, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching:', error.response ? error.response.data : error.message);
+        throw new Error('Failed to fetch');
+    }
+};
 
-export const useRegisterUserMutation = authApi.useRegisterUserMutation;
-export const useLoginUserMutation = authApi.useLoginUserMutation;
-
-export default authApi;
+export const LogUser = async (queryParams) => {
+    try {
+        const response = await axios.post(`${baseUrl}/login`, {params: queryParams});
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching:', error);
+        throw new Error('Failed to fetch');
+    }
+};

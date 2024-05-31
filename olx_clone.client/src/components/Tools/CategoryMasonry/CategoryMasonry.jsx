@@ -12,22 +12,22 @@ import {
 import { useNavigate } from 'react-router-dom';
 import {FormattedMessage} from "react-intl";
 import {useTheme} from "@mui/material/styles";
+import Categories from "@/Helpers/mainCategoriesHelper.js";
 
 
 const buttons = [
-    <FormattedMessage id='masonry.1'/>,
-    <FormattedMessage id='masonry.2'/>,
-    <FormattedMessage id='masonry.3'/>,
-    <FormattedMessage id='masonry.4'/>,
-    <FormattedMessage id='masonry.5'/>,
+    <FormattedMessage id='category.fashion'/>,
+    <FormattedMessage id='category.electronics'/>,
+    <FormattedMessage id='category.animals'/>,
+    <FormattedMessage id='category.childrensWorld'/>,
+    <FormattedMessage id='category.realEstate'/>,
 ];
-
 const navigates = [
-    '/search',
-    '/search',
-    '/search',
-    '/search',
-    '/search',
+    '/search/'+Categories[1],
+    '/search/'+Categories[5],
+    '/search/'+Categories[0],
+    '/search/'+Categories[8],
+    '/search/'+Categories[3],
 ]
 
 const images = [
@@ -40,19 +40,23 @@ const images = [
     '@/../public/Categories/hometools.png',
 ];
 
-
 const CategoryMasonry = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const navigate = useNavigate();
 
+    const onClickHandler = (nav) => {
+        navigate(nav);
+       // window.location.reload();
+    }
+    
     return (
         <Grid container direction='row' justifyContent='space-between' style={GridMainStyle}>
             <Grid container justifyContent='space-between' style={GridC1Style}>
                 <Button
                     component="span"
                     sx={{...ButtonMainStyle, width: 467, height: 290, boxShadow: colors.boxShadow }}
-                    onClick={()=> navigate(navigates[0])}
+                    onClick={()=>onClickHandler(navigates[0])}
                 >
                     <Box
                         display='flex'
@@ -76,7 +80,7 @@ const CategoryMasonry = () => {
                     <Button
                         component="span"
                         sx={{...ButtonMainStyle, width: 223, height: 290, boxShadow: colors.boxShadow}}
-                        onClick={()=> navigate(navigates[1])}
+                        onClick={()=>onClickHandler(navigates[1])}
                     >
                         <Box
                             display='flex'
@@ -104,7 +108,7 @@ const CategoryMasonry = () => {
                     <Button
                         component="span"
                         sx={{...ButtonMainStyle, width: 290, height: 180, boxShadow: colors.boxShadow }}
-                        onClick={()=> navigate(navigates[2])}
+                        onClick={()=>onClickHandler(navigates[2])}
                     >
                         <Box
                             display='flex'
@@ -137,7 +141,7 @@ const CategoryMasonry = () => {
                     <Button
                         component="span"
                         sx={{...ButtonMainStyle, width: 223, height: 290, boxShadow: colors.boxShadow }}
-                        onClick={()=> navigate(navigates[3])}
+                        onClick={()=>onClickHandler(navigates[3])}
                     >
                         <Box
                             display='flex'
@@ -171,7 +175,7 @@ const CategoryMasonry = () => {
                 <Button
                     component="span"
                     sx={{...ButtonMainStyle, width: 396, height: 180, boxShadow: colors.boxShadow }}
-                    onClick={()=> navigate(navigates[4])}
+                    onClick={()=>onClickHandler(navigates[4])}
                 >
                     <Box
                         display='flex'

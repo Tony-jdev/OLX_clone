@@ -16,19 +16,21 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectSelectedPostId, setSelectedPostId} from "@/Storage/Redux/Slices/postSlice.js";
 
-const ShortProduct = ({ photo, name, price, publicationDate, condition, city, id }) => {
+const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedId = useSelector(selectSelectedPostId);
+    const isVip = vip ?? false;
+    const isUsed = type === 'Usd';
     
     return (
         <Card style={{...CardStyle, width: 340, height: 'auto', background: colors.background.secondary, boxShadow: colors.boxShadow}}>
             <Grid style={{padding: 20, height: 300, width: 'fit-content'}}>
                 <Grid container style={IndicatorGridStyle}>
-                    <IndicatorBox text="Top" style='d'/>
-                    <IndicatorBox text="Б/У"/>
+                    { vip && <IndicatorBox text="Top" style='d'/> }
+                    { isUsed && <IndicatorBox text="Б/У"/> }
                 </Grid>
                 <CardMedia component="img" sx={CardImgStyle} image={photo} alt={name} />
             </Grid>

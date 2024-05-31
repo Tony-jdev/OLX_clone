@@ -1,5 +1,5 @@
-import React, {useMemo} from 'react';
-import {Stack} from "@mui/material";
+import React, {Suspense, useMemo} from 'react';
+import {Box, CircularProgress, Stack} from "@mui/material";
 import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
 import { IntlProvider } from 'react-intl';
@@ -38,6 +38,18 @@ const Layout = (props) => {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <IntlProvider locale={locale} messages={messages[locale]} defoult>
+                    <Suspense fallback={
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '100vh',
+                            }}
+                        >
+                            <CircularProgress sx={{ color: 'orange'}} />
+                        </Box>
+                    }>
                     <Stack>
                         <Header/>
                         <div style={{minHeight: '62.5vh'}}>
@@ -45,6 +57,7 @@ const Layout = (props) => {
                         </div>
                         <Footer/>
                     </Stack>
+                    </Suspense>
                 </IntlProvider>
             </ThemeProvider>
         </ColorModeContext.Provider>

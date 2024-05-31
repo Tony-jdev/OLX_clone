@@ -1,10 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
-import {GetPostByCategoryId, GetPostById, GetPosts} from '@/Api/postApi.js';
+import {createSlice} from '@reduxjs/toolkit';
+import {GetPostByCategoryId, GetPostById, GetPosts, GetVIPPosts} from '@/Api/postApi.js';
+import {GetCategories} from "@/Api/categoryApi.js";
 
 const initialState = {
-    categorySku: localStorage.getItem('categorySku') ?? "",
+    categorySku: "",
+    subCategorySku: "",
+    subCategories: [],
     searchText: localStorage.getItem('searchText') ?? "",
-    orderBy: localStorage.getItem('orderBy') ?? "",
+    orderBy: localStorage.getItem('orderBy') ?? "def",
     page: parseInt(localStorage.getItem('page')) ?? 1,
     pageSize : parseInt(localStorage.getItem('pageSize')) ?? 1,
     pageCount : parseInt(localStorage.getItem('pageCount')) ?? 1,
@@ -21,7 +24,12 @@ export const postsSlice = createSlice({
     reducers: {
         setCategorySku: (state, action)=>{
             state.categorySku = action.payload;
-            localStorage.setItem('categorySku', action.payload);
+        },
+        setSubCategorySku: (state, action)=>{
+            state.subCategorySku = action.payload;
+        },
+        setSubCategories: (state, action)=>{
+            state.subCategories = action.payload;
         },
         setSearchText: (state, action)=>{
             state.searchText = action.payload;
@@ -60,6 +68,8 @@ export const postsSlice = createSlice({
         },
         clearData: (state) => {
             state.categorySku = "";
+            state.subcategorySku = "";
+            state.subCategories = [];
             state.searchText = "";
             state.orderBy = "";
             state.page = 1;
@@ -72,6 +82,7 @@ export const postsSlice = createSlice({
             state.error = null;
 
             localStorage.setItem('categorySku', '');
+            localStorage.setItem('subCategorySku', '');
             localStorage.setItem('searchText', '');
             localStorage.getItem('orderBy', '');
             localStorage.setItem('page', 1);
@@ -83,6 +94,8 @@ export const postsSlice = createSlice({
 
 export const {
     setCategorySku,
+    setSubCategorySku,
+    setSubCategories,
     setSearchText, 
     setOrderBy, 
     setPage, 
@@ -117,9 +130,52 @@ export const fetchPostsAsync = () => async (dispatch, getState) => {
     }
 };
 
+export const fetchVipPostsAsync = () => async (dispatch) => {
+    try {
+        dispatch(setLoading(true));
+        const posts = await GetVIPPosts();
+        console.log(posts.data);
+        dispatch(setPosts(posts.data));
+    } catch (error) {
+        dispatch(setError(error.message));
+    } finally {
+        dispatch(setLoading(false));
+    }
+};
+
+export const fetchSubCategoriesAsync = () => async (dispatch, getState) => {
+    const state = getState();
+    const findChildCategories = (categories, sku) => {
+        const parentCategory = categories.find(category => category.sku === sku);
+        if (!parentCategory) {
+            console.error("Parent category not found");
+            return [];
+        }
+        return categories.filter(category => category.parentId === parentCategory.id);
+    }
+
+
+    try {
+        const categories = await GetCategories();
+        console.log(categories.data);
+        const subCats = findChildCategories(categories.data, state.posts.categorySku);
+        console.log(subCats);
+        dispatch(setSubCategories(subCats));
+    } catch (error) {
+        dispatch(setError(error.message));
+    } finally {
+        dispatch(setLoading(false));
+    }
+};
+
 export const fetchPostsByCategoryAsync = () => async (dispatch, getState) => {
     const state = getState();
-    const id = state.posts.categorySku;
+    
+    const id = 
+        state.posts.subCategorySku ? 
+            state.posts.subCategorySku : 
+            state.posts.categorySku ? state.posts.categorySku : "";
+    
     const queryParams = {
         searchTerm: state.posts.searchText,
         orderBy: state.posts.orderBy,
@@ -157,6 +213,8 @@ export const fetchPostByIdAsync = () => async (dispatch, getState) => {
 };
 
 export const selectCategorySku = (state) => state.posts.categorySku;
+export const selectSubCategorySku = (state) => state.posts.subCategorySku;
+export const selectSubCategories = (state) => state.posts.subCategories;
 export const selectSearchText = (state) => state.posts.searchText;
 export const selectOrderBy = (state) => state.posts.orderBy;
 export const selectPage = (state) => state.posts.page;
