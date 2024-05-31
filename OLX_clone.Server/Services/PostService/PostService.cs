@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Helpers;
+using OLX_clone.Server.Middleware.Exceptions;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
 using OLX_clone.Server.Models.Dtos.Post;
@@ -14,8 +15,7 @@ public class PostService : IPostService
     private readonly IBlobService _blobService;
     private readonly IMapper _mapper;
     
-    public PostService(IUnitOfWork unitOfWork,
-        IBlobService blobService, IMapper mapper)
+    public PostService(IUnitOfWork unitOfWork, IBlobService blobService, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
@@ -25,12 +25,9 @@ public class PostService : IPostService
     public async Task<ApiResponse<List<GetPostDto>>> GetVipPosts()
     {
         var posts = await _unitOfWork.PostRepository.GetVipPostsAsync();
+
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        
-        foreach (var post in getPostDtos)
-        {
-            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
-        }
+        await SetPhotoUrls(getPostDtos);
         
         return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
     }
@@ -38,12 +35,9 @@ public class PostService : IPostService
     public async Task<List<GetPostDto>> GetPostsByUser(string userId)
     {
         var posts = await _unitOfWork.PostRepository.GetPostsByUserIdAsync(userId);
+
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        
-        foreach (var post in getPostDtos)
-        {
-            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
-        }
+        await SetPhotoUrls(getPostDtos);
         
         return getPostDtos;
     }
@@ -55,10 +49,7 @@ public class PostService : IPostService
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 15);
         
-        foreach (var post in pagedPosts.Items)
-        {
-            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
-        }
+        await SetPhotoUrls(pagedPosts.Items);
         
         return new ApiResponse<PagedList<GetPostDto>> { Data = pagedPosts, Message = "Posts retrieved successfully." };
     }
@@ -67,15 +58,13 @@ public class PostService : IPostService
         string? searchTerm, string? orderBy, string? status, int page)
     {
         var categoryIds = await _unitOfWork.CategoryRepository.GetCategoryAndChildrenIds(categorySku);
-        
+
         var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(categoryIds, searchTerm, orderBy, status);
+
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 12);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 15);
         
-        foreach (var post in pagedPosts.Items)
-        {
-            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
-        }
+        await SetPhotoUrls(pagedPosts.Items);
         
         return new ApiResponse<PagedList<GetPostDto>> { Data = pagedPosts, Message = "Posts retrieved successfully." };
     }
@@ -85,7 +74,7 @@ public class PostService : IPostService
         var post = await _unitOfWork.PostRepository.GetPostDetailsBySkuAsync(sku);
         if (post == null)
         {
-            return new ApiResponse<GetPostDetailsDto> { Success = false, Message = "Post not found." };
+            throw new NotFoundException("Post not found");
         }
         
         var postToView = _mapper.Map<Post, GetPostDetailsDto>(post);
@@ -97,14 +86,20 @@ public class PostService : IPostService
 
     public async Task<ApiResponse<Post>> CreatePost(CreatePostDto postCreateDto)
     {
-        if (postCreateDto.Files.Count == 0)
-            return new ApiResponse<Post> { Success = false, Message = "There are no files provided" };
+        if (postCreateDto.Files == null || postCreateDto.Files.Count == 0)
+        {
+            throw new BadRequestException("There are no files provided");
+        }
 
         var postToCreate = _mapper.Map<CreatePostDto, Post>(postCreateDto);
         postToCreate.SKU = GeneratePostSKU(postToCreate.Title);
         
         var createdPost = await _unitOfWork.PostRepository.AddAsync(postToCreate);
-        
+        if (createdPost == null)
+        {
+            throw new InternalServerErrorException("Failed to create the post.");
+        }
+
         var postPhotos = await UploadPostPhotos(postCreateDto.Files, createdPost.Id);
         await _unitOfWork.PostPhotoRepository.AddRangeAsync(postPhotos);
 
@@ -113,19 +108,24 @@ public class PostService : IPostService
 
     public async Task<ApiResponse<Post>> UpdatePost(int id, UpdatePostDto postUpdateDto)
     {
-        Post postFromDb = await _unitOfWork.PostRepository.GetAsync(id);
+        var postFromDb = await _unitOfWork.PostRepository.GetAsync(id);
         if (postFromDb == null)
-            return new ApiResponse<Post> { Success = false, Message = "Post not found." };
-        
-        //Add new photos
+        {
+            throw new NotFoundException("Post not found");
+        }
+
         if (postUpdateDto.Files != null)
         {
             var postPhotos = await UploadPostPhotos(postUpdateDto.Files, postFromDb.Id);
             await _unitOfWork.PostPhotoRepository.AddRangeAsync(postPhotos);
         }
-        postFromDb = _mapper.Map(postUpdateDto, postFromDb);
 
+        postFromDb = _mapper.Map(postUpdateDto, postFromDb);
         var updatedPost = await _unitOfWork.PostRepository.UpdateAsync(postFromDb);
+        if (updatedPost == null)
+        {
+            throw new InternalServerErrorException("Failed to update the post.");
+        }
 
         return new ApiResponse<Post> { Data = updatedPost, Message = "Post updated successfully" };
     }
@@ -136,20 +136,19 @@ public class PostService : IPostService
         {
             try
             {
-                Post postFromDb = await _unitOfWork.PostRepository.GetAsync(id);
+                var postFromDb = await _unitOfWork.PostRepository.GetAsync(id);
                 if (postFromDb == null)
-                    return new ApiResponse<bool> { Success = false, Message = "Post not found." };
+                {
+                    throw new NotFoundException("Post not found");
+                }
 
-                // Видалення пов'язаних фотографій
                 foreach (var image in await _unitOfWork.PostPhotoRepository.GetPostPhotosByPostId(id))
                 {
                     await _blobService.DeleteBlob(image.PhotoUrl.Split('/').Last(), SD.SD_Storage_Container);
                     await _unitOfWork.PostPhotoRepository.DeleteAsync(image.Id);
                 }
 
-                // Видалення оголошення
                 await _unitOfWork.PostRepository.DeleteAsync(id);
-
                 await transaction.CommitAsync();
 
                 return new ApiResponse<bool> { Message = "Post deleted successfully" };
@@ -157,27 +156,32 @@ public class PostService : IPostService
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                return new ApiResponse<bool> { Success = false, Message = "Error occured while deleting post: " + ex.Message };
+                throw new InternalServerErrorException("Error occurred while deleting post");
             }
         }
     }
     
     public async Task<ApiResponse<bool>> DeletePhoto(int photoId)
     {
-        PostPhoto postPhotoFromDb = await _unitOfWork.PostPhotoRepository.GetAsync(photoId);
+        var postPhotoFromDb = await _unitOfWork.PostPhotoRepository.GetAsync(photoId);
         if (postPhotoFromDb == null)
-            return new ApiResponse<bool> { Success = false, Message = "Photo not found." };
+        {
+            throw new NotFoundException("Photo not found");
+        }
 
         await _blobService.DeleteBlob(postPhotoFromDb.PhotoUrl.Split('/').Last(), SD.SD_Storage_Container);
         var deletedPostPhoto = await _unitOfWork.PostPhotoRepository.DeleteAsync(photoId);
+        if (!deletedPostPhoto)
+        {
+            throw new InternalServerErrorException("Error occurred while deleting photo");
+        }
 
-        return !deletedPostPhoto ? new ApiResponse<bool> { Success = false, Message = "Error occured while deleting photo." } 
-            : new ApiResponse<bool> { Message = "Image deleted successfully" };
+        return new ApiResponse<bool> { Message = "Image deleted successfully" };
     }
     
     public async Task AddPostView(int postId)
     {
-        PostView postView = new PostView{PostId = postId};
+        var postView = new PostView { PostId = postId };
         await _unitOfWork.PostViewRepository.AddAsync(postView);
     }   
     
@@ -199,5 +203,13 @@ public class PostService : IPostService
         string sku = $"ID{guid}";
 
         return sku;
+    }
+    
+    private async Task SetPhotoUrls(IEnumerable<GetPostDto> posts)
+    {
+        foreach (var post in posts)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+        }
     }
 }

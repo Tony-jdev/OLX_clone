@@ -5,8 +5,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using OLX_clone.Server.Data;
-using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Helpers;
+using OLX_clone.Server.Middleware.Exceptions;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos.Auth;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
@@ -35,7 +35,7 @@ public class AuthService: IAuthService
 
         if (userFromDb != null)
         {
-            return new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "User with this email already exists" };
+            throw new BadRequestException("User with this email already exists.");
         }
 
         var user = _mapper.Map<ApplicationUser>(registerRequestDto);
@@ -48,7 +48,7 @@ public class AuthService: IAuthService
             return new ApiResponse<IEnumerable<IdentityError>> { Success = true, Message = "User registered successfully" };
         }
 
-        return new ApiResponse<IEnumerable<IdentityError>> {Data = result.Errors, Success = false, Message = $"Error occured while registering" };
+        throw new InternalServerErrorException("Error occurred while registering.");
     }
     
     public async Task<ApiResponse<LoginResponseDto>> Login(LoginRequestDto loginRequestDto)
@@ -56,7 +56,10 @@ public class AuthService: IAuthService
         var apiResponse = new ApiResponse<LoginResponseDto>();
 
         var userFromDb = await _userManager.FindByEmailAsync(loginRequestDto.Email);    
-        bool isValidUser = await _userManager.CheckPasswordAsync(userFromDb, loginRequestDto.Password);
+        if (!await _userManager.CheckPasswordAsync(userFromDb, loginRequestDto.Password))
+        {
+            throw new BadRequestException("Incorrect password.");
+        }
 
         var token = await GenerateToken(userFromDb);
         

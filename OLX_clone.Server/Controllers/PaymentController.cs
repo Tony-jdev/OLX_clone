@@ -22,29 +22,52 @@ public class PaymentController : ControllerBase
         _paymentService = paymentService;
         _userService = userService;
     }
-    
+
     [HttpPost("charge")]
     public async Task<ActionResult<ApiResponse<IEnumerable<IdentityError>>>> Charge([FromBody] PaymentRequest paymentRequest)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<IEnumerable<IdentityError>>
+            {
+                Success = false,
+                Message = "Invalid payment request",
+                Data = ModelState.Values.SelectMany(v => v.Errors).Select(e => new IdentityError { Description = e.ErrorMessage })
+            });
+        }
+
         try
         {
             var charge = await _paymentService.CreateCharge(paymentRequest);
-            
             if (charge.Status == "succeeded")
             {
-                var apiResponse = await _userService.UpdateBalance(
-                    new Transaction{Amount = paymentRequest.Amount, UserId = paymentRequest.UserId});
+                var apiResponse = await _userService.UpdateBalance(new Transaction
+                {
+                    Amount = paymentRequest.Amount,
+                    UserId = paymentRequest.UserId
+                });
+
                 if (apiResponse.Success)
                 {
                     return Ok(apiResponse);
                 }
+
                 return BadRequest(apiResponse);
             }
-            return BadRequest("Payment failed!");
+
+            return BadRequest(new ApiResponse<string>
+            {
+                Success = false,
+                Message = "Payment failed!"
+            });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"An error occurred: {ex.Message}");
+            return StatusCode(500, new ApiResponse<string>
+            {
+                Success = false,
+                Message = $"An error occurred: {ex.Message}"
+            });
         }
     }
 }

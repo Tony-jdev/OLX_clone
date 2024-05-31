@@ -8,11 +8,14 @@ public class PostPhoto
 {
     [Key]
     public int Id { get; set; }
+    
     [Required]
-    [ForeignKey("PostId")]
     public int PostId { get; set; }
+    
+    [ForeignKey("PostId")]
     [JsonIgnore]
     public Post Post { get; set; }
+    
     [Required]
     public string PhotoUrl { get; set; }
 }

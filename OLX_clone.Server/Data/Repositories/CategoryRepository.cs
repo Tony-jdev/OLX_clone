@@ -10,7 +10,15 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
    {
       
    }
-    
+   
+   public async Task<List<Category>> GetParentCategories()
+   {
+      return await _context.Categories
+         .Where(c => c.ParentId == null)
+         .Include(c => c.ChildCategories)
+         .ToListAsync();
+   }
+   
    public async Task<List<int>> GetCategoryAndChildrenIds(string categorySKU)
    {
       var categoryId = await _context.Categories
