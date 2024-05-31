@@ -22,6 +22,7 @@ using OLX_clone.Server.Services.PostService;
 using OLX_clone.Server.Services.TransactionService;
 using OLX_clone.Server.Services.UserService;
 using OLX_clone.Server.Data.Configurations;
+using OLX_clone.Server.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,7 +66,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection"));
 });
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+}).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -143,6 +151,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseHangfireDashboard();
 app.MapHangfireDashboard("/hangfiredashboard", new DashboardOptions()
 {

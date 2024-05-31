@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Helpers;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos;
@@ -78,19 +77,12 @@ public class PostController : ControllerBase
             return BadRequest(new ApiResponse<Post> { Success = false, Message = "Model is invalid"});
         }
 
-        try
+        var apiResponse = await _postService.CreatePost(postCreateDto);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _postService.CreatePost(postCreateDto);
-            if (!apiResponse.Success)
-            {
-                return BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<Post> { Success = false, Message = ex.Message});
-        }
+        return Ok(apiResponse);
     }
 
     [HttpPut("{id:int}")]
@@ -106,19 +98,12 @@ public class PostController : ControllerBase
             return BadRequest(new ApiResponse<Post> { Success = false, Message = "Wrong post"});
         }
 
-        try
+        var apiResponse = await _postService.UpdatePost(id, postUpdateDto);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _postService.UpdatePost(id, postUpdateDto);
-            if (!apiResponse.Success)
-            {
-                return BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<Post> { Success = false, Message = ex.Message, Data = null });
-        }
+        return Ok(apiResponse);
     }
 
     [HttpDelete("{id:int}")]
@@ -130,19 +115,12 @@ public class PostController : ControllerBase
             return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid post ID"});
         }
 
-        try
+        var apiResponse = await _postService.DeletePost(id);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _postService.DeletePost(id);
-            if (!apiResponse.Success)
-            {
-                return apiResponse.Message == "Post not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return apiResponse.Message == "Post not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<bool> { Success = false, Message = ex.Message});
-        }
+        return Ok(apiResponse);
     }
 
     [HttpDelete("photo/{id:int}", Name = "DeletePhoto")]
@@ -154,19 +132,12 @@ public class PostController : ControllerBase
             return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid photo ID"});
         }
 
-        try
+        var apiResponse = await _postService.DeletePhoto(id);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _postService.DeletePhoto(id);
-            if (!apiResponse.Success)
-            {
-                return apiResponse.Message == "Photo not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return apiResponse.Message == "Photo not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<bool> { Success = false, Message = ex.Message});
-        }
+        return Ok(apiResponse);
     }
 
     [HttpPost("{postId}/boost")]

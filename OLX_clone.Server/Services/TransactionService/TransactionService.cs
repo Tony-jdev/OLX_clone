@@ -2,6 +2,7 @@
 using OLX_clone.Server.Data.Contracts;
 using OLX_clone.Server.Data.Repositories;
 using OLX_clone.Server.Helpers;
+using OLX_clone.Server.Middleware.Exceptions;
 using OLX_clone.Server.Models;
 using OLX_clone.Server.Models.Dtos.Payment;
 
@@ -20,15 +21,13 @@ public class TransactionService : ITransactionService
 
     public async Task<ApiResponse<Transaction>> RecordTransaction(Transaction transaction)
     {
-        try
+        var result = await _unitOfWork.TransactionRepository.AddAsync(transaction);
+        
+        if (result == null)
         {
-            var result = await _unitOfWork.TransactionRepository.AddAsync(transaction);
-            
-            return new ApiResponse<Transaction> { Data = result, Success = true, Message = "Transaction recorded successfully." };
+            throw new InternalServerErrorException("Failed to record transaction.");
         }
-        catch (Exception ex)
-        {
-            return new ApiResponse<Transaction> { Success = false, Message = $"Failed to record transaction: {ex.Message}" };
-        }
+        
+        return new ApiResponse<Transaction> { Data = result, Success = true, Message = "Transaction recorded successfully." };
     }
 }
