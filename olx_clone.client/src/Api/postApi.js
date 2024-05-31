@@ -6,8 +6,8 @@ export const GetPosts = async (queryParams) => {
         const response = await axios.get(`${baseUrl}/api/posts`, {params: queryParams});
         return response.data;
     } catch (error) {
-        console.error('Error fetching posts:', error);
-        throw new Error('Failed to fetch posts');
+        console.error('Error fetching:', error);
+        throw new Error('Failed to fetch');
     }
 };
 export const GetVIPPosts = async () => {
@@ -15,8 +15,8 @@ export const GetVIPPosts = async () => {
         const response = await axios.get(`${baseUrl}/api/posts/vip`);
         return response.data;
     } catch (error) {
-        console.error('Error fetching posts:', error);
-        throw new Error('Failed to fetch posts');
+        console.error('Error fetching:', error);
+        throw new Error('Failed to fetch');
     }
 };
 
@@ -25,8 +25,8 @@ export const GetPostById = async (id) => {
         const response = await axios.get(`${baseUrl}/api/posts/${id}`);
         return response.data;
     } catch (error) {
-        console.error('Error fetching posts:', error);
-        throw new Error('Failed to fetch posts');
+        console.error('Error fetching:', error);
+        throw new Error('Failed to fetch');
     }
 };
 
@@ -35,7 +35,7 @@ export const GetPostByCategoryId = async (queryParams, id) => {
         const response = await axios.get(`${baseUrl}/api/posts/category/${id}`, {params: queryParams});
         return response.data;
     } catch (error) {
-        console.error('Error fetching posts:', error);
-        throw new Error('Failed to fetch posts');
+        console.error('Error fetching:', error);
+        throw new Error('Failed to fetch');
     }
 };

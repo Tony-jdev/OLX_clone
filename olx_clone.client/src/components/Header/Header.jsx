@@ -47,6 +47,10 @@ const Header = () => {
         }
     };
     
+    const authHandle = ()=>  {
+        navigate('./auth');
+    }
+    
     return (
         <AppBar style={AppBarStyle} sx={{ backgroundColor: colors.background.primary }}>
             <Container style={ContainerStyle}>
@@ -113,6 +117,7 @@ const Header = () => {
                                 isIconButton={true}
                                 icon={ <ProfileIcon /> }
                                 sl={{...ProfileButtonStyle, color: colors.text.primary}}
+                                action={authHandle}
                             />
                             
                             <SButton

@@ -30,8 +30,12 @@ function HomePage() {
     const loading = useSelector(selectLoading);
     const error = useSelector(selectError);
 
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+    
     useEffect(  () => {
-        //dispatch(clearData());
         dispatch(fetchVipPostsAsync());
     }, [dispatch]);
     

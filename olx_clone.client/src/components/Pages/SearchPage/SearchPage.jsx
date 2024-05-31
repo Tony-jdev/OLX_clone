@@ -55,6 +55,7 @@ function SearchPage() {
         {
             dispatch(fetchPostsAsync());
         }
+        window.scrollTo(0, 0);
     }, [dispatch, orderBy, page, category, subCategory, searchText]);
     
     useEffect(  () => {

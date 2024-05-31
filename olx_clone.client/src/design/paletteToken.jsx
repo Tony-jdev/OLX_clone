@@ -43,6 +43,15 @@ const getDesignTokens = (mode) => ({
                 },
             }),
     },
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: `
+                * {
+                    transition: all 0.5s ease-in-out !important;
+                }
+            `,
+        },
+    },
 });
 
 export default getDesignTokens;
