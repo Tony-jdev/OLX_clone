@@ -1,77 +1,86 @@
-import React from 'react';
-import { Grid, Typography, Button, Box } from '@mui/material';
+import React, {useEffect} from 'react';
+import {Grid, Typography, Button, Box, Container} from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import SButton from '@/components/Tools/Button/SButton.jsx';
 import {
     ProfileContainer,
     Sidebar,
-    SidebarItem,
-    SidebarButton,
     MainContent,
-    InfoBlock,
-    InfoTitle,
-    InfoText,
-    ButtonGroup,
 } from './Styles';
-import { useSelector } from 'react-redux';
-//import { selectUserName, selectUserEmail, selectUserPhone, selectUserAdditionalInfo } from '@/Storage/Redux/Slices/userProfileSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import UserInfo from "@/components/Pages/UserProfileContainer/MiniPages/UserInfo/UserInfo.jsx";
+import {useTheme} from "@mui/material/styles";
+import {HistoryViewsIcon, LikedIcon, MyMessagesIcon, MyPostsIcon, SettingsIcon} from "@/assets/Icons/Icons.jsx";
+import PagePointer from "@/components/Tools/PagePointer/PagePointer.jsx";
+import {useNavigate, useParams} from "react-router-dom";
+import {logOut} from "@/Storage/Redux/Slices/UserInfoSlice.js";
+import MyPosts from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/MyPosts.jsx";
+
+
+const profileItems = [
+    { id: 'profile.ads', label: 'Ads', type: 'sideBarBtnStyle', icon: <MyPostsIcon/>, miniPage: <MyPosts/> },
+    { id: 'profile.favorites', label: 'Favorites', type: 'sideBarBtnStyle', icon: <LikedIcon/>, miniPage: <></>},
+    { id: 'profile.messages', label: 'Messages', type: 'sideBarBtnStyle', icon: <MyMessagesIcon/>, miniPage: <></>},
+    { id: 'profile.viewedProducts', label: 'ViewedProducts', type: 'sideBarBtnStyle', icon: <HistoryViewsIcon/>, miniPage: <></>},
+    { id: 'profile.settings', label: 'Settings', type: 'sideBarBtnStyle', icon: <SettingsIcon/>, miniPage: <UserInfo/> },
+    { id: 'profile.logout', label: 'LogOut', type: 'carouselButton'},
+];
 
 const UserProfile = () => {
-    //const name = useSelector(selectUserName);
-    //const email = useSelector(selectUserEmail);
-    //const phone = useSelector(selectUserPhone);
-    //const additionalInfo = useSelector(selectUserAdditionalInfo);
+    const theme = useTheme();
+    const { colors } = theme.palette;
 
-    const name = 'Artem';
-    const email = 'Diominov';
-    const phone = '+380663896855';
-    const additionalInfo = {
-        birthDate: '04.11.2004',
-        gender: "male",
-        maritalStatus: "not",
-        hobbies: "eme game",
-        pets: 'cats',
-        occupation: 'non',
-    }
+    let { miniPage } = useParams();
+    const way = ['user', miniPage ?? profileItems[0].label,];
+    
+    const navigate = useNavigate();
+    
+    const dispatch = useDispatch();
 
+    const getMiniPageByLabel = (label) => {
+        const item = profileItems.find(item => item.label === label);
+        return item ? item.miniPage : null;
+    };
+
+    const handleLogOut = () =>  dispatch(logOut());
+    
     return (
-        <Grid container direction='row' wrap='nowrap'  sx={ProfileContainer}>
-            <Grid item xs={3} sx={Sidebar}>
-                <Typography variant="h5"><FormattedMessage id="profile.greeting" values={{name: "Друже"}} /></Typography>
-                <Typography variant="h6" sx={{ color: 'orange' }}><FormattedMessage id="profile.friend" /></Typography>
-                <Box>
-                    <Box sx={SidebarItem}><FormattedMessage id="profile.cart" /></Box>
-                    <Box sx={SidebarItem}><FormattedMessage id="profile.ads" /></Box>
-                    <Box sx={SidebarItem}><FormattedMessage id="profile.orderHistory" /></Box>
-                    <Box sx={SidebarItem}><FormattedMessage id="profile.favorites" /></Box>
-                    <Box sx={SidebarItem}><FormattedMessage id="profile.messages" /></Box>
-                    <Box sx={SidebarItem}><FormattedMessage id="profile.viewedProducts" /></Box>
-                    <Box sx={SidebarItem}><FormattedMessage id="profile.settings" /></Box>
-                    <Box sx={SidebarButton}><FormattedMessage id="profile.logout" /></Box>
-                </Box>
+        <Container style={{maxWidth: 1440, paddingTop: '10px', paddingBottom: '10px'}}>
+            <PagePointer way={way}/>
+            <Grid container direction='row' justifyContent="center" wrap='nowrap'  sx={ProfileContainer}>
+                <Grid item sx={{maxWidth: '345px', width: '100%', marginRight: '20px',}}>
+                    <Grid style={Sidebar} sx={{background: colors.background.secondary, boxShadow: colors.boxShadow}}>
+                        {profileItems.slice(0, -1).map((item, index) => (
+                            <SButton
+                                key={item.id}
+                                link={item.label}
+                                type={item.type}
+                                prew={React.cloneElement(item.icon, { sx: { color: item.label === way[1] ? 'orange' : 'black', marginRight: '10px', height: '36px', width: '36px' } })}
+                                text={<FormattedMessage id={item.id} />}
+                                action={()=>navigate(`../user/${item.label}`)}
+                                sl={{ width: '100%', color: colors.text.revers, "&:hover": { boxShadow: colors.boxShadow } }}
+                            />
+                        ))}
+                        <SButton
+                            key={profileItems[5].id}
+                            link={profileItems[5].label}
+                            type={profileItems[5].type}
+                            sl={
+                                {
+                                    color: colors.text.primary, background: colors.background.darkGradient,
+                                    "&:hover":{ boxShadow: colors.boxShadow},
+                                    maxWidth: '305px', width: '100%', marginTop: '20px',
+                                }}
+                            text={<FormattedMessage id={profileItems[5].id} />}
+                            action={handleLogOut}
+                        />
+                    </Grid>
+                </Grid>
+                <Grid item sx={MainContent}>
+                    {getMiniPageByLabel(way[1])}
+                </Grid>
             </Grid>
-            <Grid item xs={9} sx={MainContent}>
-                <Box sx={InfoBlock}>
-                    <Typography sx={InfoTitle}><FormattedMessage id="profile.contactInfo" /></Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.name" />: {name}</Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.email" />: {email}</Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.phone" />: {phone}</Typography>
-                </Box>
-                <Box sx={InfoBlock}>
-                    <Typography sx={InfoTitle}><FormattedMessage id="profile.additionalInfo" /></Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.birthDate" />: {additionalInfo.birthDate}</Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.gender" />: {additionalInfo.gender}</Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.maritalStatus" />: {additionalInfo.maritalStatus}</Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.hobbies" />: {additionalInfo.hobbies}</Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.pets" />: {additionalInfo.pets}</Typography>
-                    <Typography sx={InfoText}><FormattedMessage id="profile.occupation" />: {additionalInfo.occupation}</Typography>
-                </Box>
-                <Box sx={ButtonGroup}>
-                    <SButton type='whiteOutlined' text={<FormattedMessage id="profile.changePassword" />} />
-                    <SButton type='orange' text={<FormattedMessage id="profile.resetPassword" />} />
-                </Box>
-            </Grid>
-        </Grid>
+        </Container>
     );
 };
 

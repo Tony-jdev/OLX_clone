@@ -45,9 +45,24 @@ const getDesignTokens = (mode) => ({
     },
     components: {
         MuiCssBaseline: {
-            styleOverrides: `
+            styleOverrides: (theme)=>`
                 * {
-                    transition: all 0.5s ease-in-out !important;
+                    transition: all 0.4s ease-in-out !important;
+                }
+                input:-webkit-autofill {
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
+                  background-color: ${theme.palette.colors.background.secondary} !important;
+                }
+                input:-webkit-autofill:focus {
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
+                  background-color: ${theme.palette.colors.background.secondary} !important;
+                }
+                input:-webkit-autofill:hover {
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
+                  background-color: ${theme.palette.colors.background.secondary} !important;
                 }
             `,
         },

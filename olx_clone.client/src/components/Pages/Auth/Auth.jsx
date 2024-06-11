@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Grid, TextField, Typography, Box, Collapse } from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {Grid, TextField, Typography, Box, Collapse, Snackbar, Alert} from '@mui/material';
 import { useIntl, FormattedMessage } from 'react-intl';
 import {
     AuthContainer,
@@ -17,21 +17,26 @@ import {
     fetchLogInAsync,
     fetchRegistrationAsync,
     selectEmail, selectError,
-    selectLoading,
+    selectLoading, selectMessage,
     selectName,
     selectPassword, selectSuccess,
-    selectSurname, setEmail, setName, setPassword, setSurname
+    selectSurname, setEmail, setName, setPassword, setSurname, setSuccess, setMessage, clearData, clearInput
 } from "@/Storage/Redux/Slices/userAuthSlice.js";
 
+import {useNavigate} from "react-router-dom";
+import SAlert from "@/components/Tools/Alert/SAlert.jsx";
+
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])[A-Za-z\d]{8,}$/;
-const nameSurnameRegex = /^[A-Za-z]{3,}$/; // Регекс для імені та прізвища
+const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+const nameSurnameRegex = /^[A-Za-z]{3,}$/; 
 
 const Auth = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
 
     const [isRegister, setIsRegister] = useState(false);
+    
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
     const name = useSelector(selectName);
@@ -40,7 +45,10 @@ const Auth = () => {
     const password = useSelector(selectPassword);
     const loading = useSelector(selectLoading);
     const success = useSelector(selectSuccess);
+    const message = useSelector(selectMessage);
     const error  = useSelector(selectError);
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const [errors, setErrors] = useState({});
 
@@ -49,7 +57,7 @@ const Auth = () => {
     const validateEmail = (email) => emailRegex.test(email);
     const validatePassword = (password) => passwordRegex.test(password);
     const validateNameSurname = (value) => nameSurnameRegex.test(value);
-
+    
     const handleSubmit = () => {
         let validationErrors = {};
         if (isRegister && (!name || !validateNameSurname(name))) {
@@ -72,12 +80,41 @@ const Auth = () => {
             isRegister ? regHandler() : logHandler();
         }
     };
+    
+    const handleOpenSnackbarLogIn = async (success) => {
+        if (success) {
+            setOpenSnackbar(true);
+            setTimeout(() => {
+                navigate('/user/Settings');
+                dispatch(clearData());
+            }, 2000);
+        }
+        else {
+            dispatch(setSuccess(false));
+            dispatch(setMessage('Input error data'));
+            setOpenSnackbar(true);
+        }
+    };
+    const handleOpenSnackbarRegIn = async (success) => {
+        if (success) {
+            setOpenSnackbar(true);
+            setIsRegister(false);
+            dispatch(clearInput());
+        }
+        else {
+            dispatch(setSuccess(false));
+            dispatch(setMessage('Registration Error'));
+            setOpenSnackbar(true);
+        }
+    };
 
-    const regHandler = () => {
-        dispatch(fetchRegistrationAsync());
+    const regHandler = async () => {
+        const success = await dispatch(fetchRegistrationAsync());
+        await handleOpenSnackbarRegIn(success);
     }
-    const logHandler = () => {
-        dispatch(fetchLogInAsync());
+    const logHandler = async () => {
+        const success = await dispatch(fetchLogInAsync());
+        await handleOpenSnackbarLogIn(success);
     }
 
     return (
@@ -102,38 +139,62 @@ const Auth = () => {
                 <Box>
                     <Collapse in={isRegister} timeout={{enter: 1000, exit: 1000}}>
                         <TextField
-                            sx={FormField}
+                            sx={{...FormField,  '& .MuiInputLabel-root': {
+                                    color: colors.text.orange
+                                }
+                            }}
                             label={<FormattedMessage id="auth.name" />}
                             value={name}
                             onChange={(e) => dispatch(setName(e.target.value))}
                             error={!!errors.name}
                             helperText={errors.name}
+                            InputLabelProps={{
+                                shrink: true, 
+                            }}
                         />
                         <TextField
-                            sx={FormField}
+                            sx={{...FormField,  '& .MuiInputLabel-root': {
+                                    color: colors.text.orange
+                                }
+                            }}
                             label={<FormattedMessage id="auth.surname" />}
                             value={surname}
                             onChange={(e) => dispatch(setSurname(e.target.value))}
                             error={!!errors.surname}
                             helperText={errors.surname}
+                            InputLabelProps={{
+                                shrink: true, 
+                            }}
                         />
                     </Collapse>
                     <TextField
-                        sx={FormField}
+                        sx={{...FormField,  '& .MuiInputLabel-root': {
+                                color: colors.text.orange
+                            }
+                        }}
                         label={<FormattedMessage id="auth.email" />}
                         value={email}
                         onChange={(e) => dispatch(setEmail(e.target.value))}
                         error={!!errors.email}
                         helperText={errors.email}
+                        InputLabelProps={{
+                            shrink: true, 
+                        }}
                     />
                     <TextField
-                        sx={FormField}
+                        sx={{...FormField,  '& .MuiInputLabel-root': {
+                                color: colors.text.orange
+                            }
+                        }}
                         label={<FormattedMessage id="auth.password" />}
                         type="password"
                         value={password}
                         onChange={(e) => dispatch(setPassword(e.target.value))}
                         error={!!errors.password}
                         helperText={errors.password}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Box>
                 <SButton
@@ -143,6 +204,13 @@ const Auth = () => {
                     action={handleSubmit}
                 />
             </Grid>
+            <SAlert
+                message={message}
+                autoHideTime={2000}
+                openS={openSnackbar}
+                setOpenS={setOpenSnackbar}
+                severity={success ? 'success' : 'error'}
+            />
         </Grid>
     );
 };

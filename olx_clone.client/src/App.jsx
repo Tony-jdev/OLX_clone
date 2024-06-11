@@ -9,16 +9,16 @@ import {PersistGate} from "redux-persist/integration/react";
 function App() {
     return (
             <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <Layout>
-                        <Routes>
-                            {AppRoutes.map((route, index) => {
-                                const { element, path, ...rest } = route;
-                                return <Route key={index}  element={element} path={path} {...rest}/>;
-                            })}
-                        </Routes>
-                    </Layout>
-                </PersistGate>
+                    <PersistGate loading={null} persistor={persistor}>
+                        <Layout>
+                            <Routes>
+                                {AppRoutes.map((route, index) => {
+                                    const { element, path, ...rest } = route;
+                                    return <Route key={index}  element={element} path={path} {...rest}/>;
+                                })}
+                            </Routes>
+                        </Layout>
+                    </PersistGate>
             </Provider>
     );
 }

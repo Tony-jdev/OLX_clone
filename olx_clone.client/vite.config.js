@@ -34,11 +34,23 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 
 const databaseRoutes = {
-    '^/register': {
+    '^/api/auth/register': {
         target,
         secure: false
     },
-    '^/login': {
+    '^/api/auth/login': {
+        target,
+        secure: false
+    },
+    '^/api/users': {
+        target,
+        secure: false
+    },
+    '^/api/users/update-last-seen': {
+        target,
+        secure: false
+    },
+    '^/api/users/update-online-status': {
         target,
         secure: false
     },
