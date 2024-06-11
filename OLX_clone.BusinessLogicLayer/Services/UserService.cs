@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OLX_clone.BusinessLogicLayer.Middleware.Exceptions;
 using OLX_clone.BusinessLogicLayer.Services.Contracts;
 using OLX_clone.DataAccessLayer.Helpers;
@@ -37,6 +38,7 @@ public class UserService : IUserService
         var userProfile = new GetApplicationUserDetailsDto
         {
             UserId = user.Id,
+            Email = user.Email,
             Name = user.Name,
             Surname = user.Surname,
             PhoneNumber = user.PhoneNumber,
@@ -58,7 +60,15 @@ public class UserService : IUserService
         {
             throw new NotFoundException("User not found.");
         }
-
+    
+        // Перевірка унікальності номера телефону
+        var phoneNumberUsed = await _userManager.Users
+            .AnyAsync(u => u.PhoneNumber == applicationUserUpdateApplicationDto.PhoneNumber && u.Id != applicationUserUpdateApplicationDto.Id);
+        if (phoneNumberUsed)
+        {
+            throw new BadRequestException("Phone number already in use by another user.");
+        }
+        
         userFromDb = _mapper.Map(applicationUserUpdateApplicationDto, userFromDb);
 
         var result = await _userManager.UpdateAsync(userFromDb);

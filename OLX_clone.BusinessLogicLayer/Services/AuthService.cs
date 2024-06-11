@@ -67,7 +67,6 @@ public class AuthService: IAuthService
         
         LoginResponseDto loginResponse = new()
         {
-            Email = userFromDb.Email,
             Token = token
         };
 

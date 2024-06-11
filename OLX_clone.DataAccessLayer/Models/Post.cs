@@ -22,12 +22,14 @@ public class Post
 
     [Required]
     public string Description { get; set; }
+    [Required]
+    public string Location { get; set; }
 
     [Required]
     public double Price { get; set; }
     [Required]
     public string Type { get; set; }
-
+    
     [Required] public string Status { get; set; } = SD.status_active;
 
     [Required]

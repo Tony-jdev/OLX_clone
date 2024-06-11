@@ -29,6 +29,28 @@ public class UserController: ControllerBase
         return Ok(apiResponse);
     }
     
+    [HttpPut("{userId}")]
+    public async Task<ActionResult<ApiResponse<IEnumerable<IdentityError>>>> UpdateUser(
+        string userId, [FromBody] UpdateApplicationUserDto applicationUserUpdateDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "Model is invalid"});
+        }
+
+        if (userId != applicationUserUpdateDto.Id)
+        {
+            return BadRequest(new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "Wrong user"});
+        }
+
+        var apiResponse = await _userService.UpdateUser(applicationUserUpdateDto);
+        if (!apiResponse.Success)
+        {
+            return BadRequest(apiResponse);
+        }
+        return Ok(apiResponse);
+    }
+    
     [HttpPost("update-last-seen")]
     public async Task<ActionResult<ApiResponse<IEnumerable<IdentityError>>>> UpdateLastSeen([FromBody] string userId)
     {

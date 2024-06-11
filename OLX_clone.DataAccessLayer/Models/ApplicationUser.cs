@@ -9,6 +9,8 @@ public class ApplicationUser: IdentityUser
     public string Name { get; set; }
     [Required]
     public string Surname { get; set; }
+    
+    public string? Address { get; set; }
 
     public double Balance { get; set; } = 0;
 

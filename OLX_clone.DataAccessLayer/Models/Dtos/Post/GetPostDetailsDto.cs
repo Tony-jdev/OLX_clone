@@ -9,6 +9,7 @@ public class GetPostDetailsDto
     public string Title { get; set; }
     public string Description { get; set; }
     public double Price { get; set; }
+    public string Location { get; set; }
     public string Type { get; set; }
     public bool IsTop { get; set; }
     public int ViewsCount { get; set; }
