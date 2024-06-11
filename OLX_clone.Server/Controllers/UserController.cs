@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OLX_clone.Server.Helpers;
-using OLX_clone.Server.Models.Dtos.User;
-using OLX_clone.Server.Services.UserService;
+using OLX_clone.BusinessLogicLayer.Services.Contracts;
+using OLX_clone.DataAccessLayer.Helpers;
+using OLX_clone.DataAccessLayer.Models.Dtos.User;
 
 namespace OLX_clone.Server.Controllers;
    

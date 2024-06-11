@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OLX_clone.Server.Helpers;
-using OLX_clone.Server.Models;
-using OLX_clone.Server.Models.Dtos.Chat;
-using OLX_clone.Server.Services;
+using OLX_clone.BusinessLogicLayer.Services.Contracts;
+using OLX_clone.DataAccessLayer.Helpers;
+using OLX_clone.DataAccessLayer.Models;
+using OLX_clone.DataAccessLayer.Models.Dtos.Chat;
 
 namespace OLX_clone.Server.Controllers;
 

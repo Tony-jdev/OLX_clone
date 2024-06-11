@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OLX_clone.Server.Helpers;
-using OLX_clone.Server.Models;
-using OLX_clone.Server.Models.Dtos;
-using OLX_clone.Server.Models.Dtos.Post;
-using OLX_clone.Server.Services.BoostService;
-using OLX_clone.Server.Services.PostService;
+using OLX_clone.BusinessLogicLayer.Services.Contracts;
+using OLX_clone.DataAccessLayer.Helpers;
+using OLX_clone.DataAccessLayer.Models;
+using OLX_clone.DataAccessLayer.Models.Dtos;
+using OLX_clone.DataAccessLayer.Models.Dtos.Post;
 
 namespace OLX_clone.Server.Controllers;
 
