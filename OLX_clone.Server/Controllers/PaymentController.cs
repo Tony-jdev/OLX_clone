@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OLX_clone.Server.Helpers;
-using OLX_clone.Server.Models;
-using OLX_clone.Server.Models.Dtos.Payment;
-using OLX_clone.Server.Services.PaymentService;
-using OLX_clone.Server.Services.TransactionService;
-using OLX_clone.Server.Services.UserService;
-using Stripe;
+using OLX_clone.BusinessLogicLayer.Services.Contracts;
+using OLX_clone.DataAccessLayer.Helpers;
+using OLX_clone.DataAccessLayer.Models;
+using OLX_clone.DataAccessLayer.Models.Dtos.Payment;
 
 namespace OLX_clone.Server.Controllers;
 

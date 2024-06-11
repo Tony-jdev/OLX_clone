@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OLX_clone.Server.Helpers;
-using OLX_clone.Server.Models;
-using OLX_clone.Server.Models.Dtos;
-using OLX_clone.Server.Models.Dtos.Post;
-using OLX_clone.Server.Services.BoostService;
-using OLX_clone.Server.Services.PostService;
+using OLX_clone.BusinessLogicLayer.Services.Contracts;
+using OLX_clone.DataAccessLayer.Helpers;
+using OLX_clone.DataAccessLayer.Models;
+using OLX_clone.DataAccessLayer.Models.Dtos;
+using OLX_clone.DataAccessLayer.Models.Dtos.Post;
 
 namespace OLX_clone.Server.Controllers;
 
@@ -35,9 +34,9 @@ public class PostController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(
-        string? searchTerm, string? orderBy, string? status, int page = 1)
+        string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page = 1)
     {
-        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, status, page);
+        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, location, priceFrom, priceTo, status, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);
@@ -47,9 +46,10 @@ public class PostController : ControllerBase
 
     [HttpGet("category/{categorySku}", Name = "GetPostByCategory")]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(string categorySku,
-        string? searchTerm, string? orderBy, string? status, int page = 1)
+        string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page = 1)
     {
-        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, status, page);
+        var apiResponse = await _postService.GetPostsByCategory(
+            categorySku, searchTerm, orderBy, location, priceFrom, priceTo,status, page);
         if (!apiResponse.Success)
         {
             return BadRequest(apiResponse);
