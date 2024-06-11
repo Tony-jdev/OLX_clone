@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {LogUser, RegUser} from "@/Api/authApi.js";
+import {logIn} from "@/Storage/Redux/Slices/UserInfoSlice.js";
 
 const initialState = {
     name: "",
@@ -8,6 +9,7 @@ const initialState = {
     password: "",
     loading: false,
     success: false,
+    message: '',
     error: null,
 };
 
@@ -33,8 +35,17 @@ export const userAuthSlice = createSlice({
         setSuccess: (state, action) => {
             state.success = action.payload;
         },
+        setMessage: (state, action) => {
+            state.message = action.payload;
+        },
         setError: (state, action) => {
             state.error = action.payload;
+        },
+        clearInput: (state) => {
+            state.name = "";
+            state.surname = "";
+            state.email = "";
+            state.password = "";
         },
         clearData: (state) => {
             state.name = "";
@@ -43,6 +54,7 @@ export const userAuthSlice = createSlice({
             state.password = "";
             state.loading = false;
             state.success = false;
+            state.message = false;
             state.error = null;
         }
     },
@@ -55,7 +67,9 @@ export const {
     setPassword,
     setLoading,
     setSuccess,
+    setMessage,
     setError,
+    clearInput,
     clearData } = userAuthSlice.actions;
 
 export const fetchRegistrationAsync = () => async (dispatch, getState) => {
@@ -74,10 +88,10 @@ export const fetchRegistrationAsync = () => async (dispatch, getState) => {
 
     try {
         dispatch(setLoading(true));
-        console.log('Registering user:', user);
         const response = await RegUser(user);
-        dispatch(setSuccess(response.success));
-        console.log('Success:', response);
+        dispatch(setSuccess(response.success??false));
+        dispatch(setMessage(response.message));
+        return response.success??false;
     } catch (error) {
         dispatch(setError(error.message));
     } finally {
@@ -95,7 +109,18 @@ export const fetchLogInAsync = () => async (dispatch, getState) => {
     try {
         dispatch(setLoading(true));
         const response = await LogUser(queryParams);
-        console.log('Success:', response.data, response.success);
+        dispatch(setSuccess(response.success ?? false));
+
+        if(response.success)
+        {
+            const { token } = response.data;
+            dispatch(logIn(token));
+            dispatch(setMessage(response.message));
+        }
+        else {
+            dispatch(setMessage("Error password or email"));
+        }
+        return response.success ?? false;
     } catch (error) {
         dispatch(setError(error.message));
     } finally {
@@ -111,6 +136,7 @@ export const selectEmail = (state) => state.userAuth.email;
 export const selectPassword = (state) => state.userAuth.password;
 export const selectLoading = (state) => state.userAuth.loading;
 export const selectSuccess = (state) => state.userAuth.success;
+export const selectMessage = (state) => state.userAuth.message;
 export const selectError = (state) => state.userAuth.error;
 
 export default userAuthSlice.reducer;

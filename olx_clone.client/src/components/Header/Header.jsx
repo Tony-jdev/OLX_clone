@@ -13,6 +13,7 @@ import LocationPickerButton from "@/components/Tools/LocationPickerButton/Locati
 import {useNavigate} from "react-router-dom";
 import {selectSearchText, setSearchText} from "@/Storage/Redux/Slices/postSlice.js";
 import Categories from "@/Helpers/mainCategoriesHelper.js";
+import {isUserLoggedIn} from "@/Storage/Redux/Slices/UserInfoSlice.js";
 const Header = () => {
     const navigate = useNavigate();
 
@@ -48,7 +49,7 @@ const Header = () => {
     };
     
     const authHandle = ()=>  {
-        navigate('./auth');
+        navigate('/user/Settings');
     }
     
     return (

@@ -43,11 +43,14 @@ export const InactiveToggleOption = {
 export const FormField = {
     marginBottom: '15px',
     width: '100%',
+    
     '& .MuiOutlinedInput-root': {
         borderRadius: '12px',
     },
     '& .MuiInputLabel-root': {
         fontFamily: 'Roboto',
+        width: '100%',
+        textAlign: 'start',
     },
 };
 

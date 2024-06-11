@@ -1,13 +1,15 @@
 export const DefoultStyle = {
     '&:focus': {outline: 'none'}
 }
+export const BorderInVisibleStyle = {
+    borderColor: 'inherit'
+}
 export const OutlinedWhiteButtonStyle={
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px 16px',
-    gap: '8px',
     minWidth: '232px',
     minHeight: '40px',
     border: '2px solid #FF9D00',
@@ -26,7 +28,6 @@ export const OutlinedWhiteButtonBlackBoardStyle={
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px 16px',
-    gap: '8px',
     textTransform: 'none',
     minWidth: '232px',
     minHeight: '40px',
@@ -80,7 +81,6 @@ export const OrangeRoundButtonStyle= {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px 24px 0px 16px',
-    gap: '8px',
     borderRadius: '20px',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
@@ -91,26 +91,15 @@ export const OrangeRoundButtonStyle= {
 }
 
 export const CarouselButtonStyle = {
-    minWidth: 50,
-    margin: 0,
-    width: 'fit-content',
     borderRadius: 30,
-    fontsize: 14,
     fontFamily: 'Roboto',
     textTransform: 'none',
-    display: 'flex',
-    flexDirection: 'row',
-    flexGrow: 0,
-    boxSizing: 'border-box',
-    justifyContent: 'center',
     alignItems: 'center',
     padding: '0px 24px',
-    gap: 16,
     height: 48,
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: 24,
-    lineHeight: 28,
     textAlign: 'center',
 }
 export const AppButtonRefStyle={
@@ -134,4 +123,15 @@ export const BreadCrampsButtonStyle={
     lineHeight: '28px',
     textTransform: 'none',
     padding: 0,
+}
+
+export const SideBarButtonStyle={
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: '20px',
+    lineHeight: '36px',
+    textTransform: 'none',
+    justifyContent: 'start',
+    width: '100%'
 }

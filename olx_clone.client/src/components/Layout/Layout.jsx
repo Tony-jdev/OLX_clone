@@ -11,6 +11,7 @@ import {changeTheme, selectLocale, selectTheme} from "@/Storage/Redux/Slices/the
 import CssBaseline from "@mui/material/CssBaseline";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import getDesignTokens from "@/design/paletteToken.jsx";
+import OrangeProgress from "@/components/Tools/CentralProgress/OrangeProgress.jsx";
 
 
 const messages = {
@@ -38,18 +39,7 @@ const Layout = (props) => {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <IntlProvider locale={locale} messages={messages[locale]} defoult>
-                    <Suspense fallback={
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '100vh',
-                            }}
-                        >
-                            <CircularProgress sx={{ color: 'orange'}} />
-                        </Box>
-                    }>
+                    <Suspense fallback={<OrangeProgress/>}>
                     <Stack>
                         <Header/>
                         <div style={{minHeight: '62.5vh'}}>

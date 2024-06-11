@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, IconButton } from '@mui/material';
 import {
-    AppButtonRefStyle, BreadCrampsButtonStyle,
+    AppButtonRefStyle, BorderInVisibleStyle, BreadCrampsButtonStyle,
     CarouselButtonStyle,
     DefoultStyle, OrangeRoundButtonStyle,
     OutlinedWhiteButtonBlackBoardStyle,
-    OutlinedWhiteButtonStyle, TransparentButtonLeftTextStyle,
+    OutlinedWhiteButtonStyle, SideBarButtonStyle, TransparentButtonLeftTextStyle,
     TransparentButtonStyle, TransparentSmallButtonStyle
 } from "@/components/Tools/Button/Styles.js";
 
@@ -20,35 +20,61 @@ import {
 * 7 - carouselButton
 * 8 - appBtnStyle
 * 9 - breadCrBtnStyle
+* 10 - sideBarBtnStyle 
 * */
 
-const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, link}) => {
+
+
+
+const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, link, borderInVisible}) => {
+
+    const getButtonStyle = () => {
+        let baseStyle;
+
+        switch (type) {
+            case 'whiteOutlined':
+                baseStyle = OutlinedWhiteButtonStyle;
+                break;
+            case 'whiteOutlinedBB':
+                baseStyle = OutlinedWhiteButtonBlackBoardStyle;
+                break;
+            case 'transparentButton':
+                baseStyle = TransparentButtonStyle;
+                break;
+            case 'transparentButtonLT':
+                baseStyle = TransparentButtonLeftTextStyle;
+                break;
+            case 'transparentButtonSM':
+                baseStyle = TransparentSmallButtonStyle;
+                break;
+            case 'orangeRoundButton':
+                baseStyle = OrangeRoundButtonStyle;
+                break;
+            case 'carouselButton':
+                baseStyle = CarouselButtonStyle;
+                break;
+            case 'appBtnStyle':
+                baseStyle = AppButtonRefStyle;
+                break;
+            case 'breadCrBtnStyle':
+                baseStyle = BreadCrampsButtonStyle;
+                break;
+            case 'sideBarBtnStyle':
+                baseStyle = SideBarButtonStyle;
+                break;
+            default:
+                baseStyle = OutlinedWhiteButtonStyle;
+        }
+
+        return borderInVisible ? {...baseStyle, ...BorderInVisibleStyle} : baseStyle;
+    };
+
+
+    const buttonStyle = getButtonStyle();
+
 
     const defaultBtn = (
-        <Button title={link??""} style={(() => {
-            switch (type) {
-                case 'whiteOutlined':
-                    return OutlinedWhiteButtonStyle;
-                case 'whiteOutlinedBB':
-                    return OutlinedWhiteButtonBlackBoardStyle;
-                case 'transparentButton':
-                    return TransparentButtonStyle;
-                case 'transparentButtonLT':
-                    return TransparentButtonLeftTextStyle;
-                case 'transparentButtonSM':
-                    return TransparentSmallButtonStyle;
-                case 'orangeRoundButton':
-                    return OrangeRoundButtonStyle;
-                case 'carouselButton':
-                    return CarouselButtonStyle;
-                case 'appBtnStyle':
-                    return AppButtonRefStyle;
-                case 'breadCrBtnStyle':
-                    return BreadCrampsButtonStyle;
-                default:
-                    return OutlinedWhiteButtonStyle;
-            }})()} onClick={action} sx={{...DefoultStyle, ...sl}}
-                >
+        <Button title={link??""} onClick={action} style={buttonStyle} sx={{...DefoultStyle, ...sl}}>
             {prew}{text}{next}
         </Button>
     );
