@@ -9,9 +9,10 @@ public interface IPostService
 {
     Task<ApiResponse<List<GetPostDto>>> GetVipPosts();
     Task<List<GetPostDto>> GetPostsByUser(string userId);
-    Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(string? searchTerm, string? orderBy, string? status, int page);
+    Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(
+        string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page);
     Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 
-        string? searchTerm, string? orderBy, string? status, int page);
+        string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page);
     Task<ApiResponse<GetPostDetailsDto>> GetPost(string sku);
     Task<ApiResponse<Post>> CreatePost(CreatePostDto postCreateDto);
     Task<ApiResponse<Post>> UpdatePost(int id, UpdatePostDto postUpdateDto);

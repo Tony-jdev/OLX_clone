@@ -16,7 +16,7 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
         return await _context.Posts
             .Where(p => p.IsVip && p.Status == SD.status_active)
             .OrderBy(p => Guid.NewGuid())
-            .Take(20)
+            .Take(12)
             .ToListAsync();
     }
 
@@ -27,15 +27,18 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
             .ToListAsync();
     }
 
-    public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy, string? status)
+    public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo,
+        string? status)
     {
-        var query = BuildQuery(null, searchTerm, orderBy, status);
+        var query = BuildQuery(null, searchTerm, orderBy, location, priceFrom, priceTo, status);
         return await ExecuteQueryAsync(query, orderBy);
     }
 
-    public async Task<List<Post>> GetAllByCategoryAsync(List<int> categoryIds, string? searchTerm, string? orderBy, string? status)
+    public async Task<List<Post>> GetAllByCategoryAsync(
+        List<int> categoryIds, string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo,
+        string? status)
     {
-        var query = BuildQuery(categoryIds, searchTerm, orderBy, status);
+        var query = BuildQuery(categoryIds, searchTerm, orderBy, location, priceFrom, priceTo, status);
         return await ExecuteQueryAsync(query, orderBy);
     }
 
@@ -47,7 +50,9 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
             .FirstOrDefaultAsync(p => p.SKU == sku);
     }
 
-    private IQueryable<Post> BuildQuery(List<int>? categoryIds, string? searchTerm, string? orderBy, string? status)
+    private IQueryable<Post> BuildQuery(
+        List<int>? categoryIds, string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo,
+        string? status)
     {
         IQueryable<Post> query = _context.Posts;
 
@@ -58,7 +63,7 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
 
         if (!string.IsNullOrEmpty(status))
         {
-            query = query.Where(p => p.Status == status.ToLower());
+            query = query.Where(p => p.Status.ToLower() == status.ToLower());
         }
         else
         {
@@ -67,7 +72,22 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(p => p.Title.Contains(searchTerm.ToLower()));
+            query = query.Where(p => p.Title.ToLower().Contains(searchTerm.ToLower()));
+        }
+
+        if (!string.IsNullOrEmpty(location))
+        {
+            query = query.Where(p => p.Location.ToLower().Contains(location.ToLower()));
+        }
+
+        if (priceFrom.HasValue)
+        {
+            query = query.Where(p => p.Price >= priceFrom.Value);
+        }
+
+        if (priceTo.HasValue)
+        {
+            query = query.Where(p => p.Price <= priceTo.Value);
         }
 
         if (!string.IsNullOrEmpty(orderBy))
@@ -88,6 +108,7 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
 
         return query;
     }
+
 
     private async Task<List<Post>> ExecuteQueryAsync(IQueryable<Post> query, string? orderBy)
     {
