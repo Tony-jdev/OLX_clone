@@ -11,7 +11,7 @@ const NoDataFound = () => {
     
     return (
         <Box sx={noDataStyle}>
-            <NoDataFoundIcon sx={{width: '120px', height: '120px'}}/>
+            <NoDataFoundIcon sx={{width: '120px', height: '120px', color: colors.text.secondary}}/>
             <Typography variant="h6" sx={{ color: colors.text.secondary }}>
                 <FormattedMessage id="noDataFound" />
             </Typography>

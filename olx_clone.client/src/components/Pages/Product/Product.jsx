@@ -4,7 +4,7 @@ import ProductInfo from "@/components/Tools/ProductInfo/ProductInfo.jsx";
 import SellerInfo from "@/components/Tools/SellerInfo/SellerInfo.jsx";
 import LocationInfo from "@/components/Tools/LocationInfo/LocationInfo.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx"; 
-import {Container} from "@mui/material";
+import {Box, Container, Grid} from "@mui/material";
 import {ContainerStyle} from "@/components/Pages/Product/Styles.js";
 import {useNavigate, useParams} from "react-router-dom";
 import {FormattedMessage} from "react-intl";
@@ -15,8 +15,13 @@ import {
     selectSelectedPost,
     selectSelectedPostId, setSelectedPostId
 } from "@/Storage/Redux/Slices/postSlice.js";
+import Carousel from "@/components/Tools/Carousel/Carousel.jsx";
+import {useTheme} from "@mui/material/styles";
 
 const ProductPage = () => {
+    const theme = useTheme();
+    const { colors } = theme.palette;
+    
     const { id } = useParams();
     const dispatch = useDispatch();
     const postId = useSelector(selectSelectedPostId);
@@ -24,12 +29,21 @@ const ProductPage = () => {
     const loading = useSelector(selectLoading);
     const error = useSelector(selectError);
     const navigate = useNavigate();
-    
+
+    const [urls,setUrls] = useState([]);
+
+
     useEffect(() => {
         dispatch(setSelectedPostId(id));
         dispatch(fetchPostByIdAsync(id));
         window.scrollTo(0, 0);
     }, [dispatch, id]);
+
+    useEffect(() => {
+        if (post && post.photos) {
+            setUrls(post.photos.map(photo => photo.photoUrl));
+        }
+    }, [post]);
     
     if (post === null) {
         return <Container>
@@ -61,23 +75,17 @@ const ProductPage = () => {
 
 
     return (
-        <Container style={{marginTop: 60, marginBottom: 60}}>
+        <Container style={{marginTop: 60, marginBottom: 60, maxWidth: '1440px', width: '100%', padding: 0}}>
+            <Grid container direction={'row'} justifyContent={'space-between'} style={{marginBottom: '20px'}}>
+                <Box sx={{background: colors.background.secondary, boxShadow: colors.boxShadow}}>
+                    {urls && <Carousel items={urls} isWide={false} isOnlyImg={true} width={'953px'}/>}
+                </Box>
+                <Box style={{maxWidth:'466px', width: '100%'}}>
+                    <SellerInfo seller={'product'} />
+                    <LocationInfo location={'product'} />
+                </Box>
+            </Grid>
             <ProductInfo post={post}/>
-            <SellerInfo seller={'product'} />
-            <LocationInfo location={'product'} />
-            
-            <Container style={{display: 'flex', padding: 0, justifyContent: 'space-between', marginTop: 50}}>
-                <SButton
-                    type="contained"
-                    text={<FormattedMessage id="productPage.chatWithSeller" />}
-                    action={()=>{}}
-                />
-                <SButton
-                    type="outlined"
-                    text={<FormattedMessage id="productPage.goBack" />}
-                    action={() => navigate(-1)}
-                />
-            </Container>
         </Container>
     );
 };

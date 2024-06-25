@@ -1,6 +1,7 @@
 import React from 'react';
-import { Paper, Button, Typography, Grid, Container} from '@mui/material';
-import { BottomTextStyle, ChildGridStyle, ContainerStyle, GridStyle, PaperStyle, TopTextStyle,} from "@/components/Tools/Carousel/CarouselItem/Styles.js";
+import { Paper, Grid, Container} from '@mui/material';
+import { ChildGridStyle, ContainerStyle, GridStyle, PaperStyle,} from "@/components/Tools/Carousel/CarouselItem/Styles.js";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
 
 function CarouselItem(props) {
     return (
@@ -8,8 +9,8 @@ function CarouselItem(props) {
             <Grid container direction="column" justifyContent="space-around" alignItems="flex-start" style={GridStyle}>
                 <Grid container direction="column" justifyContent="space-between" alignItems="flex-start" style={ChildGridStyle}>
                     <Container style={ContainerStyle}>
-                        <Typography style={TopTextStyle} sx={{color: props.item.textColor}}>{props.item.name}</Typography>
-                        <Typography style={BottomTextStyle} sx={{color: props.item.textColor}}>{props.item.description}</Typography>
+                        <Text type={'Headline'} color={props.item.textColor} sr={{fontWeight: '700'}}> {props.item.name} </Text>
+                        <Text type={'Title'} color={props.item.textColor} sr={{marginTop: '10px'}}> {props.item.description} </Text>
                     </Container>
                     {props.btn}
                 </Grid>

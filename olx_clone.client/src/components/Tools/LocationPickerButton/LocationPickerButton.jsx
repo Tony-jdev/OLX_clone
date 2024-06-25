@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import SButton from '@/components/Tools/Button/SButton';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import LocationPickerMap from './Map/LocationPickerMap.jsx';
-import {useTheme} from "@mui/material/styles"; // Припустимо, що це ваш компонент для вибору місцезнаходження
+import {useTheme} from "@mui/material/styles"; 
 
 const modalStyle = {
     position: 'absolute',
@@ -19,7 +19,7 @@ const modalStyle = {
     borderRadius: 2
 };
 
-const LocationPickerButton = () => {
+const LocationPickerButton = ({Color, setLocation}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const [selectedLocation, setSelectedLocation] = useState(null);
@@ -27,7 +27,10 @@ const LocationPickerButton = () => {
 
     const handleLocationSelection = (location) => {
         setSelectedLocation(location);
-        setIsMapVisible(false); // Закрити карту після вибору
+        if(setLocation){
+            setLocation(location.city+"|"+(location.city === "Київ" ? "Київська область" : location.region)+"|"+location.lat+"|"+location.lng);
+        }
+        setIsMapVisible(false); 
     };
 
     const toggleMapVisibility = () => {
@@ -37,13 +40,11 @@ const LocationPickerButton = () => {
     return (
         <>
             <SButton type='transparentButton'
-                     text={
-                         <Typography sx={{ color: colors.text.primary }} >
-                             {selectedLocation ? selectedLocation.city+", \n"+selectedLocation.region :
-                                 <FormattedMessage id="header.locationLabel"/>}
-                         </Typography>
-                     }
-                     prew={<LocationIcon sx={{ color: colors.background.orange }} />}
+                     textType={'Body'}
+                     Color={Color ?? colors.text.primary}
+                     text={ selectedLocation ? selectedLocation.city+", \n"+(selectedLocation.city === "Київ" ? "Київська область" : selectedLocation.region) : <FormattedMessage id="header.locationLabel"/>}
+                     prew={<LocationIcon />}
+                     prewColor={colors.background.orange}
                      action={toggleMapVisibility}
             />
             <Modal

@@ -1,76 +1,49 @@
-import React from 'react';
-import { Box, Grid, Typography, Button, Avatar, Tab, Tabs } from '@mui/material';
-import PostWideCard from "@/components/Tools/PostWideCard/PostWideCard.jsx";
+import React, {useEffect} from 'react';
+import { Box, Typography, Tab, Tabs } from '@mui/material';
 import Text from "@/components/Tools/TextContainer/Text.jsx";
-
-const ads = [
-    {
-        id: 1,
-        title: 'Віддамо котика на ім\'я Борис Васильович',
-        image: 'https://via.placeholder.com/100',
-        category: 'Тварини/Коти',
-        date: 'Активне до: 20 травня 2024р.',
-        price: '5000',
-        views: 15,
-        likes: 25,
-        shares: 3
-    },
-    {
-        id: 2,
-        title: 'Віддамо котика на ім\'я Борис Васильович',
-        image: 'https://via.placeholder.com/100',
-        category: 'Тварини/Коти',
-        date: 'Активне до: 20 травня 2024р.',
-        price: '5000',
-        views: 15,
-        likes: 25,
-        shares: 3
-    },
-    {
-        id: 3,
-        title: 'Віддамо котика на ім\'я Борис Васильович',
-        image: 'https://via.placeholder.com/100',
-        category: 'Тварини/Коти',
-        date: 'Активне до: 20 травня 2024р.',
-        price: '5000',
-        views: 15,
-        likes: 25,
-        shares: 3
-    }
-];
-
-const AdList = () => {
-    return (
-        <Box>
-            {ads.map(ad => (
-                <PostWideCard key={ad.id} ad={ad} />
-            ))}
-            <Typography variant="body2" sx={{ textAlign: 'right', marginTop: '10px' }}>Всього оголошень: {ads.length}</Typography>
-        </Box>
-    );
-};
+import {
+    TabsContainerStyles
+} from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/Styles.js";
+import {useTheme} from "@mui/material/styles";
+import PostWideList from "@/components/Tools/PostWideList/PostWideList.jsx";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchUserPostsAsync, selectUserPosts} from "@/Storage/Redux/Slices/userDataSlice.js";
 
 const MyPosts = () => {
+    const theme = useTheme();
+    const { colors } = theme.palette;
+    
     const [selectedTab, setSelectedTab] = React.useState(0);
 
+    const dispatch = useDispatch();
+    const ads = useSelector(selectUserPosts);
+    
     const handleChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
 
+    useEffect(  () => {
+        dispatch(fetchUserPostsAsync());
+    }, [dispatch]);
+    
+    
     return (
-        <Box>
-            <Tabs value={selectedTab} onChange={handleChange} aria-label="profile tabs">
-                <Tab label="Активні" />
-                <Tab label="Очікують" />
-                <Tab label="Неактивні" />
-                <Tab label="Відхилені" />
+        <Box style={{maxWidth: 980, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
+            borderRadius: '10px',
+            boxShadow: colors.boxShadow,
+            background: colors.background.secondary}}>
+            <Tabs value={selectedTab} onChange={handleChange} aria-label="profile tabs" sx={{...TabsContainerStyles, 
+                '& .MuiTabs-indicator': {
+                    backgroundColor: colors.text.revers,
+                },}}>
+                <Tab label={<Text type={'Body'}>Активні</Text>} />
+                <Tab label={<Text type={'Body'}>Неактивні</Text>}/>
             </Tabs>
             <Box sx={{marginTop: '20px'}}>
-                {selectedTab === 0 && <AdList />}
-                {selectedTab === 1 && <Typography>Очікують</Typography>}
-                {selectedTab === 2 && <Text text={'Неактивні'}/>}
-                {selectedTab === 3 && <Typography>Відхилені</Typography>}
+                {selectedTab === 0 && <PostWideList ads={ads} />}
+                {selectedTab === 1 && <PostWideList ads={ads} />}
             </Box>
+            <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>Всього оголошень: {ads ? ads.length : 0}</Text>
         </Box>
     );
 };

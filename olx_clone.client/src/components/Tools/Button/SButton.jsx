@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button, IconButton } from '@mui/material';
 import {
     AppButtonRefStyle, BorderInVisibleStyle, BreadCrampsButtonStyle,
@@ -8,6 +8,7 @@ import {
     OutlinedWhiteButtonStyle, SideBarButtonStyle, TransparentButtonLeftTextStyle,
     TransparentButtonStyle, TransparentSmallButtonStyle
 } from "@/components/Tools/Button/Styles.js";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
 
 /*
 * Buttons(style types):
@@ -25,8 +26,11 @@ import {
 
 
 
-
-const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, link, borderInVisible}) => {
+const ColorWrapper = ({ children, color }) => {
+    return React.cloneElement(children, { style: { ...children.props.style, color } });
+};
+const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, sr, link, textSL, textSR, Color, prewColor, nextColor, borderInVisible, hoverShadow, hoverColor, hoverBack, textType}) => {
+    const [isHovered, setIsHovered] = useState(false);
 
     const getButtonStyle = () => {
         let baseStyle;
@@ -69,22 +73,45 @@ const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, link, 
         return borderInVisible ? {...baseStyle, ...BorderInVisibleStyle} : baseStyle;
     };
 
-
     const buttonStyle = getButtonStyle();
 
+    const handleMouseEnter = () => setIsHovered(true);
+    const handleMouseLeave = () => setIsHovered(false);
 
     const defaultBtn = (
-        <Button title={link??""} onClick={action} style={buttonStyle} sx={{...DefoultStyle, ...sl}}>
-            {prew}{text}{next}
+        <Button
+            title={link??""}
+            onClick={action}
+            style={{...buttonStyle, ...sr}}
+            sx={{...DefoultStyle,
+                ...sl, 
+                "&:hover": 
+                    {
+                        boxShadow: hoverShadow ?? '', 
+                        color: hoverColor ?? '', 
+                        background: hoverBack ?? ''
+                    } }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            {prew && <ColorWrapper color={prewColor ?? (isHovered ? hoverColor ?? Color : Color)}>{prew}</ColorWrapper>}
+            <Text sl={textSL??''} sr={textSR??''} type={textType} color={isHovered ? hoverColor ?? Color : Color}>{text}</Text>
+            {next && <ColorWrapper color={nextColor ?? (isHovered ? hoverColor ?? Color : Color)}>{next}</ColorWrapper>}
         </Button>
     );
-    
+
     const iconBtn = (
-        <IconButton onClick={action} style={sl} sx={DefoultStyle}>
+        <IconButton
+            onClick={action}
+            style={sl}
+            sx={DefoultStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
             {icon}
         </IconButton>
     );
-    
+
     return isIconButton === true ? iconBtn : defaultBtn;
 };
 

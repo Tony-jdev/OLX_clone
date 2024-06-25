@@ -13,7 +13,7 @@ import {useTheme} from "@mui/material/styles";
 import {HistoryViewsIcon, LikedIcon, MyMessagesIcon, MyPostsIcon, SettingsIcon} from "@/assets/Icons/Icons.jsx";
 import PagePointer from "@/components/Tools/PagePointer/PagePointer.jsx";
 import {useNavigate, useParams} from "react-router-dom";
-import {logOut} from "@/Storage/Redux/Slices/UserInfoSlice.js";
+import {logOut} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import MyPosts from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/MyPosts.jsx";
 
 
@@ -55,21 +55,26 @@ const UserProfile = () => {
                                 key={item.id}
                                 link={item.label}
                                 type={item.type}
-                                prew={React.cloneElement(item.icon, { sx: { color: item.label === way[1] ? 'orange' : 'black', marginRight: '10px', height: '36px', width: '36px' } })}
+                                textType={'Title'}
+                                prew={React.cloneElement(item.icon, { sx: { color: item.label === way[1] ? colors.text.orange : colors.text.revers, marginRight: '10px', height: '36px', width: '36px' } })}
                                 text={<FormattedMessage id={item.id} />}
                                 action={()=>navigate(`../user/${item.label}`)}
                                 sl={{ width: '100%', color: colors.text.revers, "&:hover": { boxShadow: colors.boxShadow } }}
+                                textSR={{fontWeight: item.label === way[1] ? '700' : ''}}
                             />
                         ))}
                         <SButton
                             key={profileItems[5].id}
                             link={profileItems[5].label}
                             type={profileItems[5].type}
+                            textType={'Title'}
+                            Color={colors.text.primary}
                             sl={
                                 {
-                                    color: colors.text.primary, background: colors.background.darkGradient,
+                                    background: colors.background.darkGradient,
                                     "&:hover":{ boxShadow: colors.boxShadow},
-                                    maxWidth: '305px', width: '100%', marginTop: '20px',
+                                    maxWidth: '305px', maxHeight: '40px', 
+                                    width: '100%', marginTop: '20px',
                                 }}
                             text={<FormattedMessage id={profileItems[5].id} />}
                             action={handleLogOut}

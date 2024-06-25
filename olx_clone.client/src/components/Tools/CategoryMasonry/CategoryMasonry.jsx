@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Box, Typography, Button } from '@mui/material';
+import { Grid, Box, Button } from '@mui/material';
 import {
     BoxImgMainStyle, BoxMainStyle,
     ButtonMainStyle,
@@ -7,12 +7,13 @@ import {
     GridC1Style, GridC21Style,
     GridC22Style,
     GridC2Style, GridC3Style,
-    GridMainStyle, TextStyle
+    GridMainStyle
 } from '@/components/Tools/CategoryMasonry/Styles.js';
 import { useNavigate } from 'react-router-dom';
 import {FormattedMessage} from "react-intl";
 import {useTheme} from "@mui/material/styles";
 import Categories from "@/Helpers/mainCategoriesHelper.js";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
 
 
 const buttons = [
@@ -47,7 +48,6 @@ const CategoryMasonry = () => {
 
     const onClickHandler = (nav) => {
         navigate(nav);
-       // window.location.reload();
     }
     
     return (
@@ -64,9 +64,9 @@ const CategoryMasonry = () => {
                         justifyContent='center'
                         sx={{ ...BoxImgMainStyle,width: 467, height: 290}}
                     >
-                        <Typography style={TextStyle}>
+                        <Text type={'Headline'} color={colors.text.primary} sr={{textAlign: 'center', fontWeight: '700'}}>
                             {buttons[0]}
-                        </Typography>
+                        </Text>
                     </Box>
                 </Button>
                 <Grid container justifyContent='space-between' style={GridC11Style}>
@@ -88,9 +88,9 @@ const CategoryMasonry = () => {
                             justifyContent='center'
                             sx={{...BoxImgMainStyle, width: 223, height: 290}}
                         >
-                            <Typography style={TextStyle}>
+                            <Text type={'Headline'} color={colors.text.primary} sr={{textAlign: 'center', fontWeight: '700'}}>
                                 {buttons[2]}
-                            </Typography>
+                            </Text>
                         </Box>
                     </Button>
                 </Grid>
@@ -116,9 +116,9 @@ const CategoryMasonry = () => {
                             justifyContent='center'
                             sx={{...BoxImgMainStyle, width: 290, height: 180}}
                         >
-                            <Typography style={TextStyle}>
+                            <Text type={'Headline'} color={colors.text.primary} sr={{textAlign: 'center', fontWeight: '700'}}>
                                 {buttons[1]}
-                            </Typography>
+                            </Text>
                         </Box>
                     </Button>
                     
@@ -149,9 +149,9 @@ const CategoryMasonry = () => {
                             justifyContent='center'
                             sx={{...BoxImgMainStyle, width: 223, height: 290}}
                         >
-                            <Typography style={TextStyle}>
+                            <Text type={'Headline'} color={colors.text.primary} sr={{textAlign: 'center', fontWeight: '700'}}>
                                 {buttons[3]}
-                            </Typography>
+                            </Text>
                         </Box>
                     </Button>
 
@@ -183,9 +183,9 @@ const CategoryMasonry = () => {
                         justifyContent='center'
                         sx={{...BoxImgMainStyle, width: 396, height: 180}}
                     >
-                        <Typography style={TextStyle}>
+                        <Text type={'Headline'} color={colors.text.primary} sr={{textAlign: 'center', fontWeight: '700'}}>
                             {buttons[4]}
-                        </Typography>
+                        </Text>
                     </Box>
                 </Button>
 

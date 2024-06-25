@@ -10,10 +10,11 @@ import {
 } from "@/components/Tools/Carousel/Styles.js";
 import CarouselItem from "@/components/Tools/Carousel/CarouselItem/CarouselItem.jsx";
 import {Paper} from "@mui/material";
-function MyCarousel({items, isOnlyImg, isWide}) {
+function MyCarousel({items, isOnlyImg, isWide, sr, width, height}) {
     return (
         <Carousel
-            style={{CarouselStyle}}
+            style={{ ...CarouselStyle }}
+            sx={{width: width, height: height}}
             NextIcon={<NextArrowIcon />} 
             PrevIcon={<PrevArrowIcon />}
             indicatorContainerProps={{sx:IndicatorContainerStyle}}
@@ -22,7 +23,7 @@ function MyCarousel({items, isOnlyImg, isWide}) {
         >
             {items.map((item, i) => (
                 isOnlyImg ? 
-                <Paper key={i} style={isWide ? PaperWideStyle : PaperNormalStyle} sx={{background: 'inherit', backgroundImage: `url(${item})`}}/>
+                <Paper key={i} style={{...(isWide ? PaperWideStyle : PaperNormalStyle), ...sr}} sx={{background: 'inherit', backgroundImage: `url(${item})`}}/>
                     :
                 <CarouselItem key={i} item={item} btn={item.btn}/>
             ))}

@@ -24,13 +24,14 @@ function PagePointer({way}) {
                     clearWay.length > 0 && clearWay.map((part, index) => part != null && (
                         <SButton
                             key = {part}
+                            textType={'Title'}
                             type='breadCrBtnStyle'
                             text={part}
                             action={()=> {
                                 if(part != null) handleNavigation(clearWay.slice(0, index + 1))
                             }}
                             link={'url'}
-                            sl={{color: index !== clearWay.length-1 ? colors.text.revers : colors.text.orange}}
+                            Color={index !== clearWay.length-1 ? colors.text.revers : colors.text.orange}
                         />
                     ))
                 }
