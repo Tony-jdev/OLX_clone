@@ -62,9 +62,9 @@ export const {
 
 export const selectToken = (state) => state.userInfo.token;
 export const selectUser = (state) => state.userInfo.user;
-export const selectLoading = (state) => state.userAuth.loading;
-export const selectSuccess = (state) => state.userAuth.success;
-export const selectError = (state) => state.userAuth.error;
+export const selectLoading = (state) => state.userInfo.loading;
+export const selectSuccess = (state) => state.userInfo.success;
+export const selectError = (state) => state.userInfo.error;
 
 export const fetchUserDataAsync = () => async (dispatch, getState) => {
     const state = await getState();
@@ -72,8 +72,7 @@ export const fetchUserDataAsync = () => async (dispatch, getState) => {
     try {
         const data = jwtDecode(token);
         const user = await fetchUserById(data.uid);
-        const res = {...user.data, email: data.email};
-        dispatch(setUser(res));
+        dispatch(setUser(user.data));
     } catch (error) {
         console.error('Failed to decode token:', error);
         return null;

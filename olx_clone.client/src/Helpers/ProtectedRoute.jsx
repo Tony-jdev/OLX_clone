@@ -1,7 +1,7 @@
 import React from 'react';
 import {Navigate} from 'react-router-dom';
 import {useSelector } from 'react-redux';
-import {isUserLoggedIn} from '../Storage/Redux/Slices/UserInfoSlice.js';
+import {isUserLoggedIn} from '../Storage/Redux/Slices/userInfoSlice.js';
 
 const ProtectedRoute = ({ element, navPath }) => {
     const isLogged = useSelector(isUserLoggedIn);

@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {LogUser, RegUser} from "@/Api/authApi.js";
-import {logIn} from "@/Storage/Redux/Slices/UserInfoSlice.js";
+import {logIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
 
 const initialState = {
     name: "",

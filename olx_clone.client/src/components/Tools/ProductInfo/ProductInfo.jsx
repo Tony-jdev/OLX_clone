@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography } from '@mui/material';
+import {Box, Container, Typography} from '@mui/material';
 import { ProductInfoContainer, TitleStyle, DescriptionStyle, PriceStyle } from './Styles.js';
 import Carousel from "@/components/Tools/Carousel/Carousel.jsx";
 import {useTheme} from "@mui/material/styles";
@@ -8,7 +8,6 @@ const ProductInfo = ({post}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     
-    const urls = post.photos.map(photo => photo.photoUrl);
     const title = post.title;
     const description = post.description;
     const price = post.price;
@@ -19,12 +18,9 @@ const ProductInfo = ({post}) => {
     
     
     return (
-        <Container 
-            style={ProductInfoContainer} 
+        <Box 
+            style={{...ProductInfoContainer, maxWidth: '953px'}} 
             sx={{background: colors.background.secondary, boxShadow: colors.boxShadow}}>
-            
-            {urls && <Carousel items={urls} isWide={false} isOnlyImg={true}/>}
-            
             <Typography variant="h2" style={TitleStyle} sx={{color: colors.text.revers }}>
                 {title??'non'}
             </Typography>
@@ -43,7 +39,7 @@ const ProductInfo = ({post}) => {
             <Typography variant="body1" style={PriceStyle} sx={{color: colors.text.revers }}>
                 views count: {viewsCount ?? 'non'}
             </Typography>
-        </Container>
+        </Box>
     );
 };
 

@@ -5,6 +5,7 @@ import SButton from '@/components/Tools/Button/SButton.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import {AboutContainerStyle, ImageStyle, TypographyStyle} from './Styles.js';
+import Text from "@/components/Tools/TextContainer/Text.jsx";
 
 const About = () => {
     const theme = useTheme();
@@ -19,12 +20,8 @@ const About = () => {
     
     return (
         <Container style={AboutContainerStyle}>
-            <Typography variant="h2" gutterBottom style={TypographyStyle}>
-                <FormattedMessage id="about.title" />
-            </Typography>
-            <Typography paragraph style={TypographyStyle}>
-                <FormattedMessage id="about.description" />
-            </Typography>
+            <Text><FormattedMessage id="about.title" /></Text>
+            <Text type={'Body'}><FormattedMessage id="about.description" /></Text>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={4}>
                     <img src={images[0]} alt="Image 1" style={ImageStyle} />
@@ -38,6 +35,7 @@ const About = () => {
             </Grid>
             <SButton
                 type="whiteOutlined"
+                sr={{padding: '5px'}}
                 text={<FormattedMessage id="about.button" />}
                 action={()=>{ navigate(-1) }}
             />

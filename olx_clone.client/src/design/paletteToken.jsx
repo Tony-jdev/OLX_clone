@@ -4,6 +4,18 @@ const getDesignTokens = (mode) => ({
         ...(mode === 'light'
             ? {
                 colors: {
+                    types: {
+                        success: '#4ABDA0',
+                        warning: '#FF9D00',
+                        error: '#CC0000',
+                        default: '#7B58C3',
+                        shadows: {
+                            boxShadowSuccess: '0px 26px 11px rgba(74, 189, 160, 0.01), 0px 15px 9px rgba(74, 189, 160, 0.05), 0px 7px 7px rgba(74, 189, 160, 0.09), 0px 2px 4px rgba(74, 189, 160, 0.1)',
+                            boxShadowWarning: '0px 26px 11px rgba(255, 157, 0, 0.01), 0px 15px 9px rgba(255, 157, 0, 0.05), 0px 7px 7px rgba(255, 157, 0, 0.09), 0px 2px 4px rgba(255, 157, 0, 0.1)',
+                            boxShadowError: '0px 26px 11px rgba(204, 0, 0, 0.01), 0px 15px 9px rgba(204, 0, 0, 0.05), 0px 7px 7px rgba(204, 0, 0, 0.09), 0px 2px 4px rgba(204, 0, 0, 0.1)',
+                            boxShadowDefault: '0px 26px 11px rgba(123, 88, 195, 0.01), 0px 15px 9px rgba(123, 88, 195, 0.05), 0px 7px 7px rgba(123, 88, 195, 0.09), 0px 2px 4px rgba(123, 88, 195, 0.1)',
+                        },
+                    },
                     background: {
                         primary: '#313030',
                         secondary: '#fffcf8',
@@ -20,10 +32,24 @@ const getDesignTokens = (mode) => ({
                         revers: '#313030',
                     },
                     boxShadow: '0px 26px 11px rgba(49, 48, 48, 0.01), 0px 15px 9px rgba(49, 48, 48, 0.05), 0px 7px 7px rgba(49, 48, 48, 0.09), 0px 2px 4px rgba(49, 48, 48, 0.1)',
+                    white: '#fff',
+                    black: '#000',
                 },
             }
             : {
                 colors: {
+                    types: {
+                        success: '#4ABDA0',
+                        warning: '#FF9D00',
+                        error: '#CC0000',
+                        default: '#7B58C3',
+                        shadows: {
+                            boxShadowSuccess: '0px 26px 11px rgba(74, 189, 160, 0.01), 0px 15px 9px rgba(74, 189, 160, 0.05), 0px 7px 7px rgba(74, 189, 160, 0.09), 0px 2px 4px rgba(74, 189, 160, 0.1)',
+                            boxShadowWarning: '0px 26px 11px rgba(255, 157, 0, 0.01), 0px 15px 9px rgba(255, 157, 0, 0.05), 0px 7px 7px rgba(255, 157, 0, 0.09), 0px 2px 4px rgba(255, 157, 0, 0.1)',
+                            boxShadowError: '0px 26px 11px rgba(204, 0, 0, 0.01), 0px 15px 9px rgba(204, 0, 0, 0.05), 0px 7px 7px rgba(204, 0, 0, 0.09), 0px 2px 4px rgba(204, 0, 0, 0.1)',
+                            boxShadowDefault: '0px 26px 11px rgba(123, 88, 195, 0.01), 0px 15px 9px rgba(123, 88, 195, 0.05), 0px 7px 7px rgba(123, 88, 195, 0.09), 0px 2px 4px rgba(123, 88, 195, 0.1)',
+                        },
+                    },
                     background: {
                         primary: '#313030',
                         secondary: '#313030',
@@ -40,6 +66,8 @@ const getDesignTokens = (mode) => ({
                         revers: '#fffcf8',
                     },
                     boxShadow: '0px 26px 11px rgba(255, 200, 10, 0.05), 0px 15px 9px rgba(255, 200, 10, 0.1), 0px 7px 7px rgba(255, 200, 10, 0.15), 0px 2px 4px rgba(255, 200, 10, 0.25)',
+                    white: '#fff',
+                    black: '#000',
                 },
             }),
     },
@@ -47,7 +75,13 @@ const getDesignTokens = (mode) => ({
         MuiCssBaseline: {
             styleOverrides: (theme)=>`
                 * {
-                    transition: all 0.4s ease-in-out !important;
+                    transition: all 0.3s ease-in-out;
+                }
+                .css-6em28x {
+                    background: none !important;
+                }
+                .css-54h2x {
+                    background: none !important;
                 }
                 input:-webkit-autofill {
                   box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;

@@ -2,7 +2,7 @@ import React from 'react';
 import {Typography, Grid, Box} from '@mui/material';
 import ContainerHeader from "@/components/Tools/ContainerHeader/ContainerHeader.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
-import {AddIcon, AddOutlinedIcon, ArrowIcon, DoAddIcon, DoPhotoIcon, RegistrationIcon} from "@/assets/Icons/Icons.jsx";
+import {AddOutlinedIcon, ArrowIcon, DoAddIcon, DoPhotoIcon, RegistrationIcon} from "@/assets/Icons/Icons.jsx";
 import {
     BtHTextStyle,
     ButtonContainerStyle,
@@ -12,6 +12,8 @@ import {
 } from "@/components/Tools/TutorialPanel/Styles.js";
 import {FormattedMessage} from "react-intl";
 import {useTheme} from "@mui/material/styles";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
+
 
 
 const TutorialPanel = () => {
@@ -26,25 +28,31 @@ const TutorialPanel = () => {
             <Grid container style={SectionContainerStyle} spacing={3} direction="row" justifyContent="space-between" alignItems="center">
                 <Grid style={GridItemStyle}>
                     <RegistrationIcon sx={{ width: '332px', height: '332px' }} />
-                    <Typography style={{...H2TextStyle, color: colors.text.orange }}><FormattedMessage id="tutorialPanel.register" /></Typography>
-                    <Typography style={defTextStyle}><FormattedMessage id="tutorialPanel.createAccount" /></Typography>
+                    <Text type={'Title'} color={colors.text.orange}><FormattedMessage id="tutorialPanel.register" /></Text>
+                    <Text type={'Body'}><FormattedMessage id="tutorialPanel.createAccount" /></Text>
                 </Grid>
                 <ArrowIcon sx={{ width: '43px', height: '75px' }} />
                 <Grid style={GridItemStyle}>
                     <DoPhotoIcon sx={{ width: '332px', height: '332px' }} />
-                    <Typography style={{...H2TextStyle, color: colors.text.orange }}><FormattedMessage id="tutorialPanel.takePhoto" /></Typography>
-                    <Typography style={defTextStyle}><FormattedMessage id="tutorialPanel.takePhotoOfWhatYouWantToSell" /></Typography>
+                    <Text type={'Title'} color={colors.text.orange}><FormattedMessage id="tutorialPanel.takePhoto" /></Text>
+                    <Text type={'Body'}><FormattedMessage id="tutorialPanel.takePhotoOfWhatYouWantToSell" /></Text>
                 </Grid>
                 <ArrowIcon sx={{ width: '43px', height: '75px' }} />
                 <Grid style={GridItemStyle}>
                     <DoAddIcon sx={{ width: '332px', height: '332px' }} />
-                    <Typography style={{...H2TextStyle, color: colors.text.orange }}><FormattedMessage id="tutorialPanel.add" /></Typography>
-                    <Typography style={defTextStyle}><FormattedMessage id="tutorialPanel.createAdOnYourPage" /></Typography>
+                    <Text type={'Title'} color={colors.text.orange}><FormattedMessage id="tutorialPanel.add" /></Text>
+                    <Text type={'Body'}><FormattedMessage id="tutorialPanel.createAdOnYourPage" /></Text>
                 </Grid>
             </Grid>
             <Grid container direction="row" justifyContent="center" style={ButtonContainerStyle}>
-                <SButton text={<FormattedMessage id="tutorialPanel.addAd" />} prew={<AddOutlinedIcon sx={{width: '18px', height: '18px', marginRight: '5px'}}/>} sl={{color: colors.text.primary, background: colors.background.darkGradient}} borderInVisible={true} />
-                <Typography style={{...BtHTextStyle, marginLeft: 20 }}><FormattedMessage id="tutorialPanel.addAdNowAndGetWhatYouWant" /></Typography>
+                <SButton text={<FormattedMessage id="tutorialPanel.addAd" />} 
+                         textType={'Title'}
+                         prew={<AddOutlinedIcon sx={{width: '18px', height: '18px', marginRight: '5px', color: colors.text.primary}}/>} 
+                         Color={colors.text.primary}
+                         sl={{background: colors.background.darkGradient}}
+                         sr={{padding: '15px', borderRadius: '30px 2px 30px 2px'}}
+                         borderInVisible={true} />
+                <Text type={'Title'} sr={{marginLeft: 20}}><FormattedMessage id="tutorialPanel.addAdNowAndGetWhatYouWant" /></Text>
             </Grid>
         </Grid>
     );

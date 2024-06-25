@@ -5,7 +5,6 @@ import {
     AuthContainer,
     FormContainer,
     FormField,
-    FormButton,
     ToggleContainer,
     ActiveToggleOption,
     InactiveToggleOption,
@@ -199,6 +198,8 @@ const Auth = () => {
                 </Box>
                 <SButton
                     type='whiteOutlined'
+                    textType={'Title'}
+                    sr={{padding: '5px'}}
                     text={<FormattedMessage id={isRegister ? 'auth.registerButton' : 'auth.loginButton'} />}
                     sl={{width: '100%', color: colors.text.revers}}
                     action={handleSubmit}

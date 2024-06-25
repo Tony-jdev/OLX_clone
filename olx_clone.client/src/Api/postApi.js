@@ -39,3 +39,29 @@ export const GetPostByCategoryId = async (queryParams, id) => {
         throw new Error('Failed to fetch');
     }
 };
+
+export const CreatePost = async (post) => {
+    const formData = new FormData();
+    formData.append('Title', post.title);
+    formData.append('Description', post.description);
+    formData.append('Type', post.type);
+    formData.append('Location', post.location);
+    formData.append('Price', post.price);
+    formData.append('CategoryId', post.categoryId);
+    formData.append('ApplicationUserId', post.applicationUserId);
+
+    post.files.forEach((file) => {
+        formData.append('Files', file);
+    });
+
+    try {
+        const response = await axios.post(`${baseUrl}/api/posts`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to create post');
+    }
+};

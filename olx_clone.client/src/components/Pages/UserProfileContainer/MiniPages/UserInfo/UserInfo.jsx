@@ -9,7 +9,7 @@ import {
     ButtonGroup,
 } from './Styles';
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUserDataAsync, selectToken, selectUser} from "@/Storage/Redux/Slices/UserInfoSlice.js";
+import {fetchUserDataAsync, selectToken, selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import OrangeProgress from "@/components/Tools/CentralProgress/OrangeProgress.jsx";
 import {useTheme} from "@mui/material/styles";
 

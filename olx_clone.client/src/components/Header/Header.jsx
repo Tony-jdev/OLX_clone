@@ -5,7 +5,7 @@ import { AppBarStyle, ContainerStyle, ToolBarStyle, FirstGridStyle, BoxContainer
 import { useTheme } from '@mui/material/styles';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import ColorModeContext from "@/contexts/ColorModeContext.jsx";
-import {AddIcon, ProfileIcon, SearchIcon} from '@/assets/Icons/Icons.jsx';
+import {AddIcon, ProfileIcon, SearchIcon, SquareIcon} from '@/assets/Icons/Icons.jsx';
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {changeLocale, changeTheme, selectLocale, selectTheme} from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
@@ -13,7 +13,8 @@ import LocationPickerButton from "@/components/Tools/LocationPickerButton/Locati
 import {useNavigate} from "react-router-dom";
 import {selectSearchText, setSearchText} from "@/Storage/Redux/Slices/postSlice.js";
 import Categories from "@/Helpers/mainCategoriesHelper.js";
-import {isUserLoggedIn} from "@/Storage/Redux/Slices/UserInfoSlice.js";
+import {isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
 const Header = () => {
     const navigate = useNavigate();
 
@@ -27,6 +28,19 @@ const Header = () => {
 
     const searchText = useSelector(selectSearchText) ?? '';
     const [text, setText] = useState(searchText ?? '');
+
+    const isUserLogined = useSelector(isUserLoggedIn);
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        if(isUserLogined)
+        setOpen(true);
+        else navigate('/auth');
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
     
     const toggleTheme = () => {
         const newTheme = mode === 'light' ? 'dark' : 'light';
@@ -50,6 +64,17 @@ const Header = () => {
     
     const authHandle = ()=>  {
         navigate('/user/Settings');
+    }
+
+    function getRandomBrightColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 3; i++) {
+            // Генеруємо яскравий колір, обираючи випадкове значення в діапазоні 8-F для кожного каналу RGB
+            color += letters[Math.floor(Math.random() * 8) + 8];
+            color += letters[Math.floor(Math.random() * 8) + 8];
+        }
+        return color;
     }
     
     return (
@@ -103,10 +128,17 @@ const Header = () => {
                         <Box style={FlexBoxStyle}>
                             <SButton
                               type='orangeRoundButton'
-                              sl={ {backgroundColor: colors.background.orange, color: colors.text.primary} }
+                              textType={'Body'}
+                              sl={ {backgroundColor: colors.background.orange}}
+                              Color={colors.text.primary}
+                              hoverBack={colors.background.orange}
+                              hoverShadow={colors.types.shadows.boxShadowWarning}
+                              sr={{width: '200px', height: '40px'}}
                               prew={<AddIcon style={AddIconStyle} sx={{ color: colors.text.primary }} />}
                               text={<FormattedMessage id="header.addButtonLabel"/>}
+                              action={handleOpen}
                             />
+                            <AddPostModal open={open} handleClose={handleClose}/>
 
                             <SButton isIconButton={true} 
                                      action={toggleTheme} 
@@ -124,9 +156,13 @@ const Header = () => {
                             <SButton
                                 type='transparentButton'
                                 action={toggleLocale}
-                                prew={<Typography sx={locale === 'uk' ? {color: colors.text.orange} : {color: colors.text.primary}}>Ua</Typography>}
-                                text='|'
-                                next={ <Typography sx={locale === 'en' ? {color: colors.text.orange} : {color: colors.text.primary}}>En</Typography>}
+                                textType={'Body'}
+                                Color={colors.text.primary}
+                                prewColor={locale === 'uk' ? colors.text.orange : colors.text.primary}
+                                nextColor={locale === 'en' ? colors.text.orange : colors.text.primary}
+                                prew={<Box>Ua</Box>}
+                                text={'|'}
+                                next={<Box>En</Box>}
                                 sl={{color: colors.text.primary }}
                             />
                         </Box>
@@ -136,66 +172,50 @@ const Header = () => {
                     <Grid container style={BottomGridStyle}>
                         <Box style={LastBoxStyle} >
                             <SButton type='transparentButton'
-                                     text={<FormattedMessage id="category.electronics"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{ 
-                                         navigate('./search/'+Categories[0]);
-                                     }}
-                            />
-                            <SButton type='transparentButton' 
-                                     text={<FormattedMessage id="category.fashion"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[1]);
-                                     }}                            />
-                            <SButton type='transparentButton'
-                                     text={<FormattedMessage id="category.homeAndGarden"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[2]);
-                                     }}                            />
-                            <SButton type='transparentButton'
+                                     Color={colors.text.primary}
                                      text={<FormattedMessage id="category.realEstate"/>}
                                      sl={{ color: colors.text.primary }}
+                                     prewColor={getRandomBrightColor()}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
                                      action={()=>{
                                          navigate('./search/'+Categories[3]);
                                      }}                            />
                             <SButton type='transparentButton'
-                                     text={<FormattedMessage id="category.cars"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[4]);
-                                     }}                            />
-                            <SButton type='transparentButton'
+                                     Color={colors.text.primary}
+                                     prewColor={getRandomBrightColor()}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
                                      text={<FormattedMessage id="category.animals"/>}
                                      sl={{ color: colors.text.primary }}
                                      action={()=>{
                                          navigate('./search/'+Categories[5]);
                                      }}                            />
                             <SButton type='transparentButton'
-                                     text={<FormattedMessage id="category.job"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[6]);
-                                     }}                            />
-                            <SButton type='transparentButton'
-                                     text={<FormattedMessage id="category.businessAndServices"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[7]);
-                                     }}                            />
-                            <SButton type='transparentButton'
+                                     Color={colors.text.primary}
+                                     prewColor={getRandomBrightColor()}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
                                      text={<FormattedMessage id="category.childrensWorld"/>}
                                      sl={{ color: colors.text.primary }}
                                      action={()=>{
                                          navigate('./search/'+Categories[8]);
                                      }}                            />
                             <SButton type='transparentButton'
-                                     text={<FormattedMessage id="category.sport"/>}
+                                     Color={colors.text.primary}
+                                     prewColor={getRandomBrightColor()}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
+                                     text={<FormattedMessage id="category.fashion"/>}
                                      sl={{ color: colors.text.primary }}
                                      action={()=>{
-                                         navigate('./search/'+Categories[9]);
-                                     }}                            
+                                         navigate('./search/'+Categories[1]);
+                                     }}                            />
+                            <SButton type='transparentButton'
+                                     Color={colors.text.primary}
+                                     prewColor={getRandomBrightColor()}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
+                                     text={<FormattedMessage id="category.electronics"/>}
+                                     sl={{ color: colors.text.primary }}
+                                     action={()=>{ 
+                                         navigate('./search/'+Categories[0]);
+                                     }}
                             />
                         </Box>
                     </Grid>

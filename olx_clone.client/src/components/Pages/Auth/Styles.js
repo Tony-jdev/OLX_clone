@@ -3,6 +3,7 @@ export const AuthContainer = {
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
+    minWidth: '335px',
 };
 
 export const FormContainer = {

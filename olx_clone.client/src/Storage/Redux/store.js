@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import postsReducer from './Slices/postSlice.js';
 import userAuthReducer from './Slices/userAuthSlice.js';
-import userInfoReducer from './Slices/UserInfoSlice.js';
+import userInfoReducer from './Slices/userInfoSlice.js';
+import userDataReducer from './Slices/userDataSlice.js';
 import themeAndLocaleReducer from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
 import {combineReducers} from "redux";
 import persistConfig from "@/Storage/Redux/persistConfig.js";
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     posts: postsReducer,
     userAuth: userAuthReducer,
     userInfo: userInfoReducer,
+    userData: userDataReducer,
     themeAndLocale: themeAndLocaleReducer,
 });
 

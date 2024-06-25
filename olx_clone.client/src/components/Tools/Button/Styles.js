@@ -2,7 +2,7 @@ export const DefoultStyle = {
     '&:focus': {outline: 'none'}
 }
 export const BorderInVisibleStyle = {
-    borderColor: 'inherit'
+    borderColor: 'rgb(0,0,0,0)'
 }
 export const OutlinedWhiteButtonStyle={
     display: 'flex',
@@ -10,8 +10,6 @@ export const OutlinedWhiteButtonStyle={
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px 16px',
-    minWidth: '232px',
-    minHeight: '40px',
     border: '2px solid #FF9D00',
     borderRadius: '20px 0px',
     fontFamily: 'Roboto',
@@ -21,6 +19,7 @@ export const OutlinedWhiteButtonStyle={
     lineHeight: '24px',
     textAlign: 'center',
     letterSpacing: '0.15px',
+    textTransform: 'none',
 }
 export const OutlinedWhiteButtonBlackBoardStyle={
     display: 'flex',
@@ -80,14 +79,9 @@ export const OrangeRoundButtonStyle= {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '0px 24px 0px 16px',
+    padding: '0px',
     borderRadius: '20px',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: '600',
-    fontSize: '14px',
-    lineHeight: '20px',
-    letterSpacing: '0.1px',
+    textTransform: 'none',
 }
 
 export const CarouselButtonStyle = {

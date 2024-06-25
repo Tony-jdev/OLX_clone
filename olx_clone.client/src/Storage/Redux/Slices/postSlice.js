@@ -145,22 +145,15 @@ export const fetchVipPostsAsync = () => async (dispatch) => {
 
 export const fetchSubCategoriesAsync = () => async (dispatch, getState) => {
     const state = getState();
-    const findChildCategories = (categories, sku) => {
-        const parentCategory = categories.find(category => category.sku === sku);
+    try {
+        const categories = await GetCategories();
+        const parentCategory = categories.data.find(category => category.sku === state.posts.categorySku);
         if (!parentCategory) {
             console.error("Parent category not found");
             return [];
         }
-        return categories.filter(category => category.parentId === parentCategory.id);
-    }
-
-
-    try {
-        const categories = await GetCategories();
-        console.log(categories.data);
-        const subCats = findChildCategories(categories.data, state.posts.categorySku);
-        console.log(subCats);
-        dispatch(setSubCategories(subCats));
+        const childCategories = parentCategory.childCategories;
+        dispatch(setSubCategories(childCategories));
     } catch (error) {
         dispatch(setError(error.message));
     } finally {
@@ -185,7 +178,7 @@ export const fetchPostsByCategoryAsync = () => async (dispatch, getState) => {
     try {
         dispatch(setLoading(true));
         const posts = await GetPostByCategoryId(queryParams, id);
-        console.log(posts.data);
+        console.log(posts);
         dispatch(setPosts(posts.data.items));
         dispatch(setPageSize(posts.data.pageSize));
         dispatch(setPageCount(posts.data.totalCount));

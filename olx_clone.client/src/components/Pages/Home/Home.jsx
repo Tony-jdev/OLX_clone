@@ -5,8 +5,6 @@ import Carousel from '@/components/Tools/Carousel/Carousel.jsx';
 import CategoryMasonry from "@/components/Tools/CategoryMasonry/CategoryMasonry.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    clearData,
-    fetchPostsAsync,
     fetchVipPostsAsync,
     selectError,
     selectLoading,
@@ -18,6 +16,7 @@ import {FormattedMessage} from "react-intl";
 import {ContainerStyle} from "@/components/Pages/Home/Styles.jsx";
 import TutorialPanel from "@/components/Tools/TutorialPanel/TutorialPanel.jsx";
 import {useNavigate} from "react-router-dom";
+import {AddOutlinedIcon} from "@/assets/Icons/Icons.jsx";
 
 function HomePage() {
     const theme = useTheme();
@@ -43,7 +42,12 @@ function HomePage() {
         <SButton
             type='whiteOutlinedBB' 
             text={<FormattedMessage id='home.vip.btn' />}
-            sl={{background: 'white'}}
+            hoverColor={colors.black}
+            hoverBack={colors.white}
+            hoverShadow={colors.boxShadow}
+            textType={'Body'}
+            Color={colors.black}
+            sl={{background: colors.white }}
             action={()=> {
                 navigate('./search');
             }}
@@ -57,8 +61,11 @@ function HomePage() {
             textColor: colors.text.primary,
             btn: <SButton
                 type='carouselButton'
+                textType={'Title'}
                 text={<FormattedMessage id='btn.add' /> }
-                sl={{color: colors.text.input, background: colors.background.def}}
+                Color={colors.text.input}
+                prew={<AddOutlinedIcon sx={{marginRight: '5px'}}/>}
+                sl={{background: colors.background.def}}
                 action={()=>{}}
             />,
             imageUrl: "@/../public/Ads/Ads0.png"
@@ -69,8 +76,10 @@ function HomePage() {
             textColor: colors.text.input,
             btn: <SButton
                 type='carouselButton'
+                textType={'Title'}
                 text={<FormattedMessage id='btn.see' />}
-                sl={{color: colors.text.primary, background: colors.background.darkGradient}}
+                Color={colors.text.primary}
+                sl={{background: colors.background.darkGradient}}
                 action={()=>{}}
             />,
             imageUrl: "@/../public/Ads/Ads1.png"
@@ -81,8 +90,10 @@ function HomePage() {
             textColor: colors.text.input,
             btn: <SButton
                 type='carouselButton'
+                textType={'Title'}
                 text={<FormattedMessage id='btn.see' />}
-                sl={{color: colors.text.primary, background: colors.background.darkGradient}}
+                Color={colors.text.primary}
+                sl={{background: colors.background.darkGradient}}
                 action={()=>{}}
             />,
             imageUrl: "@/../public/Ads/Ads2.png"
