@@ -5,6 +5,7 @@ using OLX_clone.DataAccessLayer.Models.Dtos.BoostPackage;
 using OLX_clone.DataAccessLayer.Models.Dtos.Category;
 using OLX_clone.DataAccessLayer.Models.Dtos.Chat;
 using OLX_clone.DataAccessLayer.Models.Dtos.ChatMessage;
+using OLX_clone.DataAccessLayer.Models.Dtos.Favorite;
 using OLX_clone.DataAccessLayer.Models.Dtos.Post;
 using OLX_clone.DataAccessLayer.Models.Dtos.User;
 
@@ -40,5 +41,8 @@ public class MapperConfiguration : Profile
         CreateMap<BoostPackage, GetBoostPackageDetailsDto>();
         CreateMap<CreateBoostPackageDto, BoostPackage>();
         CreateMap<UpdateBoostPackageDto, BoostPackage>();
+
+        CreateMap<Favorite, GetFavoriteDto>();
+        CreateMap<AddFavoriteDto, Favorite>();
     }
 }

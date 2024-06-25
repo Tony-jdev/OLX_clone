@@ -16,6 +16,7 @@ public class UnitOfWork: IUnitOfWork
     public ITransactionRepository TransactionRepository { get; }
     public IBoostPackageRepository BoostPackageRepository { get; }
     public IPostBoostRepository PostBoostRepository { get; }
+    public IFavoriteRepository FavoriteRepository { get; }
 
     public UnitOfWork(ApplicationDbContext context)
     {
@@ -29,6 +30,7 @@ public class UnitOfWork: IUnitOfWork
         TransactionRepository = new TransactionRepository(_context);
         BoostPackageRepository = new BoostPackageRepositoory(_context);
         PostBoostRepository = new PostBoostRepository(_context);
+        FavoriteRepository = new FavoriteRepository(_context);
     }
 
     public async Task<int> SaveChangesAsync()

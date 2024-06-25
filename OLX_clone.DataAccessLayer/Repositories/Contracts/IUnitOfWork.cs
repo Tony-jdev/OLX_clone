@@ -11,6 +11,7 @@ public interface IUnitOfWork: IDisposable
     ITransactionRepository TransactionRepository { get; }
     IBoostPackageRepository BoostPackageRepository { get; }
     IPostBoostRepository PostBoostRepository { get; }
+    IFavoriteRepository FavoriteRepository { get; }
 
     Task<int> SaveChangesAsync();
 }

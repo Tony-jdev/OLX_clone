@@ -84,6 +84,7 @@ builder.Services.AddScoped<IBoostPackageService, BoostPackageService>();
 builder.Services.AddScoped<IBoostService, BoostService>();
 builder.Services.AddScoped<IBoostExpirationService, BoostExpirationService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
