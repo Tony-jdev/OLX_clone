@@ -6,6 +6,7 @@ using OLX_clone.DataAccessLayer.Helpers;
 using OLX_clone.DataAccessLayer.Models;
 using OLX_clone.DataAccessLayer.Models.Dtos;
 using OLX_clone.DataAccessLayer.Models.Dtos.Post;
+using OLX_clone.DataAccessLayer.Models.Enums;
 using OLX_clone.DataAccessLayer.Repositories.Contracts;
 
 namespace OLX_clone.BusinessLogicLayer.Services;
@@ -130,6 +131,27 @@ public class PostService : IPostService
         }
 
         return new ApiResponse<Post> { Data = updatedPost, Message = "Post updated successfully" };
+    }
+    
+    public async Task<ApiResponse<bool>> UpdatePostStatus(int postId, PostStatus newStatus)
+    {
+        try
+        {
+            var post = await _unitOfWork.PostRepository.GetAsync(postId);
+            if (post == null)
+            {
+                return new ApiResponse<bool> { Success = false, Message = "Post not found." };
+            }
+
+            post.Status = newStatus;
+            await _unitOfWork.PostRepository.UpdateAsync(post);
+
+            return new ApiResponse<bool> { Success = true, Message = "Post status updated successfully." };
+        }
+        catch (Exception ex)
+        {
+            return new ApiResponse<bool> { Success = false, Message = $"Error updating post status: {ex.Message}" };
+        }
     }
 
     public async Task<ApiResponse<bool>> DeletePost(int id)

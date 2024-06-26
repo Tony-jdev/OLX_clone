@@ -105,6 +105,20 @@ public class PostController : ControllerBase
         }
         return Ok(apiResponse);
     }
+    
+    [HttpPatch("{postId:int}/status")]  // Використовуємо HTTP PATCH, оскільки змінюємо частину ресурсу
+    public async Task<IActionResult> UpdatePostStatus(int postId, [FromBody] UpdatePostStatusDto updateStatusDto)
+    {
+        var response = await _postService.UpdatePostStatus(postId, updateStatusDto.NewStatus);
+        if (response.Success)
+        {
+            return Ok(response);
+        }
+        else
+        {
+            return BadRequest(response);
+        }
+    }
 
     [HttpDelete("{id:int}")]
     [Authorize]

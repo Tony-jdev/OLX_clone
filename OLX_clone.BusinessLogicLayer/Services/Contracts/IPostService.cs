@@ -2,6 +2,7 @@
 using OLX_clone.DataAccessLayer.Models;
 using OLX_clone.DataAccessLayer.Models.Dtos;
 using OLX_clone.DataAccessLayer.Models.Dtos.Post;
+using OLX_clone.DataAccessLayer.Models.Enums;
 
 namespace OLX_clone.BusinessLogicLayer.Services.Contracts;
 
@@ -16,6 +17,7 @@ public interface IPostService
     Task<ApiResponse<GetPostDetailsDto>> GetPost(string sku);
     Task<ApiResponse<Post>> CreatePost(CreatePostDto postCreateDto);
     Task<ApiResponse<Post>> UpdatePost(int id, UpdatePostDto postUpdateDto);
+    Task<ApiResponse<bool>> UpdatePostStatus(int postId, PostStatus newStatus);
     Task<ApiResponse<bool>> DeletePost(int id);
     Task<ApiResponse<bool>> DeletePhoto(int photoId);
 
