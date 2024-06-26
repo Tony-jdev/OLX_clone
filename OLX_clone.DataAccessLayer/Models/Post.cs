@@ -29,9 +29,9 @@ public class Post
     [Required]
     public double Price { get; set; }
     [Required]
-    public string Type { get; set; }
+    public PostType Type { get; set; }
     
-    [Required] public PostStatus Status { get; set; } = PostStatus.PendingApproval;
+    [Required] public PostStatus Status { get; set; } = PostStatus.Active;
 
     [Required]
     public string ApplicationUserId { get; set; }

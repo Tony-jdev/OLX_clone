@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using OLX_clone.DataAccessLayer.Models.Enums;
 
 namespace OLX_clone.DataAccessLayer.Models.Dtos.Post;
 
@@ -21,13 +22,10 @@ public class UpdatePostDto
     public double Price { get; set; }
 
     [Required]
-    public string Type { get; set; }
+    public PostType Type { get; set; }
 
     [Required]
     public int CategoryId { get; set; }
-
-    [Required]
-    public string Status { get; set; }
 
     public List<IFormFile>? Files { get; set; }
 }

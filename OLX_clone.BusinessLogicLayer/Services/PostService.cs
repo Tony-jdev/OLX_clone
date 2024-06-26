@@ -98,10 +98,6 @@ public class PostService : IPostService
         postToCreate.SKU = GeneratePostSKU(postToCreate.Title);
         
         var createdPost = await _unitOfWork.PostRepository.AddAsync(postToCreate);
-        if (createdPost == null)
-        {
-            throw new InternalServerErrorException("Failed to create the post.");
-        }
 
         var postPhotos = await UploadPostPhotos(postCreateDto.Files, createdPost.Id);
         await _unitOfWork.PostPhotoRepository.AddRangeAsync(postPhotos);
@@ -135,23 +131,20 @@ public class PostService : IPostService
     
     public async Task<ApiResponse<bool>> UpdatePostStatus(int postId, PostStatus newStatus)
     {
-        try
+        var postFromDb = await _unitOfWork.PostRepository.GetAsync(postId);
+        if (postFromDb == null)
         {
-            var post = await _unitOfWork.PostRepository.GetAsync(postId);
-            if (post == null)
-            {
-                return new ApiResponse<bool> { Success = false, Message = "Post not found." };
-            }
-
-            post.Status = newStatus;
-            await _unitOfWork.PostRepository.UpdateAsync(post);
-
-            return new ApiResponse<bool> { Success = true, Message = "Post status updated successfully." };
+            throw new NotFoundException("Post not found");
         }
-        catch (Exception ex)
+
+        postFromDb.Status = newStatus;
+        var updatedPost = await _unitOfWork.PostRepository.UpdateAsync(postFromDb);
+        if (updatedPost == null)
         {
-            return new ApiResponse<bool> { Success = false, Message = $"Error updating post status: {ex.Message}" };
+            throw new InternalServerErrorException("Failed to update the post.");
         }
+            
+        return new ApiResponse<bool> { Success = true, Message = "Post status updated successfully." };
     }
 
     public async Task<ApiResponse<bool>> DeletePost(int id)
