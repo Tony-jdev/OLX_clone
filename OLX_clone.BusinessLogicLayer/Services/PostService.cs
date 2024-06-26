@@ -34,12 +34,16 @@ public class PostService : IPostService
         return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
     }
     
-    public async Task<List<GetPostDto>> GetPostsByUser(string userId)
+    public async Task<List<GetPostProfileDto>> GetPostsByUser(string userId)
     {
         var posts = await _unitOfWork.PostRepository.GetPostsByUserIdAsync(userId);
 
-        var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        await SetPhotoUrls(getPostDtos);
+        var getPostDtos = _mapper.Map<List<GetPostProfileDto>>(posts);
+        foreach (var post in getPostDtos)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+            post.ViewsCount = await _unitOfWork.PostViewRepository.GetAllPostViewsCountByPostId(post.Id);
+        }
         
         return getPostDtos;
     }

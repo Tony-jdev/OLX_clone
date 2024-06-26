@@ -9,5 +9,5 @@ public class GetApplicationUserDetailsDto
     public string Name { get; set; }
     public string Surname { get; set; }
     public string PhoneNumber { get; set; }
-    public ICollection<GetPostDto> Posts { get; set; }
+    public ICollection<GetPostProfileDto> Posts { get; set; }
 }

@@ -9,7 +9,7 @@ namespace OLX_clone.BusinessLogicLayer.Services.Contracts;
 public interface IPostService
 {
     Task<ApiResponse<List<GetPostDto>>> GetVipPosts();
-    Task<List<GetPostDto>> GetPostsByUser(string userId);
+    Task<List<GetPostProfileDto>> GetPostsByUser(string userId);
     Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(
         string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page);
     Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 
