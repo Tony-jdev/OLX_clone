@@ -19,10 +19,10 @@ const modalStyle = {
     borderRadius: 2
 };
 
-const LocationPickerButton = ({Color, setLocation}) => {
+const LocationPickerButton = ({Color, setLocation, location}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
-    const [selectedLocation, setSelectedLocation] = useState(null);
+    const [selectedLocation, setSelectedLocation] = useState(location ?? null);
     const [isMapVisible, setIsMapVisible] = useState(false);
 
     const handleLocationSelection = (location) => {
@@ -53,7 +53,7 @@ const LocationPickerButton = ({Color, setLocation}) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description" >
                 <Box sx={modalStyle}>
-                    <LocationPickerMap onLocationSelect={handleLocationSelection} />
+                    <LocationPickerMap onLocationSelect={handleLocationSelection} location={selectedLocation} />
                 </Box>
             </Modal>
         </>

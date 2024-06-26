@@ -9,6 +9,7 @@ import {IndicatorGridStyle} from "@/components/Tools/ShortProduct/Styles.js";
 import IndicatorBox from "@/components/Tools/IndicatorBox/IndicatorBox.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useTheme} from "@mui/material/styles";
+import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
 
 
 //ad:{
@@ -31,6 +32,10 @@ const PostWideCard = ({ ad, container }) => {
     
     const vip = ad.vip;
     const isUsed = ad.type === 'Usd';
+
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    
+    
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -62,6 +67,15 @@ const PostWideCard = ({ ad, container }) => {
         };
     }, [container]);
 
+
+    const handleEdit = () => {
+        setEditModalOpen(true);
+    };
+
+    const handleCloseEditModal = () => {
+        setEditModalOpen(false);
+    };
+    
     return (
         <Box
             ref={cardRef}
@@ -105,7 +119,7 @@ const PostWideCard = ({ ad, container }) => {
                             hoverColor={colors.types.warning}
                             hoverBack={colors.background.secondary}
                             hoverShadow={colors.types.shadows.boxShadowWarning}
-                            action={() => { }}
+                            action={handleEdit}
                         />
                         <SButton
                             prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
@@ -136,6 +150,7 @@ const PostWideCard = ({ ad, container }) => {
                     </Box>
                 </Grid>
             </Box>
+            <AddPostModal open={editModalOpen} handleClose={handleCloseEditModal} post={ad} edit={true}/>
         </Box>
     );
 };

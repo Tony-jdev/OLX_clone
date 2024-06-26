@@ -5,15 +5,33 @@ import Text from '@/components/Tools/TextContainer/Text.jsx';
 import { GetCategories } from "@/Api/categoryApi.js";
 import { useTheme } from '@mui/material/styles';
 
-const CategoriesSelector = ({ onCategorySelect, onSubCategorySelect }) => {
+const CategoriesSelector = ({ onCategorySelect, onSubCategorySelect, subCategory, category }) => {
     const navigate = useNavigate();
     const theme = useTheme();
     const { colors } = theme.palette;
 
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(category ?? null);
+    const [selectedSubCategory, setSelectedSubCategory] = useState(subCategory ?? null);
+
+    const handleCategorySelect = (categoryId) => {
+        if (selectedCategory !== categoryId) {
+            setSelectedSubCategory(null);
+            onSubCategorySelect(null);
+        }
+        setSelectedCategory(categoryId);
+        if (onCategorySelect) {
+            onCategorySelect(categoryId);
+        }
+    };
+
+    const handleSubCategorySelect = (subCategoryId) => {
+        setSelectedSubCategory(subCategoryId);
+        if (onSubCategorySelect) {
+            onSubCategorySelect(subCategoryId);
+        }
+    };
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -24,7 +42,6 @@ const CategoriesSelector = ({ onCategorySelect, onSubCategorySelect }) => {
                 console.error("Failed to fetch categories", error);
             }
         };
-
         fetchCategories();
     }, []);
 
@@ -38,21 +55,10 @@ const CategoriesSelector = ({ onCategorySelect, onSubCategorySelect }) => {
             setSubCategories([]);
         }
     }, [selectedCategory, categories]);
-
-    const handleCategorySelect = (categoryId) => {
-        setSelectedCategory(categoryId);
-        setSelectedSubCategory(null);
-        if (onCategorySelect) {
-            onCategorySelect(categoryId);
-        }
-    };
-
-    const handleSubCategorySelect = (subCategoryId) => {
-        setSelectedSubCategory(subCategoryId);
-        if (onSubCategorySelect) {
-            onSubCategorySelect(subCategoryId);
-        }
-    };
+    
+    useEffect(()=>{
+        console.log("id1: "+ category+" id2: "+subCategory);
+    }, []);
 
     return (
         <Box display="flex" flexDirection="column" alignItems="start">

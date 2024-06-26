@@ -26,8 +26,8 @@ const reverseGeocode = async (lat, lon) => {
     return response.data;
 };
 
-const LocationPickerMap = ({ onLocationSelect }) => {
-    const [position, setPosition] = useState(defaultPosition);
+const LocationPickerMap = ({ onLocationSelect, location }) => {
+    const [position, setPosition] = useState(location && location.count === 4 ? [location.lat, location.lng] : defaultPosition);
 
     const LocationMarker = () => {
         useMapEvents({
