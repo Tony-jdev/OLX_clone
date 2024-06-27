@@ -21,6 +21,7 @@ public class CategoryService: ICategoryService
     
     public async Task<ApiResponse<List<GetCategoryDetailsDto>>> GetCategories()
     {
+        throw new NotFoundException("Category not found.");
         var categories = await _unitOfWork.CategoryRepository.GetParentCategories();
         return new ApiResponse<List<GetCategoryDetailsDto>>
         {

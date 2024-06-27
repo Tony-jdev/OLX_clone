@@ -16,6 +16,7 @@ using OLX_clone.DataAccessLayer.Repositories;
 using OLX_clone.BusinessLogicLayer.Services;
 using OLX_clone.BusinessLogicLayer.Services.Contracts;
 using OLX_clone.DataAccessLayer.Repositories.Contracts;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,6 +99,15 @@ builder.Services.AddHangfire(configuration => configuration
 
 builder.Services.AddHangfireServer();
 
+// Add Serilog configuration
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 builder.Services.AddAuthentication(u =>
 {
     u.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -145,7 +155,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>(); 
+//app.UseRequestLogging();
 app.UseHangfireDashboard();
 app.MapHangfireDashboard("/hangfiredashboard", new DashboardOptions()
 {
@@ -160,7 +171,7 @@ app.MapHangfireDashboard("/hangfiredashboard", new DashboardOptions()
     }
 });
 
-RecurringJob.AddOrUpdate<IBoostExpirationService>(x => x.CheckBoostExpiration(), Cron.Minutely);   
+RecurringJob.AddOrUpdate<IBoostExpirationService>(x => x.CheckBoostExpiration(), Cron.Hourly);   
 
 app.MapControllers();
 

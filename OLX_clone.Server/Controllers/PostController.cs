@@ -132,7 +132,7 @@ public class PostController : ControllerBase
         var apiResponse = await _postService.DeletePost(id);
         if (!apiResponse.Success)
         {
-            return apiResponse.Message == "Post not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
+            return BadRequest(apiResponse);
         }
         return Ok(apiResponse);
     }
@@ -149,7 +149,7 @@ public class PostController : ControllerBase
         var apiResponse = await _postService.DeletePhoto(id);
         if (!apiResponse.Success)
         {
-            return apiResponse.Message == "Photo not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
+            return BadRequest(apiResponse);
         }
         return Ok(apiResponse);
     }
