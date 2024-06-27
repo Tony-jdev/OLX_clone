@@ -40,30 +40,22 @@ public class BoostPackageController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApiResponse<BoostPackage>>> CreateBoostPackage(CreateBoostPackageDto boostPackageCreateDto)
+    public async Task<ActionResult<ApiResponse<BoostPackage>>> CreateBoostPackage([FromBody] CreateBoostPackageDto boostPackageCreateDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(new ApiResponse<BoostPackage> { Success = false, Message = "Model is invalid" });
         }
 
-        try
+        var apiResponse = await _boostPackageService.CreateBoostPackage(boostPackageCreateDto);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _boostPackageService.CreateBoostPackage(boostPackageCreateDto);
-            if (!apiResponse.Success)
-            {
-                return BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<BoostPackage> { Success = false, Message = ex.Message });
-        }
+        return Ok(apiResponse);
     }
 
     [HttpPut("{id:int}")]
-    //[Authorize(Roles = SD.Role_Admin)]
     public async Task<ActionResult<ApiResponse<BoostPackage>>> UpdateBoostPackage(int id, [FromBody] UpdateBoostPackageDto boostPackageUpdateDto)
     {
         if (!ModelState.IsValid)
@@ -76,23 +68,15 @@ public class BoostPackageController : ControllerBase
             return BadRequest(new ApiResponse<BoostPackage> { Success = false, Message = "Wrong package ID" });
         }
 
-        try
+        var apiResponse = await _boostPackageService.UpdateBoostPackage(id, boostPackageUpdateDto);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _boostPackageService.UpdateBoostPackage(id, boostPackageUpdateDto);
-            if (!apiResponse.Success)
-            {
-                return BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<BoostPackage> { Success = false, Message = ex.Message });
-        }
+        return Ok(apiResponse);
     }
 
     [HttpDelete("{id:int}")]
-    //[Authorize(Roles = SD.Role_Admin)]
     public async Task<ActionResult<ApiResponse<bool>>> DeleteBoostPackage(int id)
     {
         if (id == 0)
@@ -100,19 +84,12 @@ public class BoostPackageController : ControllerBase
             return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid package ID" });
         }
 
-        try
+        var apiResponse = await _boostPackageService.DeleteBoostPackage(id);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _boostPackageService.DeleteBoostPackage(id);
-            if (!apiResponse.Success)
-            {
-                return apiResponse.Message == "Package not found" ? NotFound(apiResponse) : BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return apiResponse.Message == "Package not found" ? NotFound(apiResponse) : BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<bool> { Success = false, Message = ex.Message });
-        }
+        return Ok(apiResponse);
     }
 
     [HttpPost("{postId}/purchase")]
@@ -123,18 +100,11 @@ public class BoostPackageController : ControllerBase
             return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid post ID or package ID" });
         }
 
-        try
+        var apiResponse = await _boostPackageService.BuyBoostPackage(userId, postId, packageId);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _boostPackageService.BuyBoostPackage(userId, postId, packageId);
-            if (!apiResponse.Success)
-            {
-                return apiResponse.Message == "Package not found" ? NotFound(apiResponse) : BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return apiResponse.Message == "Package not found" ? NotFound(apiResponse) : BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<bool> { Success = false, Message = ex.Message });
-        }
+        return Ok(apiResponse);
     }
 }

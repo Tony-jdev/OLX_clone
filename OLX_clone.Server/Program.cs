@@ -5,7 +5,7 @@ using Hangfire.Storage.SQLite;
 using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;    
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OLX_clone.BusinessLogicLayer.Middleware;
@@ -20,22 +20,27 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add Serilog configuration
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+builder.Host.UseSerilog();
 
+// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger/OpenAPI configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
-        Description =
-            "JWT Authorization header using the Bearer scheme. \r\n\r\n " +
-            "Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n" +
-            "Example: \"Bearer 12345abcdef\"",
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Scheme = JwtBearerDefaults.AuthenticationScheme
+        Type = SecuritySchemeType.ApiKey
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -45,21 +50,20 @@ builder.Services.AddSwaggerGen(options =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id = JwtBearerDefaults.AuthenticationScheme
                 },
                 Scheme = "oauth2",
-                Name = "Bearer",
-                In = ParameterLocation.Header
+                Name = JwtBearerDefaults.AuthenticationScheme,
+                In = ParameterLocation.Header,
             },
             new List<string>()
         }
     });
 });
 
+// Database and Identity configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection"));
-});
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection")));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
@@ -69,12 +73,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireLowercase = false;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
+// Service registration
 builder.Services.AddAutoMapper(typeof(Program));
-
 builder.Services.AddSingleton(u => new BlobServiceClient(
     builder.Configuration.GetConnectionString("StorageAccount")));
 builder.Services.AddSingleton<IBlobService, BlobService>();
-
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -89,25 +92,16 @@ builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+// Real-time and background services
 builder.Services.AddSignalR();
-
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
     .UseSQLiteStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
-
 builder.Services.AddHangfireServer();
 
-// Add Serilog configuration
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
-
-builder.Host.UseSerilog();
-
+// Authentication and authorization
 builder.Services.AddAuthentication(u =>
 {
     u.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -129,33 +123,13 @@ builder.Services.AddAuthentication(u =>
 
 var app = builder.Build();
 
+// Application Middleware
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-if (builder.Environment.IsDevelopment())
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var services = scope.ServiceProvider;
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        await UserSeeder.Initialize(services, userManager, roleManager);
-    }
-}
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>(); 
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 //app.UseRequestLogging();
 app.UseHangfireDashboard();
 app.MapHangfireDashboard("/hangfiredashboard", new DashboardOptions()
@@ -171,10 +145,23 @@ app.MapHangfireDashboard("/hangfiredashboard", new DashboardOptions()
     }
 });
 
-RecurringJob.AddOrUpdate<IBoostExpirationService>(x => x.CheckBoostExpiration(), Cron.Hourly);   
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        await UserSeeder.Initialize(services, userManager, roleManager);
+    }
+}
 
 app.MapControllers();
-
 app.MapFallbackToFile("/index.html");
+
+RecurringJob.AddOrUpdate<IBoostExpirationService>(x => x.CheckBoostExpiration(), Cron.Hourly); 
 
 app.Run();
