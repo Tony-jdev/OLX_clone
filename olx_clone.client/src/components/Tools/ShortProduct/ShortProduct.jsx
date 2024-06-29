@@ -1,20 +1,20 @@
-import React from 'react';
-import {Grid, Card, CardMedia, CardContent, Typography, IconButton } from '@mui/material';
+import React, {useState} from 'react';
+import {Grid, Box} from '@mui/material';
 import IndicatorBox from "@/components/Tools/IndicatorBox/IndicatorBox.jsx";
 import {
     CardContentStyle,
     CardImgStyle,
     CardStyle,
-    HTextStyle, IndicatorGridStyle,
-    PTextStyle,
-    STextStyle
+    IndicatorGridStyle,
 } from "@/components/Tools/ShortProduct/Styles.js";
-import {LikeIcon} from "@/assets/Icons/Icons.jsx";
+import {LikedIcon, LikeIcon} from "@/assets/Icons/Icons.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useTheme} from "@mui/material/styles";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectSelectedPostId, setSelectedPostId} from "@/Storage/Redux/Slices/postSlice.js";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
+import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 
 const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id }) => {
     const theme = useTheme();
@@ -26,40 +26,48 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id 
     const isUsed = type === 'Usd';
     
     return (
-        <Card style={{...CardStyle, width: 340, height: 'auto', background: colors.background.secondary, boxShadow: colors.boxShadow}}>
-            <Grid style={{padding: 20, height: 300, width: 'fit-content'}}>
+        <Box
+            style={{
+                ...CardStyle,
+                backgroundColor: colors.background.secondary,
+                boxShadow: colors.boxShadow,
+                transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                maxWidth: 272,
+                maxHeight: 430,
+                width: '100%',
+                height: '100vh',
+            }}
+            sx={{
+                '&:hover': { 
+                    boxShadow: colors.types.shadows.boxShadowWarning + '!important',
+                    transform: 'scale(1.05)', 
+                },
+            }}
+            onClick={() => {
+                navigate(`/../post/${id}`);
+            }}
+        >
+            <Box style={{ position: 'relative', marginBottom: '10px' }}>
                 <Grid container style={IndicatorGridStyle}>
-                    { vip && <IndicatorBox text="Top" style='d'/> }
-                    { isUsed && <IndicatorBox text="Б/У"/> }
+                    {vip && <IndicatorBox text="Top" style="d" />}
+                    {isUsed && <IndicatorBox text="Б/У" />}
                 </Grid>
-                <CardMedia component="img" sx={CardImgStyle} image={photo} alt={name} />
-            </Grid>
-            <CardContent style={CardContentStyle} >
-                <Typography style={HTextStyle} sx={{color: colors.text.revers}}>
-                    Name: {name}
-                </Typography>
-                <Grid container direction='row' justifyContent='space-between'>
-                    <Typography style={PTextStyle}  sx={{color: colors.text.revers}}>
-                        Price: {price} ₴
-                    </Typography>
+                <Box component="img" sx={CardImgStyle} src={photo} alt={name} />
+            </Box>
+            <Box style={CardContentStyle}>
+               <Box>
+                   <Text type={'Body'}>Віддамо котика на ім’я Борис Васильович </Text>
+               </Box>
+                <Box style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text type={'Title'} sr={{alignSelf: 'center'}}>500₴</Text>
                     <SButton
                         isIconButton={true}
-                        icon={<LikeIcon sx={{color: colors.text.revers}}/>}
+                        icon={<Icon icon={LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
+                        action={(e)=>{ e.stopPropagation(); console.log('clicked')}}
                     />
-                </Grid>
-                <Typography style={STextStyle}  sx={{color: colors.text.revers}}>
-                    City: {city}
-                </Typography>
-                <Typography style={STextStyle}  sx={{color: colors.text.revers}}>
-                    Published: {publicationDate}
-                </Typography>
-                <SButton type='whiteOutlined' sl={{width: '100%', marginTop: '15px'}} text='Check' action={
-                    ()=>{
-                        navigate('/../post/'+id);
-                    }
-                }/>
-            </CardContent>
-        </Card>
+                </Box>
+            </Box>
+        </Box>
     );
 };
 

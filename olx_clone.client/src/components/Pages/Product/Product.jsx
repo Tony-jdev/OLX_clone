@@ -77,12 +77,15 @@ const ProductPage = () => {
     return (
         <Container style={{marginTop: 60, marginBottom: 60, maxWidth: '1440px', width: '100%', padding: 0}}>
             <Grid container direction={'row'} justifyContent={'space-between'} style={{marginBottom: '20px'}}>
-                <Box sx={{background: colors.background.secondary, boxShadow: colors.boxShadow}}>
-                    {urls && <Carousel items={urls} isWide={false} isOnlyImg={true} width={'953px'}/>}
+                <Box sx={{background: colors.background.secondary, boxShadow: colors.boxShadow, 
+                    borderRadius: '20px', maxHeight: '630px', height: '100vh',
+                    alignContent: 'center',
+                }}>
+                    {urls && <Carousel items={urls} isWide={false} isOnlyImg={true} width={'953px'} withoutNBtns={true} stopAutoplay={true}/>}
                 </Box>
                 <Box style={{maxWidth:'466px', width: '100%'}}>
                     <SellerInfo seller={'product'} />
-                    <LocationInfo location={'product'} />
+                    <LocationInfo location={post.location} />
                 </Box>
             </Grid>
             <ProductInfo post={post}/>

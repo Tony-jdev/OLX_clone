@@ -13,7 +13,7 @@ const PostWideList = ({ads}) => {
 
     const slowScroll = (event) => {
         event.preventDefault();
-        const step = 30; 
+        const step = 80; 
         if (event.deltaY > 0) {
             containerRef.current.scrollBy({
                 top: step,

@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import { FormattedMessage } from 'react-intl';
-import { AppBar, Toolbar, IconButton, Typography, TextField, Box, InputAdornment, Button, Grid, CardMedia, Container } from '@mui/material';
+import { AppBar, Toolbar, TextField, Box, InputAdornment, Grid, CardMedia, Container } from '@mui/material';
 import { AppBarStyle, ContainerStyle, ToolBarStyle, FirstGridStyle, BoxContainerStyle, LogoStyle, PropsFieldStyle, FieldStyle, FlexBoxStyle, AddButtonStyle, AddIconStyle, ProfileButtonStyle, BottomGridStyle, LastBoxStyle } from "@/components/Header/Styles.js";
 import { useTheme } from '@mui/material/styles';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
@@ -15,6 +15,7 @@ import {selectSearchText, setSearchText} from "@/Storage/Redux/Slices/postSlice.
 import Categories from "@/Helpers/mainCategoriesHelper.js";
 import {isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
+import AuthModal from "@/components/Pages/Auth/Auth.jsx";
 const Header = () => {
     const navigate = useNavigate();
 
@@ -31,6 +32,18 @@ const Header = () => {
 
     const isUserLogined = useSelector(isUserLoggedIn);
     const [open, setOpen] = useState(false);
+
+    const [openAuth, setOpenAuth] = useState(false);
+
+    const handleClickOpenAuth = () => {
+        setOpenAuth(true);
+        console.log('opened!');
+    };
+
+    const handleCloseAuth = () => {
+        setOpenAuth(false);
+        console.log('closed!');
+    };
 
     const handleOpen = () => {
         if(isUserLogined)
@@ -70,7 +83,6 @@ const Header = () => {
         const letters = '0123456789ABCDEF';
         let color = '#';
         for (let i = 0; i < 3; i++) {
-            // Генеруємо яскравий колір, обираючи випадкове значення в діапазоні 8-F для кожного каналу RGB
             color += letters[Math.floor(Math.random() * 8) + 8];
             color += letters[Math.floor(Math.random() * 8) + 8];
         }
@@ -150,7 +162,7 @@ const Header = () => {
                                 isIconButton={true}
                                 icon={ <ProfileIcon /> }
                                 sl={{...ProfileButtonStyle, color: colors.text.primary}}
-                                action={authHandle}
+                                action={handleClickOpenAuth}
                             />
                             
                             <SButton
@@ -166,6 +178,7 @@ const Header = () => {
                                 sl={{color: colors.text.primary }}
                             />
                         </Box>
+                        <AuthModal open={openAuth} handleClose={handleCloseAuth} />
                     </Grid>
                 </Toolbar>
                 <Toolbar style={ToolBarStyle}>

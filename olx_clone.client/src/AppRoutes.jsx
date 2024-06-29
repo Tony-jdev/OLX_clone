@@ -3,20 +3,13 @@ const Home = React.lazy(() => import('./components/Pages/Home/Home'));
 const SearchPage = React.lazy(() => import('@/components/Pages/SearchPage/SearchPage.jsx'));
 const Product = React.lazy(() => import('@/components/Pages/Product/Product.jsx'));
 const About = React.lazy(() => import('@/components/Pages/About/About.jsx'));
-const Auth = React.lazy(() => import('@/components/Pages/Auth/Auth.jsx'));
 const UserProfileContainer = React.lazy(() => import('@/components/Pages/UserProfileContainer/UserProfileContainer.jsx'));
-const ProtectedRoute = React.lazy(() => import('@/Helpers/ProtectedRoute.jsx'));
-
 
 const AppRoutes = [
     {
         index: true,
         path: '/',
         element: <Home/>
-    },
-    {
-        path: '/auth',
-        element: <Auth/>
     },
     {
         path: '/about',
@@ -32,7 +25,7 @@ const AppRoutes = [
     },
     {
         path: 'user/:miniPage?',
-        element: <ProtectedRoute element={<UserProfileContainer/>} />
+        element: <UserProfileContainer/> 
     },
 ];
 

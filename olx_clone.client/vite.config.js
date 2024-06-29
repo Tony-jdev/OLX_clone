@@ -86,6 +86,10 @@ const databaseRoutes = {
         target,
         secure: false
     },
+    '^/api/posts/photo': {
+        target,
+        secure: false
+    },
     '^/api/posts/photo/{id}': {
         target,
         secure: false
