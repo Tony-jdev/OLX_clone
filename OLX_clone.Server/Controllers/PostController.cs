@@ -22,51 +22,40 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("vip")]
-    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetVipPosts()
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetVipPosts([FromQuery] int number = 4)
     {
-        var apiResponse = await _postService.GetVipPosts();
-        if (!apiResponse.Success)
-        {
-            return BadRequest(apiResponse);
-        }
-        return Ok(apiResponse);
+        var apiResponse = await _postService.GetVipPosts(number);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 
     [HttpGet]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(
-        string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page = 1)
+        [FromQuery] string? searchTerm, [FromQuery] string? orderBy, [FromQuery] string? location, 
+        [FromQuery] double? priceFrom, [FromQuery] double? priceTo, [FromQuery] string? status, [FromQuery] int page = 1)
     {
         var apiResponse = await _postService.GetPosts(searchTerm, orderBy, location, priceFrom, priceTo, status, page);
-        if (!apiResponse.Success)
-        {
-            return BadRequest(apiResponse);
-        }
-        return Ok(apiResponse);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 
     [HttpGet("category/{categorySku}", Name = "GetPostByCategory")]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(string categorySku,
-        string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page = 1)
+        [FromQuery] string? searchTerm, [FromQuery] string? orderBy, [FromQuery] string? location, 
+        [FromQuery] double? priceFrom, [FromQuery] double? priceTo, [FromQuery] string? status, [FromQuery] int page = 1)
     {
-        var apiResponse = await _postService.GetPostsByCategory(
-            categorySku, searchTerm, orderBy, location, priceFrom, priceTo,status, page);
-        if (!apiResponse.Success)
-        {
-            return BadRequest(apiResponse);
-        }
-        return Ok(apiResponse);
+        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, location, priceFrom, priceTo, status, page);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 
     [HttpGet("{sku}", Name = "GetPost")]
     public async Task<ActionResult<ApiResponse<GetPostDetailsDto>>> GetPost(string sku)
     {
         var apiResponse = await _postService.GetPost(sku);
-        if (!apiResponse.Success)
+        if (apiResponse.Success)
         {
-            return NotFound(apiResponse);
+            await _postService.AddPostView(apiResponse.Data.Id);
+            return Ok(apiResponse);
         }
-        await _postService.AddPostView(apiResponse.Data.Id);
-        return Ok(apiResponse);
+        return NotFound(apiResponse);
     }
 
     [HttpPost]
@@ -74,15 +63,11 @@ public class PostController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Model is invalid"});
+            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Model is invalid" });
         }
 
         var apiResponse = await _postService.CreatePost(postCreateDto);
-        if (!apiResponse.Success)
-        {
-            return BadRequest(apiResponse);
-        }
-        return Ok(apiResponse);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 
     [HttpPut("{id:int}")]
@@ -90,20 +75,23 @@ public class PostController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Model is invalid"});
+            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Model is invalid" });
         }
 
         if (id != postUpdateDto.Id)
         {
-            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Wrong post"});
+            return BadRequest(new ApiResponse<Post> { Success = false, Message = "Wrong post" });
         }
 
         var apiResponse = await _postService.UpdatePost(id, postUpdateDto);
-        if (!apiResponse.Success)
-        {
-            return BadRequest(apiResponse);
-        }
-        return Ok(apiResponse);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
+    }
+    
+    [HttpPatch("{postId:int}/status")]
+    public async Task<IActionResult> UpdatePostStatus(int postId, [FromBody] UpdatePostStatusDto updateStatusDto)
+    {
+        var response = await _postService.UpdatePostStatus(postId, updateStatusDto.NewStatus);
+        return response.Success ? Ok(response) : BadRequest(response);
     }
 
     [HttpDelete("{id:int}")]
@@ -112,15 +100,11 @@ public class PostController : ControllerBase
     {
         if (id == 0)
         {
-            return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid post ID"});
+            return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid post ID" });
         }
 
         var apiResponse = await _postService.DeletePost(id);
-        if (!apiResponse.Success)
-        {
-            return apiResponse.Message == "Post not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
-        }
-        return Ok(apiResponse);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 
     [HttpDelete("photo/{id:int}", Name = "DeletePhoto")]
@@ -129,25 +113,17 @@ public class PostController : ControllerBase
     {
         if (id == 0)
         {
-            return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid photo ID"});
+            return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid photo ID" });
         }
 
         var apiResponse = await _postService.DeletePhoto(id);
-        if (!apiResponse.Success)
-        {
-            return apiResponse.Message == "Photo not found." ? NotFound(apiResponse) : BadRequest(apiResponse);
-        }
-        return Ok(apiResponse);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 
     [HttpPost("{postId}/boost")]
     public async Task<ActionResult<ApiResponse<bool>>> BoostPost(int postId)
     {
         var response = await _boostService.BoostPost(postId);
-        if (response.Success)
-        {
-            return Ok(response);
-        }
-        return BadRequest(response);
+        return response.Success ? Ok(response) : BadRequest(response);
     }
 }

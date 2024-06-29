@@ -6,6 +6,7 @@ using OLX_clone.DataAccessLayer.Helpers;
 using OLX_clone.DataAccessLayer.Models;
 using OLX_clone.DataAccessLayer.Models.Dtos;
 using OLX_clone.DataAccessLayer.Models.Dtos.Post;
+using OLX_clone.DataAccessLayer.Models.Enums;
 using OLX_clone.DataAccessLayer.Repositories.Contracts;
 
 namespace OLX_clone.BusinessLogicLayer.Services;
@@ -23,9 +24,9 @@ public class PostService : IPostService
         _blobService = blobService;
     }
     
-    public async Task<ApiResponse<List<GetPostDto>>> GetVipPosts()
+    public async Task<ApiResponse<List<GetPostDto>>> GetVipPosts(int number)
     {
-        var posts = await _unitOfWork.PostRepository.GetVipPostsAsync();
+        var posts = await _unitOfWork.PostRepository.GetVipPostsAsync(number);
 
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         await SetPhotoUrls(getPostDtos);
@@ -33,12 +34,16 @@ public class PostService : IPostService
         return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
     }
     
-    public async Task<List<GetPostDto>> GetPostsByUser(string userId)
+    public async Task<List<GetPostProfileDto>> GetPostsByUser(string userId)
     {
         var posts = await _unitOfWork.PostRepository.GetPostsByUserIdAsync(userId);
 
-        var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        await SetPhotoUrls(getPostDtos);
+        var getPostDtos = _mapper.Map<List<GetPostProfileDto>>(posts);
+        foreach (var post in getPostDtos)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+            post.ViewsCount = await _unitOfWork.PostViewRepository.GetAllPostViewsCountByPostId(post.Id);
+        }
         
         return getPostDtos;
     }
@@ -97,10 +102,6 @@ public class PostService : IPostService
         postToCreate.SKU = GeneratePostSKU(postToCreate.Title);
         
         var createdPost = await _unitOfWork.PostRepository.AddAsync(postToCreate);
-        if (createdPost == null)
-        {
-            throw new InternalServerErrorException("Failed to create the post.");
-        }
 
         var postPhotos = await UploadPostPhotos(postCreateDto.Files, createdPost.Id);
         await _unitOfWork.PostPhotoRepository.AddRangeAsync(postPhotos);
@@ -130,6 +131,24 @@ public class PostService : IPostService
         }
 
         return new ApiResponse<Post> { Data = updatedPost, Message = "Post updated successfully" };
+    }
+    
+    public async Task<ApiResponse<bool>> UpdatePostStatus(int postId, PostStatus newStatus)
+    {
+        var postFromDb = await _unitOfWork.PostRepository.GetAsync(postId);
+        if (postFromDb == null)
+        {
+            throw new NotFoundException("Post not found");
+        }
+
+        postFromDb.Status = newStatus;
+        var updatedPost = await _unitOfWork.PostRepository.UpdateAsync(postFromDb);
+        if (updatedPost == null)
+        {
+            throw new InternalServerErrorException("Failed to update the post.");
+        }
+            
+        return new ApiResponse<bool> { Success = true, Message = "Post status updated successfully." };
     }
 
     public async Task<ApiResponse<bool>> DeletePost(int id)

@@ -32,7 +32,7 @@ public class GlobalExceptionHandlingMiddleware
 
     private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        _logger.LogError(exception, exception.Message);
+        _logger.LogError(exception, "An unhandled exception has occurred: {Message}", exception.Message);
 
         var code = HttpStatusCode.InternalServerError;
 

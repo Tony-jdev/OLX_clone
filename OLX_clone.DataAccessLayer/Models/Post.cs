@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using OLX_clone.DataAccessLayer.Helpers;
+using OLX_clone.DataAccessLayer.Models.Enums;
 
 namespace OLX_clone.DataAccessLayer.Models;
 
@@ -28,9 +29,9 @@ public class Post
     [Required]
     public double Price { get; set; }
     [Required]
-    public string Type { get; set; }
+    public PostType Type { get; set; }
     
-    [Required] public string Status { get; set; } = SD.status_active;
+    [Required] public PostStatus Status { get; set; } = PostStatus.Active;
 
     [Required]
     public string ApplicationUserId { get; set; }

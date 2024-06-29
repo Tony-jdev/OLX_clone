@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using OLX_clone.DataAccessLayer.Models.Enums;
 
 namespace OLX_clone.DataAccessLayer.Models.Dtos.Post;
 
@@ -12,7 +13,7 @@ public class CreatePostDto
     public string Description { get; set; }
 
     [Required]
-    public string Type { get; set; }
+    public PostType Type { get; set; }
     [Required]
     public string Location { get; set; }
 

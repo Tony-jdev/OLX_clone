@@ -4,7 +4,7 @@ namespace OLX_clone.DataAccessLayer.Repositories.Contracts;
 
 public interface IPostRepository: IGenericRepository<Post>
 {
-    Task<List<Post>> GetVipPostsAsync();
+    Task<List<Post>> GetVipPostsAsync(int number);
     Task<List<Post>> GetPostsByUserIdAsync(string userId);
     Task<Post> GetPostDetailsBySkuAsync(string sku);
     Task<List<Post>> GetAllByCategoryAsync(

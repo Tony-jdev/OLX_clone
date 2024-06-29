@@ -21,7 +21,7 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("charge")]
-    public async Task<ActionResult<ApiResponse<IEnumerable<IdentityError>>>> Charge([FromBody] PaymentRequest paymentRequest)
+    public async Task<ActionResult<ApiResponse<object>>> Charge([FromBody] PaymentRequest paymentRequest)
     {
         if (!ModelState.IsValid)
         {
@@ -33,38 +33,27 @@ public class PaymentController : ControllerBase
             });
         }
 
-        try
+        var charge = await _paymentService.CreateCharge(paymentRequest);
+        if (charge.Status == "succeeded")
         {
-            var charge = await _paymentService.CreateCharge(paymentRequest);
-            if (charge.Status == "succeeded")
+            var apiResponse = await _userService.UpdateBalance(new Transaction
             {
-                var apiResponse = await _userService.UpdateBalance(new Transaction
-                {
-                    Amount = paymentRequest.Amount,
-                    UserId = paymentRequest.UserId
-                });
+                Amount = paymentRequest.Amount,
+                UserId = paymentRequest.UserId
+            });
 
-                if (apiResponse.Success)
-                {
-                    return Ok(apiResponse);
-                }
-
-                return BadRequest(apiResponse);
+            if (apiResponse.Success)
+            {
+                return Ok(apiResponse);
             }
 
-            return BadRequest(new ApiResponse<string>
-            {
-                Success = false,
-                Message = "Payment failed!"
-            });
+            return BadRequest(apiResponse);
         }
-        catch (Exception ex)
+
+        return BadRequest(new ApiResponse<string>
         {
-            return StatusCode(500, new ApiResponse<string>
-            {
-                Success = false,
-                Message = $"An error occurred: {ex.Message}"
-            });
-        }
+            Success = false,
+            Message = "Payment failed!"
+        });
     }
 }

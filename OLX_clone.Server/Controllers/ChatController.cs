@@ -27,41 +27,29 @@ public class ChatController : ControllerBase
             return BadRequest(new ApiResponse<Chat> { Success = false, Message = "Model is invalid" });
         }
 
-        try
-        {
-            var apiResponse = await _chatService.CreateChatAsync(chatCreateDto);
-            if (!apiResponse.Success)
-            {
-                return NotFound(apiResponse);
-            }
-            return Ok(apiResponse);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<Chat> { Success = false, Message = ex.Message });
-        }
+        var apiResponse = await _chatService.CreateChatAsync(chatCreateDto);
+        return apiResponse.Success ? Ok(apiResponse) : NotFound(apiResponse);
     }
 
+    [HttpGet(Name = "GetChatByUsers")]
+    public async Task<ActionResult<ApiResponse<GetChatDetailsDto>>> GetChatByUsers(string customerId, string sellerId, int postId)
+    {
+        var apiResponse = await _chatService.GetChatByUsersAsync(customerId, sellerId, postId);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
+    }
+    
     [HttpGet("{id:int}", Name = "GetChat")]
     public async Task<ActionResult<ApiResponse<GetChatDetailsDto>>> GetChat(int id)
     {
         var apiResponse = await _chatService.GetChatWithMessagesAsync(id);
-        if (!apiResponse.Success)
-        {
-            return NotFound(apiResponse);
-        }
-        return Ok(apiResponse);
+        return apiResponse.Success ? Ok(apiResponse) : NotFound(apiResponse);
     }
 
     [HttpGet("user/{userId}", Name = "GetChatsByUserId")]
     public async Task<ActionResult<ApiResponse<List<GetChatDto>>>> GetChatsByUserId(string userId)
     {
         var apiResponse = await _chatService.GetChatsByUserIdAsync(userId);
-        if (!apiResponse.Success)
-        {
-            return NotFound(apiResponse);
-        }
-        return Ok(apiResponse);
+        return apiResponse.Success ? Ok(apiResponse) : NotFound(apiResponse);
     }
 
     [HttpPost("mark-as-read")]
@@ -72,18 +60,7 @@ public class ChatController : ControllerBase
             return BadRequest(new ApiResponse<bool> { Success = false, Message = "Model is invalid" });
         }
 
-        try
-        {
-            var apiResponse = await _chatService.MarkMessagesAsRead(messageIds);
-            if (!apiResponse.Success)
-            {
-                return NotFound(apiResponse);
-            }
-            return Ok(apiResponse);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<bool> { Success = false, Message = ex.Message });
-        }
+        var apiResponse = await _chatService.MarkMessagesAsRead(messageIds);
+        return apiResponse.Success ? Ok(apiResponse) : NotFound(apiResponse);
     }
 }

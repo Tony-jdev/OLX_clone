@@ -27,6 +27,14 @@ public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         
+        modelBuilder.Entity<Post>()
+            .Property(p => p.Status)
+            .HasConversion<string>();
+        
+        modelBuilder.Entity<Post>()
+            .Property(p => p.Type)
+            .HasConversion<string>();
+        
         modelBuilder.Entity<ChatMessage>()
             .HasOne(cm => cm.Sender)
             .WithMany()

@@ -49,19 +49,12 @@ public class CategoryController : ControllerBase
             return BadRequest(new ApiResponse<Category> { Success = false, Message = "Model is invalid" });
         }
 
-        try
+        var apiResponse = await _categoryService.CreateCategory(categoryCreateDto);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _categoryService.CreateCategory(categoryCreateDto);
-            if (!apiResponse.Success)
-            {
-                return BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<Category> { Success = false, Message = ex.Message });
-        }
+        return Ok(apiResponse);
     }
 
     [HttpPut("{id:int}")]
@@ -78,19 +71,12 @@ public class CategoryController : ControllerBase
             return BadRequest(new ApiResponse<Category> { Success = false, Message = "Wrong category ID" });
         }
 
-        try
+        var apiResponse = await _categoryService.UpdateCategory(id, categoryUpdateDto);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _categoryService.UpdateCategory(id, categoryUpdateDto);
-            if (!apiResponse.Success)
-            {
-                return BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<Category> { Success = false, Message = ex.Message });
-        }
+        return Ok(apiResponse);
     }
 
     [HttpDelete("{id:int}")]
@@ -102,18 +88,11 @@ public class CategoryController : ControllerBase
             return BadRequest(new ApiResponse<bool> { Success = false, Message = "Invalid category ID" });
         }
 
-        try
+        var apiResponse = await _categoryService.DeleteCategory(id);
+        if (!apiResponse.Success)
         {
-            var apiResponse = await _categoryService.DeleteCategory(id);
-            if (!apiResponse.Success)
-            {
-                return apiResponse.Message == "Category not found" ? NotFound(apiResponse) : BadRequest(apiResponse);
-            }
-            return Ok(apiResponse);
+            return BadRequest(apiResponse);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new ApiResponse<bool> { Success = false, Message = ex.Message });
-        }
+        return Ok(apiResponse);
     }
 }

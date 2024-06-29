@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OLX_clone.DataAccessLayer.Helpers;
 using OLX_clone.DataAccessLayer.Models;
+using OLX_clone.DataAccessLayer.Models.Enums;
 using OLX_clone.DataAccessLayer.Repositories.Contracts;
 
 namespace OLX_clone.DataAccessLayer.Repositories;
@@ -11,12 +12,12 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
     {
     }
 
-    public async Task<List<Post>> GetVipPostsAsync()
+    public async Task<List<Post>> GetVipPostsAsync(int number)
     {
         return await _context.Posts
-            .Where(p => p.IsVip && p.Status == SD.status_active)
+            .Where(p => p.IsVip && p.Status == PostStatus.Active)
             .OrderBy(p => Guid.NewGuid())
-            .Take(12)
+            .Take(number)
             .ToListAsync();
     }
 
@@ -63,11 +64,11 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
 
         if (!string.IsNullOrEmpty(status))
         {
-            query = query.Where(p => p.Status.ToLower() == status.ToLower());
+            query = query.Where(p => p.Status.ToString().ToLower() == status.ToLower());
         }
         else
         {
-            query = query.Where(p => p.Status == SD.status_active);
+            query = query.Where(p => p.Status == PostStatus.Active);
         }
 
         if (!string.IsNullOrEmpty(searchTerm))
