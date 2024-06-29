@@ -104,8 +104,6 @@ const PostWideCard = ({ ad, container }) => {
                 <Grid container alignItems='flex-end' justifyContent='space-between' style={{ maxHeight: 70, height: '100%' }}>
                     <Box style={StatsContainer}>
                         <Visibility style={StatIconStyle} />{ad.views}
-                        <Favorite style={StatIconMarginLeft} />{ad.likes}
-                        <Share style={StatIconMarginLeft} />{ad.shares}
                     </Box>
                     <Box style={ActionButtonsContainer}>
                         <SButton

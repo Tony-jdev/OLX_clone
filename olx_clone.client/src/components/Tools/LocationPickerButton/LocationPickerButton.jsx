@@ -53,7 +53,7 @@ const LocationPickerButton = ({Color, setLocation, location}) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description" >
                 <Box sx={modalStyle}>
-                    <LocationPickerMap onLocationSelect={handleLocationSelection} location={selectedLocation} />
+                    <LocationPickerMap onLocationSelect={handleLocationSelection} location={selectedLocation} readOnly={false} allowMove={true}/>
                 </Box>
             </Modal>
         </>

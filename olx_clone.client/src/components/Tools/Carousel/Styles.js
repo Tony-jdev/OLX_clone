@@ -42,3 +42,10 @@ export const PaperNormalStyle= {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'auto 50vh'
 }
+export const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    boxShadow: 24,
+};

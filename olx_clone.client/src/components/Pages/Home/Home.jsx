@@ -17,6 +17,14 @@ import {ContainerStyle} from "@/components/Pages/Home/Styles.jsx";
 import TutorialPanel from "@/components/Tools/TutorialPanel/TutorialPanel.jsx";
 import {useNavigate} from "react-router-dom";
 import {AddOutlinedIcon} from "@/assets/Icons/Icons.jsx";
+import Carusel from "@/components/Tools/CaruselM3/Carusel.jsx";
+
+const itemss = [
+    { image: 'https://th.bing.com/th/id/OIP.bZDmBBbw15Uog6Em-3dJeQHaE8?rs=1&pid=ImgDetMain', name: 'Item 1', price: '100$' },
+    { image: 'https://th.bing.com/th/id/OIP.bZDmBBbw15Uog6Em-3dJeQHaE8?rs=1&pid=ImgDetMain', name: 'Item 2', price: '200$' },
+    { image: 'https://th.bing.com/th/id/OIP.bZDmBBbw15Uog6Em-3dJeQHaE8?rs=1&pid=ImgDetMain', name: 'Item 3', price: '300$' },
+];
+
 
 function HomePage() {
     const theme = useTheme();
@@ -106,7 +114,12 @@ function HomePage() {
         <Container style={ContainerStyle}>
             <Carousel items={items} />
             <CategoryMasonry/>
-            <ProductList posts={posts} error={error} loading={loading} headerText={<FormattedMessage id='home.vip.header' />} headerBtn={HeaderBtn}/>
+            <Carusel
+                headerText={<FormattedMessage id='home.vip.header' />} headerBtn={HeaderBtn}
+                items={posts}
+                error={error}
+                loading={loading}
+            />
             <TutorialPanel/>
         </Container>
     );

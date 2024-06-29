@@ -32,6 +32,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserDataAsync, selectToken, selectUser } from "@/Storage/Redux/Slices/userInfoSlice.js";
 import { CreatePost, EditPost, GetPostById, DeletePostPhoto } from "@/Api/postApi.js";
 import {parseLocationString, parseLocationToString} from "@/Helpers/locationHelper.js";
+import {fetchUserPostsAsync} from "@/Storage/Redux/Slices/userDataSlice.js";
 
 const AddPostModal = ({ open, handleClose, edit, post }) => {
     const theme = useTheme();
@@ -132,7 +133,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
             setErrors(newErrors);
         } else {
             try {
-                console.log("cat:"+ category+ " subcat:"+ subCategory + " = " + subCategory || category);
+                console.log("cat:"+ category+ " subcat:"+ subCategory + " = " + subCategory === null ? category: subCategory);
                 const loc = typeof location === 'string' ? location : parseLocationToString(location);
                 const post = {
                     title,
@@ -140,7 +141,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
                     type: condition,
                     location: loc,
                     price: parseFloat(price),
-                    categoryId: subCategory || category,
+                    categoryId: subCategory === null ? category: subCategory,
                     applicationUserId: user.userId,
                     files: images
                 };
@@ -148,6 +149,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
                 console.log(id);
                 
                 edit ? await EditPost(id, post) : await CreatePost(post);
+                dispatch(fetchUserPostsAsync());
                 clearFields();
                 handleClose();
             } catch (error) {
@@ -182,7 +184,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
                 aria-describedby="add-post-modal-description"
             >
                 <Box sx={{...modalStyle, background: colors.background.secondary, boxShadow: colors.boxShadow}}>
-                    <Text type="Headline" text="Додати оголошення" />
+                    <Text type="Headline" text={edit ? "Редагувати оголошення" : "Додати оголошення"} />
                     <Grid container justifyContent={"start"}>
                         <Box sx={{width: '400px', marginRight: '20px', position: 'relative'}}>
                             <TextField
@@ -218,7 +220,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
                                 error={!!errors.price}
                                 helperText={errors.price}
                                 type="number"
-                                inputProps={{ step: "0.01", min: "0", max: "1000000", pattern: '[0-9]+([.,][0-9]{1,2})?' }}
+                                inputProps={{ step: "1", min: "1", max: "1000000", pattern: '[0-9]+([.,][0-9]{1,2})?' }}
                             />
                             <CategoriesSelector
                                 category={category}

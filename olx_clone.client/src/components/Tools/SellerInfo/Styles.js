@@ -21,3 +21,11 @@ export const SellerInfoTextStyle = {
     fontSize: '16px',
     lineHeight: '20px',
 };
+
+export const CardContainer = {
+    width: 466,
+    height: 430,
+    borderRadius: 20,
+    padding: '16px',
+    marginBottom: '20px',
+};
