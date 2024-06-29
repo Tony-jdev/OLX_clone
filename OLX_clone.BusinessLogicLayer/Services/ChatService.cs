@@ -37,7 +37,7 @@ public class ChatService : IChatService
 
         return new ApiResponse<ChatMessage> { Data = createdMessage, Message = "Message created successfully" };
     }
-
+    
     public async Task<ApiResponse<List<GetChatDto>>> GetChatsByUserIdAsync(string userId)
     {
         var chats = await _unitOfWork.ChatRepository.GetAllChatsByUserIdAsync(userId);
@@ -52,9 +52,24 @@ public class ChatService : IChatService
         {
             var latestMessage = await _unitOfWork.ChatMessageRepository.GetLatestMessageByChatIdAsync(chat.Id);
             chat.LatestMessage = _mapper.Map<GetChatMessageDto>(latestMessage);
+            chat.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(chat.PostId);
         }
 
         return new ApiResponse<List<GetChatDto>> { Data = getChatDtos, Message = "Chats retrieved successfully." };
+    }
+    
+    public async Task<ApiResponse<GetChatDetailsDto>> GetChatByUsersAsync(string customerId, string sellerId, int postId)
+    {
+        var chat = await _unitOfWork.ChatRepository.GetChatByUsersAsync(customerId, sellerId, postId);
+        if (chat == null)
+        {
+            throw new NotFoundException("Chat not found.");
+        }
+
+        var chatToView = _mapper.Map<Chat, GetChatDetailsDto>(chat);
+        chatToView.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(chat.PostId);
+        
+        return new ApiResponse<GetChatDetailsDto> { Data = chatToView, Success = true, Message = "Chat retrieved successfully." };
     }
 
     public async Task<ApiResponse<GetChatDetailsDto>> GetChatWithMessagesAsync(int id)
@@ -66,6 +81,7 @@ public class ChatService : IChatService
         }
 
         var chatToView = _mapper.Map<Chat, GetChatDetailsDto>(chat);
+        chatToView.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(chat.PostId);
 
         return new ApiResponse<GetChatDetailsDto> { Data = chatToView, Message = "Chat retrieved successfully." };
     }

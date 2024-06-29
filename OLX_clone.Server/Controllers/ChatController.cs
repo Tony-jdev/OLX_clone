@@ -31,6 +31,13 @@ public class ChatController : ControllerBase
         return apiResponse.Success ? Ok(apiResponse) : NotFound(apiResponse);
     }
 
+    [HttpGet(Name = "GetChatByUsers")]
+    public async Task<ActionResult<ApiResponse<GetChatDetailsDto>>> GetChatByUsers(string customerId, string sellerId, int postId)
+    {
+        var apiResponse = await _chatService.GetChatByUsersAsync(customerId, sellerId, postId);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
+    }
+    
     [HttpGet("{id:int}", Name = "GetChat")]
     public async Task<ActionResult<ApiResponse<GetChatDetailsDto>>> GetChat(int id)
     {

@@ -13,12 +13,28 @@ public class ChatRepository: GenericRepository<Chat>, IChatRepository
 
     public async Task<List<Chat>> GetAllChatsByUserIdAsync(string userId)
     {
-        return await _context.Chats.Where(c => c.SellerId == userId || c.CustomerId == userId).ToListAsync();
+        return await _context.Chats
+            .Where(c => c.SellerId == userId || c.CustomerId == userId)
+            .Include(c => c.Post)
+            .ToListAsync();
+    }
+    
+    public async Task<Chat> GetChatByUsersAsync(string customerId, string sellerId, int postId)
+    {
+        return await _context.Chats
+            .Include(c => c.Messages)
+            .Include(c => c.Post)
+            .Where(c => c.CustomerId == customerId && c.SellerId == sellerId && c.PostId == postId)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<Chat> GetChatWithMessagesAsync(int id)
     {
-        return await _context.Chats.Include(c => c.Messages).Where(c => c.Id == id).FirstOrDefaultAsync();
+        return await _context.Chats
+            .Include(c => c.Messages)
+            .Include(c => c.Post)
+            .Where(c => c.Id == id)
+            .FirstOrDefaultAsync();
     }
     
     public async Task<Chat> GetChatWithMessagesByParticipantsAsync(string senderId, string receiverId)
@@ -28,5 +44,4 @@ public class ChatRepository: GenericRepository<Chat>, IChatRepository
             .Where(c => (c.CustomerId == senderId && c.SellerId == receiverId) || (c.CustomerId == receiverId && c.SellerId == senderId))
             .FirstOrDefaultAsync();
     }
-
 }

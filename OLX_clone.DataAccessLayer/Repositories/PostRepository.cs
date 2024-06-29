@@ -12,12 +12,12 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
     {
     }
 
-    public async Task<List<Post>> GetVipPostsAsync()
+    public async Task<List<Post>> GetVipPostsAsync(int number)
     {
         return await _context.Posts
             .Where(p => p.IsVip && p.Status == PostStatus.Active)
             .OrderBy(p => Guid.NewGuid())
-            .Take(12)
+            .Take(number)
             .ToListAsync();
     }
 

@@ -22,9 +22,9 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("vip")]
-    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetVipPosts()
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetVipPosts([FromQuery] int number = 4)
     {
-        var apiResponse = await _postService.GetVipPosts();
+        var apiResponse = await _postService.GetVipPosts(number);
         return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 

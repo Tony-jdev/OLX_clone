@@ -18,7 +18,7 @@ public class UpdatePostDto
     public string Location { get; set; }
 
     [Required]
-    [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
+    [Range(1, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
     public double Price { get; set; }
 
     [Required]

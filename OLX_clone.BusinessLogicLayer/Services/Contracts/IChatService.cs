@@ -10,6 +10,7 @@ public interface IChatService
     Task<ApiResponse<Chat>> CreateChatAsync(CreateChatDto chatCreateDto);
     Task<ApiResponse<ChatMessage>> CreateChatMessageAsync(CreateChatMessageDto chatMessageCreateDto);
     Task<ApiResponse<List<GetChatDto>>> GetChatsByUserIdAsync(string userId);
+    Task<ApiResponse<GetChatDetailsDto>> GetChatByUsersAsync(string customerId, string sellerId, int postId);
     Task<ApiResponse<GetChatDetailsDto>> GetChatWithMessagesAsync(int id);
     Task<ApiResponse<bool>> MarkMessagesAsRead(List<int> messageIds);
     Task<ApiResponse<GetChatDetailsDto>> GetChatWithMessagesByParticipantsAsync(string senderId, string receiverId);
