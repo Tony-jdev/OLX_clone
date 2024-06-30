@@ -56,7 +56,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id 
             </Box>
             <Box style={CardContentStyle}>
                <Box>
-                   <Text type={'Body'} sr={{textAlign: 'center', marginBottom: '30px'}}>{name}</Text>
+                   <Text type={'Body'} sr={{textAlign: 'start', marginBottom: '30px'}}>{name}</Text>
                </Box>
                 <Box style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text type={'Title'} sr={{alignSelf: 'center'}}>{price}₴</Text>

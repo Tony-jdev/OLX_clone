@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {GetPostByCategoryId, GetPostById, GetPosts, GetVIPPosts} from '@/Api/postApi.js';
 import {GetCategories} from "@/Api/categoryApi.js";
+import {parseLocationString} from "@/Helpers/locationHelper.js";
 
 const initialState = {
     categorySku: "",
@@ -8,6 +9,7 @@ const initialState = {
     subCategories: [],
     searchText: localStorage.getItem('searchText') ?? "",
     orderBy: localStorage.getItem('orderBy') ?? "def",
+    location: localStorage.getItem('location') ?? '',
     page: parseInt(localStorage.getItem('page')) ?? 1,
     pageSize : parseInt(localStorage.getItem('pageSize')) ?? 1,
     pageCount : parseInt(localStorage.getItem('pageCount')) ?? 1,
@@ -38,6 +40,10 @@ export const postsSlice = createSlice({
         setOrderBy: (state, action)=>{
             state.orderBy = action.payload;
             localStorage.setItem('orderBy', action.payload);
+        },
+        setLocation: (state, action)=>{
+            state.location = action.payload;
+            localStorage.setItem('location', action.payload);
         },
         setPage: (state, action)=>{
             state.page = action.payload;
@@ -76,6 +82,7 @@ export const postsSlice = createSlice({
             state.pageSize = 1;
             state.pageCount = 1;
             state.posts = [];
+            state.location = '';
             state.selectedPostId = null;
             state.selectedPost = null;
             state.loading = false;
@@ -84,7 +91,8 @@ export const postsSlice = createSlice({
             localStorage.setItem('categorySku', '');
             localStorage.setItem('subCategorySku', '');
             localStorage.setItem('searchText', '');
-            localStorage.getItem('orderBy', '');
+            localStorage.setItem('orderBy', '');
+            localStorage.setItem('location', '');
             localStorage.setItem('page', 1);
             localStorage.setItem('pageSize', 1);
             localStorage.setItem('pageCount', 1);
@@ -98,6 +106,7 @@ export const {
     setSubCategories,
     setSearchText, 
     setOrderBy, 
+    setLocation,
     setPage, 
     setPageSize, 
     setPageCount, 
@@ -110,12 +119,18 @@ export const {
 
 export const fetchPostsAsync = () => async (dispatch, getState) => {
     const state = getState();
+    
+    const parsedLocation = parseLocationString(state.posts.location);
+    const locationStr = (parsedLocation?.city??null ?? null) !== null ? parsedLocation.city + "|" + parsedLocation.region : "";
+
+
     const queryParams = {
         searchTerm: state.posts.searchText, 
         orderBy: state.posts.orderBy, 
+        location: locationStr?? '',
         page: state.posts.page 
     };
-    
+    console.log(queryParams);
     try {
         dispatch(setLoading(true));
         const posts = await GetPosts(queryParams);
@@ -210,6 +225,7 @@ export const selectSubCategorySku = (state) => state.posts.subCategorySku;
 export const selectSubCategories = (state) => state.posts.subCategories;
 export const selectSearchText = (state) => state.posts.searchText;
 export const selectOrderBy = (state) => state.posts.orderBy;
+export const selectLocation = (state) => state.posts.location;
 export const selectPage = (state) => state.posts.page;
 export const selectPageSize = (state) => state.posts.pageSize;
 export const selectPageCount = (state) => state.posts.pageCount;

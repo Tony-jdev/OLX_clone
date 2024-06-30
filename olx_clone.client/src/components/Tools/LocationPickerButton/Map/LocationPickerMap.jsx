@@ -32,7 +32,8 @@ const reverseGeocode = async (lat, lon) => {
 const LocationPickerMap = ({ onLocationSelect, location, unparseLocation, readOnly, allowMove, onClick}) => {
     const parsedLoc = parseLocationString(unparseLocation);
     const initialPosition = parsedLoc ? [parsedLoc.lat, parsedLoc.lng] : defaultPosition;
-    const [position, setPosition] = useState(location ?? initialPosition);
+    
+    const [position, setPosition] = useState(location===''|| location === null || typeof location === 'string' ? initialPosition : location ?? defaultPosition);
     const LocationMarker = () => {
             useMapEvents({
                 click: async (e) => {

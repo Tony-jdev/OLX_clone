@@ -19,7 +19,6 @@ import TutorialPanel from "@/components/Tools/TutorialPanel/TutorialPanel.jsx";
 import {useNavigate} from "react-router-dom";
 import {AddOutlinedIcon} from "@/assets/Icons/Icons.jsx";
 import Carusel from "@/components/Tools/CaruselM3/Carusel.jsx";
-import {useAuth} from "@/providers/AuthProvider.jsx";
 import Categories from "@/Helpers/mainCategoriesHelper.js";
 import {useAddPost} from "@/providers/AddPostModalProvider.jsx";
 function HomePage() {

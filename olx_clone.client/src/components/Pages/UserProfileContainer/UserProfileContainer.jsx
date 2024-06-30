@@ -15,6 +15,8 @@ import PagePointer from "@/components/Tools/PagePointer/PagePointer.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {logOut} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import MyPosts from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/MyPosts.jsx";
+import {selectMessage} from "@/Storage/Redux/Slices/userAuthSlice.js";
+import {setMessage} from "@/Storage/Redux/Slices/userAuthSlice.js";
 
 
 const profileItems = [
@@ -33,16 +35,21 @@ const UserProfile = () => {
     let { miniPage } = useParams();
     const way = ['user', miniPage ?? profileItems[0].label,];
     
+    
     const navigate = useNavigate();
     
     const dispatch = useDispatch();
+    const message = useSelector(selectMessage);
 
     const getMiniPageByLabel = (label) => {
         const item = profileItems.find(item => item.label === label);
         return item ? item.miniPage : null;
     };
 
-    const handleLogOut = () =>  dispatch(logOut());
+    const handleLogOut = () =>  {
+        dispatch(logOut());
+        dispatch(setMessage('Log out successs!'));
+    };
     
     return (
         <Container style={{maxWidth: 1440, paddingTop: '10px', paddingBottom: '10px'}}>

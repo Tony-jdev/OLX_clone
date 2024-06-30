@@ -18,11 +18,6 @@ const SellerInfo = ({ authorName, joinedDate, onlineTime, OpenChat }) => {
             <Box style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', maxWidth: '406px', maxHeight: '264px', height: '100%'}}>
                 <Box style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text type={'Headline'}>Про автора</Text>
-                    <Box display="flex">
-                        {[...Array(5)].map((_, index) => (
-                            <Icon key={index} icon={StarIcon} color={colors.text.orange} step={1} width={20} height={20} />
-                        ))}
-                    </Box>
                 </Box>
                 <Box>
                     <Text type={'Title'} mt={2}>{authorName?? "Artem"}</Text>

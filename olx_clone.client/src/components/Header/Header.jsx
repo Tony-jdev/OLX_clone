@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { FormattedMessage } from 'react-intl';
 import { AppBar, Toolbar, TextField, Box, InputAdornment, Grid, CardMedia, Container } from '@mui/material';
 import { AppBarStyle, ContainerStyle, ToolBarStyle, FirstGridStyle, BoxContainerStyle, LogoStyle, PropsFieldStyle, FieldStyle, FlexBoxStyle, AddButtonStyle, AddIconStyle, ProfileButtonStyle, BottomGridStyle, LastBoxStyle } from "@/components/Header/Styles.js";
@@ -11,7 +11,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeLocale, changeTheme, selectLocale, selectTheme} from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
 import LocationPickerButton from "@/components/Tools/LocationPickerButton/LocationPickerButton.jsx";
 import {useNavigate} from "react-router-dom";
-import {selectSearchText, setSearchText} from "@/Storage/Redux/Slices/postSlice.js";
+import {selectLocation, selectSearchText, setLocation, setSearchText} from "@/Storage/Redux/Slices/postSlice.js";
 import Categories from "@/Helpers/mainCategoriesHelper.js";
 import {isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
@@ -32,6 +32,9 @@ const Header = () => {
 
     const searchText = useSelector(selectSearchText) ?? '';
     const [text, setText] = useState(searchText ?? '');
+    
+    const location = useSelector(selectLocation)??null;
+    const [newLocation, setNewLocation] = useState(location); 
 
     const isUserLogined = useSelector(isUserLoggedIn);
     const [open, setOpen] = useState(false);
@@ -72,6 +75,10 @@ const Header = () => {
         }
         return color;
     }
+
+    useEffect(() => {
+        dispatch(setLocation(newLocation));
+    }, [newLocation]);
     
     return (
         <AppBar style={AppBarStyle} sx={{ backgroundColor: colors.background.primary }}>
@@ -119,7 +126,7 @@ const Header = () => {
                                 }} 
                             >
                             </TextField>
-                            <LocationPickerButton/>
+                            <LocationPickerButton location={location} setLocation={setNewLocation}/>
                         </Box>
                         <Box style={FlexBoxStyle}>
                             <SButton

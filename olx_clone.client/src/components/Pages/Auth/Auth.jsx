@@ -21,6 +21,8 @@ import {
 } from "@/Storage/Redux/Slices/userAuthSlice.js";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import {useAlert} from "@/providers/AlertsProvider.jsx";
+import Icon from "@/components/Tools/IconContainer/Icon.jsx";
+import {eVseIcon} from "@/assets/Icons/Icons.jsx";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -110,6 +112,7 @@ const AuthModal = ({ open, handleClose}) => {
     return (
         <Modal open={open} onClose={handleClose}>
             <Grid container sx={{...AuthModalContainer, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: colors.background.secondary, padding: '20px', borderRadius: '20px', boxShadow: colors.boxShadow}}>
+                <img src={'@/../public/EVSE.png'} style={{width: '225px', height: '89px', marginTop: '-120px', marginBottom: '40px' }}/>
                 <Box style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
                     <SButton
                         type='orangeRoundButton'
@@ -181,7 +184,7 @@ const AuthModal = ({ open, handleClose}) => {
                                 },
                             },
                         }}
-                        label={<Text type={'Body'} color={colors.text.secondary}><FormattedMessage id="auth.email" /></Text>}
+                        label={<Text type={'Body'} color={colors.text.orange}><FormattedMessage id="auth.email" /></Text>}
                         value={email}
                         onChange={(e) => dispatch(setEmail(e.target.value))}
                         error={!!errors.email}
@@ -189,7 +192,7 @@ const AuthModal = ({ open, handleClose}) => {
                         InputLabelProps={{ shrink: true }}
                     />
                     <TextField
-                        sx={{...FormField, 
+                        sx={{...FormField,
                             '& .MuiOutlinedInput-root': {
                                 background: colors.background.input,
                                 border: 'none',
@@ -210,7 +213,7 @@ const AuthModal = ({ open, handleClose}) => {
                                 },
                             },
                         }}
-                        label={<Text type={'Body'} color={colors.text.secondary}><FormattedMessage id="auth.password" /></Text>}
+                        label={<Text type={'Body'} color={colors.text.orange}><FormattedMessage id="auth.password" /></Text>}
                         type="password"
                         value={password}
                         onChange={(e) => dispatch(setPassword(e.target.value))}
