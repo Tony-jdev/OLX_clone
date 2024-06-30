@@ -56,10 +56,10 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id 
             </Box>
             <Box style={CardContentStyle}>
                <Box>
-                   <Text type={'Body'}>Віддамо котика на ім’я Борис Васильович </Text>
+                   <Text type={'Body'} sr={{textAlign: 'center', marginBottom: '30px'}}>{name}</Text>
                </Box>
                 <Box style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text type={'Title'} sr={{alignSelf: 'center'}}>500₴</Text>
+                    <Text type={'Title'} sr={{alignSelf: 'center'}}>{price}₴</Text>
                     <SButton
                         isIconButton={true}
                         icon={<Icon icon={LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}

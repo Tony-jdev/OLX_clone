@@ -9,7 +9,7 @@ import {useTheme} from "@mui/material/styles";
 import {CardContainer} from "@/components/Tools/SellerInfo/Styles.js";
 import {color} from "@mui/system";
 
-const SellerInfo = ({ authorName, joinedDate, onlineTime }) => {
+const SellerInfo = ({ authorName, joinedDate, onlineTime, OpenChat }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     
@@ -49,6 +49,7 @@ const SellerInfo = ({ authorName, joinedDate, onlineTime }) => {
                     hoverShadow={colors.types.shadows.boxShadowWarning}
                     sl={{background: colors.background.lightGradient}}
                     sr={{padding: '0px 16px 0px 16px', maxWidth: '406px', maxHeight: '48px', width: "100%", height: '100vh', borderRadius: '30px' }}
+                    action={OpenChat}
                 />
                 <SButton
                     type={'orangeRoundButton'}

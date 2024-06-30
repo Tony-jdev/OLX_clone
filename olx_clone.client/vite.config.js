@@ -34,6 +34,12 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 
 const databaseRoutes = {
+    '^/chathub': {
+        target: 'https://localhost:7051', 
+        changeOrigin: true,
+        secure: false,
+        ws: true
+    },
     '^/api/auth/register': {
         target,
         secure: false
@@ -58,19 +64,11 @@ const databaseRoutes = {
         target,
         secure: false
     },
-    '^/api/categories/{id}': {
-        target,
-        secure: false
-    },
     '^/api/chats': {
         target,
         secure: false
     },
-    '^/api/chats/{id}': {
-        target,
-        secure: false
-    },
-    '^/api/chats/user/{userId}': {
+    '^/api/chats/user': {
         target,
         secure: false
     },
@@ -82,15 +80,7 @@ const databaseRoutes = {
         target,
         secure: false
     },
-    '^/api/posts/{id}': {
-        target,
-        secure: false
-    },
     '^/api/posts/photo': {
-        target,
-        secure: false
-    },
-    '^/api/posts/photo/{id}': {
         target,
         secure: false
     },

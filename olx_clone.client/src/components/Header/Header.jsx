@@ -15,14 +15,17 @@ import {selectSearchText, setSearchText} from "@/Storage/Redux/Slices/postSlice.
 import Categories from "@/Helpers/mainCategoriesHelper.js";
 import {isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
-import AuthModal from "@/components/Pages/Auth/Auth.jsx";
+import {useAuth} from "@/providers/AuthProvider.jsx";
+import {useAddPost} from "@/providers/AddPostModalProvider.jsx";
 const Header = () => {
     const navigate = useNavigate();
 
     const mode = useSelector(selectTheme) ?? 'light';
     const locale = useSelector(selectLocale) ?? 'uk';
     const dispatch = useDispatch();
-    
+
+    const {openAuth} = useAuth();
+
     const theme = useTheme();
     const { colors } = theme.palette;
     const colorMode = useContext(ColorModeContext);
@@ -33,27 +36,8 @@ const Header = () => {
     const isUserLogined = useSelector(isUserLoggedIn);
     const [open, setOpen] = useState(false);
 
-    const [openAuth, setOpenAuth] = useState(false);
-
-    const handleClickOpenAuth = () => {
-        setOpenAuth(true);
-        console.log('opened!');
-    };
-
-    const handleCloseAuth = () => {
-        setOpenAuth(false);
-        console.log('closed!');
-    };
-
-    const handleOpen = () => {
-        if(isUserLogined)
-        setOpen(true);
-        else navigate('/auth');
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const { showAddPostModal } = useAddPost();
+    
     
     const toggleTheme = () => {
         const newTheme = mode === 'light' ? 'dark' : 'light';
@@ -148,9 +132,8 @@ const Header = () => {
                               sr={{width: '200px', height: '40px'}}
                               prew={<AddIcon style={AddIconStyle} sx={{ color: colors.text.primary }} />}
                               text={<FormattedMessage id="header.addButtonLabel"/>}
-                              action={handleOpen}
+                              action={showAddPostModal}
                             />
-                            <AddPostModal open={open} handleClose={handleClose}/>
 
                             <SButton isIconButton={true} 
                                      action={toggleTheme} 
@@ -162,7 +145,7 @@ const Header = () => {
                                 isIconButton={true}
                                 icon={ <ProfileIcon /> }
                                 sl={{...ProfileButtonStyle, color: colors.text.primary}}
-                                action={handleClickOpenAuth}
+                                action={()=>navigate('/user')}
                             />
                             
                             <SButton
@@ -178,7 +161,6 @@ const Header = () => {
                                 sl={{color: colors.text.primary }}
                             />
                         </Box>
-                        <AuthModal open={openAuth} handleClose={handleCloseAuth} />
                     </Grid>
                 </Toolbar>
                 <Toolbar style={ToolBarStyle}>

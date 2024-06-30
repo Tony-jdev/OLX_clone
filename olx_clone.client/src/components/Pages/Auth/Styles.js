@@ -88,7 +88,6 @@ export const FormContainer = {
 
 export const FormField = {
     margin: '10px 0',
-    width: '100%',
 };
 
 export const ToggleContainer = {
@@ -98,14 +97,11 @@ export const ToggleContainer = {
 };
 
 export const ActiveToggleOption = {
-    cursor: 'pointer',
     borderBottom: '2px solid',
-    paddingBottom: '5px',
 };
 
 export const InactiveToggleOption = {
     cursor: 'pointer',
-    paddingBottom: '5px',
 };
 
 export const SocialButton = {

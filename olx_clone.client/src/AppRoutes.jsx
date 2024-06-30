@@ -1,4 +1,5 @@
 import React from 'react';
+import ProtectedRoute from "@/Helpers/ProtectedRoute.jsx";
 const Home = React.lazy(() => import('./components/Pages/Home/Home'));
 const SearchPage = React.lazy(() => import('@/components/Pages/SearchPage/SearchPage.jsx'));
 const Product = React.lazy(() => import('@/components/Pages/Product/Product.jsx'));
@@ -25,7 +26,7 @@ const AppRoutes = [
     },
     {
         path: 'user/:miniPage?',
-        element: <UserProfileContainer/> 
+        element: <ProtectedRoute component={UserProfileContainer}/>
     },
 ];
 

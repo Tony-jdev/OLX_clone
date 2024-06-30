@@ -21,6 +21,7 @@ const getDesignTokens = (mode) => ({
                         secondary: '#fffcf8',
                         orange: '#ff9d00',
                         def: '#fffcf8',
+                        input: '#ffebcc',
                         lightGradient: 'linear-gradient(45deg, #ffc66b  30%, #ff9d00 90%)',
                         darkGradient: 'linear-gradient(45deg, #727171  30%, #313030 90%)',
                     },
@@ -55,6 +56,7 @@ const getDesignTokens = (mode) => ({
                         secondary: '#313030',
                         orange: '#ff9d00',
                         def: '#fffcf8',
+                        input: '#ffebcc',
                         lightGradient: 'linear-gradient(45deg, #ffc66b  30%, #ff9d00 90%)',
                         darkGradient: 'linear-gradient(45deg, #727171  30%, #313030 90%)',
                     },
@@ -84,19 +86,19 @@ const getDesignTokens = (mode) => ({
                     background: none !important;
                 }
                 input:-webkit-autofill {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.input} inset !important;
                   -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
-                  background-color: ${theme.palette.colors.background.secondary} !important;
+                  background-color: ${theme.palette.colors.background.input} !important;
                 }
                 input:-webkit-autofill:focus {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.input} inset !important;
                   -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
-                  background-color: ${theme.palette.colors.background.secondary} !important;
+                  background-color: ${theme.palette.colors.background.input} !important;
                 }
                 input:-webkit-autofill:hover {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.input} inset !important;
                   -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
-                  background-color: ${theme.palette.colors.background.secondary} !important;
+                  background-color: ${theme.palette.colors.background.input} !important;
                 }
             `,
         },

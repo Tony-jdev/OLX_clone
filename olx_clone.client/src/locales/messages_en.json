@@ -68,7 +68,7 @@
     "auth.invalidName": "Name must be at least 3 characters long.",
     "auth.invalidSurname": "Surname must be at least 3 characters long.",
     "auth.invalidEmail": "Invalid email address.",
-    "auth.invalidPassword": "Password must be at least 8 characters long, contain at least one uppercase letter and one number, without space.",
+    "auth.invalidPassword": "Password must be at least 8 characters long, contain at least one uppercase letter and one number and unique sign, without space.",
     "auth.nameRequired": "Name is required.",
     "auth.surnameRequired": "Surname is required.",
     "auth.registerButton": "Register",
@@ -97,5 +97,9 @@
     "profile.pets": "Pets",
     "profile.occupation": "Occupation",
     "profile.changePassword": "Change Password",
-    "profile.resetPassword": "Reset Password"
+    "profile.resetPassword": "Reset Password",
+    "auth.continueFacebook": "Continue with Facebook",
+    "auth.continueGoogle": "Continue with Google",
+    "auth.continueApple": "Continue with Apple",
+    "auth.forgotPassword": "Forgot Password?"
 }

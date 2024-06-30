@@ -68,7 +68,7 @@
     "auth.invalidName": "Ім'я має бути не менше 3 символів.",
     "auth.invalidSurname": "Прізвище має бути не менше 3 символів.",
     "auth.invalidEmail": "Недійсна електронна пошта.",
-    "auth.invalidPassword": "Пароль має бути не менше 8 символів, містити принаймні одну велику літеру та одну цифру без пробілів.",
+    "auth.invalidPassword": "Пароль має бути не менше 8 символів, містити принаймні одну велику літеру та одну цифру і унікальний символ без пробілів.",
     "auth.nameRequired": "Ім'я є обов'язковим.",
     "auth.surnameRequired": "Прізвище є обов'язковим.",
     "auth.registerButton": "Зареєструватися",
@@ -97,5 +97,10 @@
     "profile.pets": "Домашні тварини",
     "profile.occupation": "Рід діяльності",
     "profile.changePassword": "Змінити пароль",
-    "profile.resetPassword": "Відновити пароль"
+    "profile.resetPassword": "Відновити пароль",
+
+    "auth.continueFacebook": "Продовжити з Facebook",
+    "auth.continueGoogle": "Продовжити з Google",
+    "auth.continueApple": "Продовжити з Apple",
+    "auth.forgotPassword": "Забули пароль?"
 }

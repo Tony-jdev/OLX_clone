@@ -17,6 +17,7 @@ import {
 } from "@/Storage/Redux/Slices/postSlice.js";
 import Carousel from "@/components/Tools/Carousel/Carousel.jsx";
 import {useTheme} from "@mui/material/styles";
+import {useChat} from "@/providers/ChatProvider.jsx";
 
 const ProductPage = () => {
     const theme = useTheme();
@@ -31,6 +32,16 @@ const ProductPage = () => {
     const navigate = useNavigate();
 
     const [urls,setUrls] = useState([]);
+
+    const { openChat, fetchChats } = useChat();
+
+    React.useEffect(() => {
+        fetchChats();
+    }, [fetchChats]);
+
+    const handleOpenChat = () => {
+        openChat(1);
+    };
 
 
     useEffect(() => {
@@ -84,7 +95,7 @@ const ProductPage = () => {
                     {urls && <Carousel items={urls} isWide={false} isOnlyImg={true} width={'953px'} withoutNBtns={true} stopAutoplay={true}/>}
                 </Box>
                 <Box style={{maxWidth:'466px', width: '100%'}}>
-                    <SellerInfo seller={'product'} />
+                    <SellerInfo seller={'product'} OpenChat={handleOpenChat}/>
                     <LocationInfo location={post.location} />
                 </Box>
             </Grid>

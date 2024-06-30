@@ -9,8 +9,8 @@ export const RegUser = async (user) => {
             }
         });
         return response.data;
-    } catch (error) {
-        throw new Error('Failed to fetch');
+    } catch (e) {
+        throw e;
     }
 };
 
@@ -22,7 +22,9 @@ export const LogUser = async (user) => {
             }
         });
         return response.data;
-    } catch (error) {
-        throw new Error('Failed to fetch');
+    } catch (e) {
+        const errorMessage = e.response.data.Message;
+        console.log(errorMessage);
+        throw Error(errorMessage);
     }
 };

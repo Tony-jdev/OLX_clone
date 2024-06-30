@@ -12,6 +12,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import getDesignTokens from "@/design/paletteToken.jsx";
 import OrangeProgress from "@/components/Tools/CentralProgress/OrangeProgress.jsx";
+import {ChatProvider} from "@/providers/ChatProvider.jsx";
+import {AuthProvider} from "@/providers/AuthProvider.jsx";
+import {AddPostProvider} from "@/providers/AddPostModalProvider.jsx";
+import {AlertProvider} from "@/providers/AlertsProvider.jsx";
 
 
 const messages = {
@@ -40,13 +44,21 @@ const Layout = (props) => {
                 <CssBaseline />
                 <IntlProvider locale={locale} messages={messages[locale]} defoult>
                     <Suspense fallback={<OrangeProgress/>}>
-                    <Stack>
-                        <Header/>
-                        <div style={{minHeight: '62.5vh'}}>
-                            {props.children}
-                        </div>
-                        <Footer/>
-                    </Stack>
+                        <AlertProvider>
+                        <AuthProvider>
+                            <AddPostProvider>
+                                <ChatProvider>
+                                        <Stack>
+                                            <Header/>
+                                            <div style={{minHeight: '62.5vh'}}>
+                                                {props.children}
+                                            </div>
+                                            <Footer/>
+                                        </Stack>
+                                </ChatProvider>
+                            </AddPostProvider>
+                        </AuthProvider>
+                        </AlertProvider>
                     </Suspense>
                 </IntlProvider>
             </ThemeProvider>
