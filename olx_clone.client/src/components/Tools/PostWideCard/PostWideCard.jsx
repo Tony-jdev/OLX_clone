@@ -31,7 +31,7 @@ const PostWideCard = ({ ad, container }) => {
     const cardRef = useRef(null);
     
     const vip = ad.vip;
-    const isUsed = ad.type === 'Usd';
+    const isUsed = ad.type !== 'New';
 
     const [editModalOpen, setEditModalOpen] = useState(false);
     

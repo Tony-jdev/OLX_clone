@@ -18,6 +18,14 @@ import {
 import Carousel from "@/components/Tools/Carousel/Carousel.jsx";
 import {useTheme} from "@mui/material/styles";
 import {useChat} from "@/providers/ChatProvider.jsx";
+import {
+    selectCustomer,
+    selectPost,
+    selectSeller,
+    setCustomer, setPost,
+    setSeller
+} from "@/Storage/Redux/Slices/chatSlice.js";
+import {selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
 
 const ProductPage = () => {
     const theme = useTheme();
@@ -30,31 +38,55 @@ const ProductPage = () => {
     const loading = useSelector(selectLoading);
     const error = useSelector(selectError);
     const navigate = useNavigate();
+    
+    const user = useSelector(selectUser);
+    
+    const customer = useSelector(selectCustomer);
+    const seller = useSelector(selectSeller);
+    const postChat = useSelector(selectPost);
 
     const [urls,setUrls] = useState([]);
-
+    
     const { openChat, fetchChats } = useChat();
-
-    React.useEffect(() => {
+    
+    useEffect(() => {
         fetchChats();
     }, [fetchChats]);
 
-    const handleOpenChat = () => {
-        openChat(1);
-    };
-
-
     useEffect(() => {
         dispatch(setSelectedPostId(id));
-        dispatch(fetchPostByIdAsync(id));
+        const fetch = async ()=>{
+            await dispatch(fetchPostByIdAsync(id));
+        }
+        fetch();
         window.scrollTo(0, 0);
     }, [dispatch, id]);
+    
 
     useEffect(() => {
         if (post && post.photos) {
             setUrls(post.photos.map(photo => photo.photoUrl));
         }
     }, [post]);
+
+    useEffect(() => {
+
+        console.log(user);
+        console.log(post);//null
+        console.log(post?.user);//null
+
+        if(post)
+        {
+            dispatch(setCustomer(user));
+            dispatch(setSeller(post.user));
+            dispatch(setPost(post));
+        }
+        //setPost(post);
+    }, [post, user]);
+    
+    const handleOpenChat = () => {
+        openChat();
+    };
     
     if (post === null) {
         return <Container>

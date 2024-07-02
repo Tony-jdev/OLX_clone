@@ -33,7 +33,7 @@ const Header = () => {
     const searchText = useSelector(selectSearchText) ?? '';
     const [text, setText] = useState(searchText ?? '');
     
-    const location = useSelector(selectLocation)??null;
+    const location = useSelector(selectLocation);
     const [newLocation, setNewLocation] = useState(location); 
 
     const isUserLogined = useSelector(isUserLoggedIn);
@@ -54,8 +54,9 @@ const Header = () => {
     
     const searchThings = () => {
         dispatch(setSearchText(text));
-        navigate('./search');
+        navigate(`./search`, { state: { refresh: new Date().getTime() } });    
     }
+    
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             searchThings();
@@ -76,6 +77,11 @@ const Header = () => {
         return color;
     }
 
+    useEffect(() => {
+        console.log(location);
+        console.log(newLocation);
+    }, []);
+    
     useEffect(() => {
         dispatch(setLocation(newLocation));
     }, [newLocation]);

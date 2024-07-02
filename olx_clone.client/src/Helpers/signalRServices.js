@@ -1,54 +1,54 @@
-import * as signalR from "@microsoft/signalr";
-import baseUrl from "@/Helpers/baseUrlHelper.js";
+import { useState, useEffect } from 'react';
+import * as signalR from '@microsoft/signalr';
 
-let connection = null;
+export const useSignalR = (chatId) => {
+    const [connection, setConnection] = useState(null);
+    const [messages, setMessages] = useState([]);
 
-export const startConnection = async () => {
-    connection = new signalR.HubConnectionBuilder()
-        .withUrl(baseUrl+"/hub")
-        .withAutomaticReconnect()
-        .build();
+    useEffect(() => {
+        console.log('signalR');
+        const connectToHub = async () => {
+            const newConnection = new signalR.HubConnectionBuilder()
+                .withUrl('https://localhost:5173/chathub', { transport: signalR.HttpTransportType.WebSockets })
+                .withAutomaticReconnect()
+                .build();
 
-    try {
-        await connection.start();
-        console.log("SignalR Connected.");
-    } catch (err) {
-        console.log("Error while establishing connection: ", err);
-        setTimeout(() => startConnection(), 5000);
-    }
-};
+            setConnection(newConnection);
 
-export const joinChatGroup = async (chatId) => {
-    if (connection.state === signalR.HubConnectionState.Connected) {
-        try {
-            await connection.invoke("JoinChatGroup", chatId);
-            console.log(`Joined chat group: ${chatId}`);
-        } catch (err) {
-            console.error("Error joining chat group: ", err);
+            try {
+                await newConnection.start()
+                    .then(() => {
+                        console.log('Connected!');
+                    })
+                    .catch((e) => console.log('Connection failed: ', e));
+
+                newConnection.on('ReceiveMessage', (message) => {
+                    setMessages((prevMessages) => [...prevMessages, message]);
+                });
+
+                await newConnection.invoke('JoinChatGroup', chatId)
+                    .then(() => console.log('Joined group'))
+                    .catch((e) => console.log('Failed to join group', e));
+                
+            } catch (e) {
+                console.log('Connection failed: ', e);
+            }
+        };
+
+        if (chatId) {
+            connectToHub();
         }
-    } else {
-        console.error("Connection is not established. Cannot join chat group.");
-    }
-};
 
-export const sendMessage = async (messageDto) => {
-    if (connection.state === signalR.HubConnectionState.Connected) {
-        try {
-            await connection.invoke("SendMessage", messageDto);
-            console.log("Message sent:", messageDto);
-        } catch (err) {
-            console.error("Error sending message: ", err);
-        }
-    } else {
-        console.error("Connection is not established. Cannot send message.");
-    }
-};
+        return () => {
+            if (connection) {
+                connection.stop();
+            }
+        };
+    }, [chatId]);
 
-export const onReceiveMessage = (callback) => {
-    if (connection) {
-        connection.on("ReceiveMessage", (message) => {
-            console.log("Message received:", message);
-            callback(message);
-        });
-    }
+    return {
+        connection,
+        messages,
+        setMessages,
+    };
 };

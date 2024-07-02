@@ -8,8 +8,9 @@ import {
     setSelectedChatId,
     setMessage
 } from '@/Storage/Redux/Slices/chatSlice.js';
-import ChatComponent from '@/components/Tools/ChatComponent/Chat.jsx'; 
-import { Box, Dialog } from '@mui/material';
+import ChatComponent from '@/components/Tools/ChatComponent/ChatСontainer.jsx'; 
+import {Box, Dialog, Modal} from '@mui/material';
+import {fetchUserDataAsync, selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
 
 const ChatContext = createContext();
 
@@ -20,11 +21,10 @@ export const ChatProvider = ({ children }) => {
     const chats = useSelector(selectChats);
     const selectedChat = useSelector(selectSelectedChat);
     const [isOpen, setIsOpen] = useState(false);
-
-    const openChat = (chatId) => {
+    const [post, setPost] = useState(null);
+    
+    const openChat = () => {
         setIsOpen(true);
-        dispatch(setSelectedChatId(chatId));
-        dispatch(fetchChatByIdAsync(chatId));
     };
 
     const closeChat = () => {
@@ -35,15 +35,44 @@ export const ChatProvider = ({ children }) => {
     const fetchChats = () => {
         //dispatch(fetchChatsAsync());
     };
-
+    
+    
+    
     return (
-        <ChatContext.Provider value={{ openChat, closeChat, fetchChats, chats, selectedChat }}>
+        <ChatContext.Provider value={{ openChat, closeChat, fetchChats, isOpen, chats, selectedChat, setPost }}>
             {children}
-            <Dialog open={isOpen} onClose={closeChat} fullWidth maxWidth="md">
-                <Box p={2}>
-                    <ChatComponent chatId={1} />
+            <Modal
+                open={isOpen}
+                onClose={closeChat}
+                aria-labelledby="chat-modal-title"
+                aria-describedby="chat-modal-description"
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                }}
+            >
+                <Box
+                    sx={{
+                        width: '100%',
+                        maxWidth: '400px',
+                        height: '100%',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        overflow: 'auto',
+                        borderRadius: '30px 0px 0px 30px',
+                        transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
+                        transition: 'transform 1s ease-in-out',
+                        position: 'absolute',
+                        top: 0,
+                        right: 0,
+                    }}
+                >
+                    {isOpen && (
+                        <ChatComponent prod={post} open={isOpen} onClose={closeChat} />
+                    )}
                 </Box>
-            </Dialog>
+            </Modal>
         </ChatContext.Provider>
     );
 };

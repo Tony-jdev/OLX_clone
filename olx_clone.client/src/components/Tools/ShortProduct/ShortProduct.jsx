@@ -23,7 +23,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id 
     const dispatch = useDispatch();
     const selectedId = useSelector(selectSelectedPostId);
     const isVip = vip ?? false;
-    const isUsed = type === 'Usd';
+    const isUsed = type !== 'New';
     
     return (
         <Box

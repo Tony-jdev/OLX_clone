@@ -7,17 +7,18 @@ import TopFilters from "@/components/Tools/TopFilters/TopFilters.jsx";
 import SideFilters from "@/components/Tools/SideFilters/SideFilters.jsx";
 import SubCategoryList from "@/components/Tools/SubCategoryList/SubCategoryList.jsx";
 import {ContainerStyle} from "@/components/Pages/SearchPage/Styles.js";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchPostsAsync, fetchPostsByCategoryAsync, selectCategorySku,
     selectError,
-    selectLoading, selectOrderBy, selectPage, selectPageCount, selectPageSize,
+    selectLoading, selectLocation, selectOrderBy, selectPage, selectPageCount, selectPageSize,
     selectPosts,
     selectSearchText, selectSubCategorySku, setCategorySku, setPage, setSubCategorySku
 } from "@/Storage/Redux/Slices/postSlice.js";
 
 function SearchPage() {
+    const navigate = useNavigate();
     let { category, subCategory } = useParams();
     const way = ['search', category ?? null, subCategory ?? null];
 
@@ -33,6 +34,7 @@ function SearchPage() {
     const searchText = useSelector(selectSearchText);
     const posts = useSelector(selectPosts);
     const orderBy = useSelector(selectOrderBy);
+    const location = useSelector(selectLocation);
     const page = useSelector(selectPage);
     const pageSize = useSelector(selectPageSize);
     const pageCount = useSelector(selectPageCount);
@@ -56,7 +58,7 @@ function SearchPage() {
             dispatch(fetchPostsAsync());
         }
         window.scrollTo(0, 0);
-    }, [dispatch, orderBy, page, category, subCategory, searchText]);
+    }, [dispatch, orderBy, page, category, subCategory, searchText, location]);
     
     useEffect(  () => {
         setCount(parseInt(Math.ceil(pageCount / pageSize)));

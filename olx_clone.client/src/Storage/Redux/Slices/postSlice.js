@@ -9,12 +9,12 @@ const initialState = {
     subCategories: [],
     searchText: localStorage.getItem('searchText') ?? "",
     orderBy: localStorage.getItem('orderBy') ?? "def",
-    location: localStorage.getItem('location') ?? '',
+    location: localStorage.getItem('location') ?? null,
     page: parseInt(localStorage.getItem('page')) ?? 1,
     pageSize : parseInt(localStorage.getItem('pageSize')) ?? 1,
     pageCount : parseInt(localStorage.getItem('pageCount')) ?? 1,
     posts: [],
-    selectedPostId: null,
+    selectedPostId: 0,
     selectedPost: null,
     loading: false,
     error: null,
@@ -73,6 +73,10 @@ export const postsSlice = createSlice({
             state.error = action.payload;
         },
         clearData: (state) => {
+            state.selectedPostId = null;
+            state.selectedPost = null;
+        },
+        clearData: (state) => {
             state.categorySku = "";
             state.subcategorySku = "";
             state.subCategories = [];
@@ -82,7 +86,7 @@ export const postsSlice = createSlice({
             state.pageSize = 1;
             state.pageCount = 1;
             state.posts = [];
-            state.location = '';
+            state.location = null;
             state.selectedPostId = null;
             state.selectedPost = null;
             state.loading = false;
@@ -92,7 +96,7 @@ export const postsSlice = createSlice({
             localStorage.setItem('subCategorySku', '');
             localStorage.setItem('searchText', '');
             localStorage.setItem('orderBy', '');
-            localStorage.setItem('location', '');
+            localStorage.setItem('location', null);
             localStorage.setItem('page', 1);
             localStorage.setItem('pageSize', 1);
             localStorage.setItem('pageCount', 1);
@@ -119,17 +123,24 @@ export const {
 
 export const fetchPostsAsync = () => async (dispatch, getState) => {
     const state = getState();
-    
+    console.log(state.posts.location);
+
     const parsedLocation = parseLocationString(state.posts.location);
-    const locationStr = (parsedLocation?.city??null ?? null) !== null ? parsedLocation.city + "|" + parsedLocation.region : "";
+    console.log(parsedLocation);
+
+    const city = parsedLocation?.city ?? 'empty';
+    const region = parsedLocation?.region === undefined ? "empty" : parsedLocation.region;
+
+    const locationStr = region === "empty" ? "" : (city === "empty" ? "" : city +"|")+region;
 
 
     const queryParams = {
         searchTerm: state.posts.searchText, 
         orderBy: state.posts.orderBy, 
-        location: locationStr?? '',
+        location: locationStr ?? '',
         page: state.posts.page 
     };
+    console.log(locationStr);
     console.log(queryParams);
     try {
         dispatch(setLoading(true));
