@@ -10,6 +10,7 @@ import IndicatorBox from "@/components/Tools/IndicatorBox/IndicatorBox.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useTheme} from "@mui/material/styles";
 import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
+import {useNavigate} from "react-router-dom";
 
 
 //ad:{
@@ -26,6 +27,9 @@ import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
 const PostWideCard = ({ ad, container }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
+
+    const navigate = useNavigate();
+
     const [opacity, setOpacity] = useState(1);
     const [scale, setScale] = useState(1);
     const cardRef = useRef(null);
@@ -117,7 +121,7 @@ const PostWideCard = ({ ad, container }) => {
                             hoverColor={colors.types.warning}
                             hoverBack={colors.background.secondary}
                             hoverShadow={colors.types.shadows.boxShadowWarning}
-                            action={handleEdit}
+                            action={()=>navigate('/create/'+ad.sku)}
                         />
                         <SButton
                             prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
@@ -148,7 +152,6 @@ const PostWideCard = ({ ad, container }) => {
                     </Box>
                 </Grid>
             </Box>
-            <AddPostModal open={editModalOpen} handleClose={handleCloseEditModal} post={ad} edit={true}/>
         </Box>
     );
 };

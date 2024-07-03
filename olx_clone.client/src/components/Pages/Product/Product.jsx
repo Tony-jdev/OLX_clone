@@ -26,6 +26,8 @@ import {
     setSeller
 } from "@/Storage/Redux/Slices/chatSlice.js";
 import {selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {addRecentView} from "@/Helpers/recentViewsHelper.js";
+import {GetPostById} from "@/Api/postApi.js";
 
 const ProductPage = () => {
     const theme = useTheme();
@@ -72,8 +74,10 @@ const ProductPage = () => {
     useEffect(() => {
 
         console.log(user);
-        console.log(post);//null
-        console.log(post?.user);//null
+        console.log(post);
+        console.log(post?.user);
+        
+        //addRecentView(post.sku);
 
         if(post)
         {
@@ -81,7 +85,6 @@ const ProductPage = () => {
             dispatch(setSeller(post.user));
             dispatch(setPost(post));
         }
-        //setPost(post);
     }, [post, user]);
     
     const handleOpenChat = () => {

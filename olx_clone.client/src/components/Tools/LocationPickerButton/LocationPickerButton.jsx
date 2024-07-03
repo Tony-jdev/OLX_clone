@@ -5,6 +5,7 @@ import SButton from '@/components/Tools/Button/SButton';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import LocationPickerMap from './Map/LocationPickerMap.jsx';
 import { useTheme } from "@mui/material/styles";
+import { formatLocationText, parseLocationToString } from "@/Helpers/locationHelper.js";
 
 const modalStyle = {
     position: 'absolute',
@@ -14,20 +15,21 @@ const modalStyle = {
     width: '80%',
     height: '80%',
     boxShadow: 24,
-    paddingBottom: 5,
+    paddingBottom: 7,
     borderRadius: 2
 };
 
-const LocationPickerButton = ({ Color, setLocation, location }) => {
+const LocationPickerButton = ({ Color, setLocation, location, withoutDefoult }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const [selectedLocation, setSelectedLocation] = useState(location ?? null);
+    const [locationText, setLocationText] = useState('');
     const [isMapVisible, setIsMapVisible] = useState(false);
 
     const handleLocationSelection = (location) => {
         setSelectedLocation(location);
         if (setLocation) {
-            setLocation(location === null ? null : location.city + "|" + (location.city === "Київ" ? "Київська область" : location.region) + "|" + location.lat + "|" + location.lng);
+            setLocation(location === null ? null : location);
         }
         setIsMapVisible(false);
     };
@@ -35,19 +37,18 @@ const LocationPickerButton = ({ Color, setLocation, location }) => {
     const handleLocationSelectionDef = (location) => {
         setSelectedLocation(location);
         if (setLocation) {
-            setLocation(location === null ? null : location.city + "|" + (location.city === "Київ" ? "Київська область" : location.region) + "|" + location.lat + "|" + location.lng);
+            setLocation(location === null ? null : location);
         }
     };
-    
+
     const toggleMapVisibility = () => {
         setIsMapVisible(!isMapVisible);
     };
 
     useEffect(() => {
-        console.log(selectedLocation !== null);
-        console.log(selectedLocation !== 'null');
-        console.log(selectedLocation);
-    }, [selectedLocation]);
+        setSelectedLocation(location);
+        setLocationText(formatLocationText(location));
+    }, [location]);
 
     return (
         <>
@@ -55,11 +56,7 @@ const LocationPickerButton = ({ Color, setLocation, location }) => {
                 type='transparentButton'
                 textType={'Body'}
                 Color={Color ?? colors.text.primary}
-                text={
-                    selectedLocation && selectedLocation !== 'null' && selectedLocation.region
-                        ? `${selectedLocation?.city !== 'empty' ? selectedLocation?.city ?? "" +"," : ""} \n${selectedLocation.city === "Київ" ? "Київська область" : selectedLocation.region ?? 'empty'}`
-                        : <FormattedMessage id="header.locationLabel" />
-                }
+                text={ locationText || <FormattedMessage id="header.locationLabel" />}
                 prew={<LocationIcon />}
                 prewColor={colors.background.orange}
                 action={toggleMapVisibility}
@@ -77,7 +74,7 @@ const LocationPickerButton = ({ Color, setLocation, location }) => {
                         readOnly={false}
                         allowMove={true}
                         isCloseBtn={true}
-                        isSetDefBtn={true}
+                        isSetDefBtn={!(withoutDefoult ?? true)}
                         isSetOnlyRegion={true}
                         onClose={toggleMapVisibility}
                         setDef={handleLocationSelectionDef}

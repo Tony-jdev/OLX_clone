@@ -6,7 +6,7 @@ import axios from 'axios';
 import ukraineGeoJSON from './custom.geo.json'; 
 import FullscreenMapModal from "@/components/Tools/LocationPickerButton/Map/FullscreenMapModal.jsx";
 import {Box, colors, FormControlLabel, Grid, Switch} from "@mui/material";
-import {parseLocationString} from "@/Helpers/locationHelper.js";
+import {parseLocationString, validateLocation} from "@/Helpers/locationHelper.js";
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useTheme} from "@mui/material/styles";
 
@@ -38,9 +38,10 @@ const LocationPickerMap = ({ onLocationSelect, location, unparseLocation, readOn
     const parsedLoc = parseLocationString(unparseLocation);
     const initialPosition = parsedLoc ? [parsedLoc.lat, parsedLoc.lng] : defaultPosition;
     
-    const [position, setPosition] = useState(location===''|| location === null || typeof location === 'string' ? initialPosition : location ?? defaultPosition);
+    const [position, setPosition] = useState(validateLocation(location) ?  location : initialPosition ?? defaultPosition);
 
     const [onlyRegion, setOnlyRegion] = useState(false);
+    
     
     const LocationMarker = () => {
             useMapEvents({
@@ -63,10 +64,10 @@ const LocationPickerMap = ({ onLocationSelect, location, unparseLocation, readOn
                         try {
                             const locationData = await reverseGeocode(newPosition[0], newPosition[1]);
                             const selectedLocation = {
-                                lat: newPosition[0],
-                                lng: newPosition[1],
                                 city: onlyRegion ? 'empty' : (locationData.address.city || locationData.address.town || locationData.address.village),
                                 region: locationData.address.state,
+                                lat: newPosition[0],
+                                lng: newPosition[1],
                             };
                             onLocationSelect(selectedLocation);
                         } catch (error) {
@@ -127,9 +128,9 @@ const LocationPickerMap = ({ onLocationSelect, location, unparseLocation, readOn
                 <GeoJSON data={ukraineGeoJSON} />
                 {readOnly ? <LocationCircle/> : <LocationMarker />}
             </MapContainer>
-            <Grid container direction={'row'} sx={{padding: '3px'}}>
+            <Grid container direction={'row'} sx={{margin: 1}}>
                 {   
-                    isSetDefBtn &&
+                    isSetDefBtn && 
                     <SButton
                         text={'set Defoult'}
                         textType={'Body'}

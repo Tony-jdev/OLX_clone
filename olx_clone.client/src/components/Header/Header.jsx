@@ -145,7 +145,7 @@ const Header = () => {
                               sr={{width: '200px', height: '40px'}}
                               prew={<AddIcon style={AddIconStyle} sx={{ color: colors.text.primary }} />}
                               text={<FormattedMessage id="header.addButtonLabel"/>}
-                              action={showAddPostModal}
+                              action={()=>navigate('/create')}
                             />
 
                             <SButton isIconButton={true} 

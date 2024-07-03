@@ -82,6 +82,8 @@ export const EditPost = async (id, post) => {
         formData.append('Files', file);
     });
 
+    console.log(post);
+    
     try {
         const response = await axios.put(`${baseUrl}/api/posts/${id}`, formData, {
             headers: {

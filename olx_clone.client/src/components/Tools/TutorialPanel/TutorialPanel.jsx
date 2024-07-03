@@ -15,12 +15,15 @@ import {useTheme} from "@mui/material/styles";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import {useAuth} from "@/providers/AuthProvider.jsx";
 import {useAddPost} from "@/providers/AddPostModalProvider.jsx";
+import {useNavigate} from "react-router-dom";
 
 
 
 const TutorialPanel = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
+    
+    const navigate = useNavigate();
 
     const { showAddPostModal } = useAddPost();
     
@@ -56,7 +59,7 @@ const TutorialPanel = () => {
                          sl={{background: colors.background.darkGradient}}
                          sr={{padding: '15px', borderRadius: '30px 2px 30px 2px'}}
                          borderInVisible={true} 
-                         action={showAddPostModal}
+                         action={()=>navigate('/create')}
                 />
                 <Text type={'Title'} sr={{marginLeft: 20}}><FormattedMessage id="tutorialPanel.addAdNowAndGetWhatYouWant" /></Text>
             </Grid>

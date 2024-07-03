@@ -17,13 +17,16 @@ import {logOut} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import MyPosts from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/MyPosts.jsx";
 import {selectMessage} from "@/Storage/Redux/Slices/userAuthSlice.js";
 import {setMessage} from "@/Storage/Redux/Slices/userAuthSlice.js";
+import MyRecentViews from "@/components/Pages/UserProfileContainer/MiniPages/MyRecentViews/MyRecentViews.jsx";
+import MyFavourites from "@/components/Pages/UserProfileContainer/MiniPages/MyFavourites/MyFavourites.jsx";
+import MyMessages from "@/components/Pages/UserProfileContainer/MiniPages/MyMessages/MyMessages.jsx";
 
 
 const profileItems = [
     { id: 'profile.ads', label: 'Ads', type: 'sideBarBtnStyle', icon: <MyPostsIcon/>, miniPage: <MyPosts/> },
-    { id: 'profile.favorites', label: 'Favorites', type: 'sideBarBtnStyle', icon: <LikedIcon/>, miniPage: <></>},
-    { id: 'profile.messages', label: 'Messages', type: 'sideBarBtnStyle', icon: <MyMessagesIcon/>, miniPage: <></>},
-    { id: 'profile.viewedProducts', label: 'ViewedProducts', type: 'sideBarBtnStyle', icon: <HistoryViewsIcon/>, miniPage: <></>},
+    { id: 'profile.favorites', label: 'Favorites', type: 'sideBarBtnStyle', icon: <LikedIcon/>, miniPage: <MyFavourites/> },
+    { id: 'profile.messages', label: 'Messages', type: 'sideBarBtnStyle', icon: <MyMessagesIcon/>, miniPage: <MyMessages/>},
+    { id: 'profile.viewedProducts', label: 'ViewedProducts', type: 'sideBarBtnStyle', icon: <HistoryViewsIcon/>, miniPage: <MyRecentViews/>},
     { id: 'profile.settings', label: 'Settings', type: 'sideBarBtnStyle', icon: <SettingsIcon/>, miniPage: <UserInfo/> },
     { id: 'profile.logout', label: 'LogOut', type: 'carouselButton'},
 ];
@@ -49,6 +52,7 @@ const UserProfile = () => {
     const handleLogOut = () =>  {
         dispatch(logOut());
         dispatch(setMessage('Log out successs!'));
+        navigate('/');
     };
     
     return (

@@ -72,9 +72,10 @@ function HomePage() {
                 textType={'Title'}
                 text={<FormattedMessage id='btn.add' /> }
                 Color={colors.text.input}
+                hoverBack={colors.background.def}
                 prew={<AddOutlinedIcon sx={{marginRight: '5px'}}/>}
                 sl={{background: colors.background.def}}
-                action={showAddPostModal}
+                action={()=>navigate('/create')}
             />,
             imageUrl: "@/../public/Ads/Ads0.png"
         },

@@ -50,10 +50,10 @@ const LocationCard = ({ location }) => {
                             />
                             <Grid>
                                 <Text type={'Title'} color={colors.text.revers} >
-                                    {parsedLoc?.city ?? 'null'}
+                                    {(parsedLoc?.city ==='empty' ? "" : parsedLoc?.city) ?? 'null'}
                                 </Text>
                                 <Text type={'Title'} color={colors.text.revers} >
-                                    {parsedLoc?.region ?? 'null'}
+                                    {parsedLoc?.region ?? 'empty'}
                                 </Text>
                             </Grid>
                         </Box>

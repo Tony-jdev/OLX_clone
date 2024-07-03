@@ -1,18 +1,40 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Grid, Typography} from '@mui/material';
 import ShortProduct from '../ShortProduct/ShortProduct.jsx';
 import ContainerHeader from "@/components/Tools/ContainerHeader/ContainerHeader.jsx";
 import {GridStyle} from "@/components/Tools/ProductList/Styles.js";
 import NoDataFound from "@/components/NoDataFound/NoDataFound.jsx";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchUserDataAsync, selectToken, selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {selectError, selectLoading} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import OrangeProgress from "@/components/Tools/CentralProgress/OrangeProgress.jsx";
 
 
-const ProductList = ({loading, error, posts, headerText, headerBtn, isShort}) => {
+const ProductList = ({loading, error, posts, headerText, headerBtn, isShort, userId}) => {
+
+    const dispatch = useDispatch();
+    const user = useSelector(selectUser);
+    const token = useSelector(selectToken);
+
+    useEffect(() => {
+        if (token) {
+            dispatch(fetchUserDataAsync());
+        }
+    }, [token]);
+
+    if (!user) {
+        return <OrangeProgress/>;
+    }
+
+    const mainInfo = {
+        Id: user.userId,
+    }
     
     if (loading) {
         return <div>Loading...</div>;
     }
 
-    if (error) {
+    if (error ) {
         return <div>Error: {error}</div>;
     }
     
@@ -31,6 +53,8 @@ const ProductList = ({loading, error, posts, headerText, headerBtn, isShort}) =>
                             vip={product.isTop}
                             type={product.type}
                             city={product.city}
+                            userId={mainInfo.Id??""} 
+                            intId={product.id}
                         />
                     </Grid>
                 )) :  <NoDataFound/>}

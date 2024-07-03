@@ -1,20 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Box,
-    Modal,
-    TextField,
-    Radio,
-    RadioGroup,
-    FormControlLabel,
-    FormControl,
-    FormLabel,
-    Grid,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Button
+    Box, Modal, TextField, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Text from '@/components/Tools/TextContainer/Text.jsx';
@@ -191,10 +177,10 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
                                 label={<Text type="Body" text="Назва" />}
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                fullWidth
                                 margin="normal"
                                 error={!!errors.title}
                                 helperText={errors.title}
+                                fullWidth
                                 inputProps={{ maxLength: 500 }}
                             />
                             <Text type="Label" text={`${title?.length ?? '0'} / 500 символів`} color={colors.text.secondary} sx={{ position: 'absolute', bottom: '-20px', right: '10px' }} />

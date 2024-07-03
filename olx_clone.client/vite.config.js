@@ -80,6 +80,14 @@ const databaseRoutes = {
         target,
         secure: false
     },
+    '^/api/favorites': {
+        target,
+        secure: false
+    },
+    '^/api/favorites/user': {
+        target,
+        secure: false
+    },
     '^/api/posts/photo': {
         target,
         secure: false
