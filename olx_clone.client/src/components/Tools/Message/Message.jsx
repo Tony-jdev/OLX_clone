@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import Text from "@/components/Tools/TextContainer/Text.jsx";
 
 const Message = ({ message, isUserMessage }) => {
     const theme = useTheme();
@@ -19,11 +20,10 @@ const Message = ({ message, isUserMessage }) => {
                     maxWidth: '70%',
                     padding: '10px',
                     borderRadius: isUserMessage ? '10px 10px 0 10px' : '10px 10px 10px 0',
-                    backgroundColor: isUserMessage ? colors.background.primary : colors.background.secondary,
-                    color: isUserMessage ? colors.text.primary : colors.text.secondary,
+                    backgroundColor: isUserMessage ? colors.background.orange : colors.background.secondary,
                 }}
             >
-                <Typography variant="body1">{message.text}</Typography>
+                <Text type={'body'} color={isUserMessage ? colors.text.primary : colors.text.secondary}>{message.text}</Text>
             </Box>
         </Box>
     );

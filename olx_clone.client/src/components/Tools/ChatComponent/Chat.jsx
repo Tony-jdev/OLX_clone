@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, TextField, List, Box, Typography, IconButton, Avatar } from '@mui/material';
+import { TextField, Box, Typography, IconButton, Avatar } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { createChat, getChatById } from "@/Api/chatApi.js";
 import { useTheme } from '@mui/material/styles';
@@ -12,8 +12,10 @@ import {
     setSelectedChatId
 } from "@/Storage/Redux/Slices/chatSlice.js";
 import { useChat } from "@/providers/ChatProvider.jsx";
+import SButton from "@/components/Tools/Button/SButton.jsx";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
 
-const Chat = ({ post, sender, receiver, user }) => {
+const Chat = ({ post, sender, receiver }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const [message, setMessage] = useState('');
@@ -55,7 +57,7 @@ const Chat = ({ post, sender, receiver, user }) => {
         };
 
         updateData();
-    }, [post, sender]);
+    }, [post, sender, dispatch]);
 
     useEffect(() => {
         if (chatId) {
@@ -82,9 +84,7 @@ const Chat = ({ post, sender, receiver, user }) => {
 
     useEffect(() => {
         const handleReceiveMessage = (message) => {
-            setMessages((messages) => {
-                return messages;
-            });
+            //setMessages((messages) => [...messages, message]);
             scrollToBottom();
         };
 
@@ -152,9 +152,9 @@ const Chat = ({ post, sender, receiver, user }) => {
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                backgroundColor: colors.background.default,
-                borderRadius: '10px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                backgroundColor: colors.background.secondary,
+                borderRadius: '10px 10px 0 0',
+                boxShadow: colors.types.shadows.boxShadowDefault,
             }}
         >
             <Box
@@ -163,17 +163,18 @@ const Chat = ({ post, sender, receiver, user }) => {
                     alignItems: 'center',
                     backgroundColor: colors.background.primary,
                     color: colors.text.primary,
+                    boxShadow: colors.boxShadow,
                     padding: '16px',
-                    borderRadius: '10px 10px 0 0',
+                    borderRadius: '10px 0px 0 0',
                     position: 'sticky',
                     top: 0,
                     zIndex: 1,
                 }}
             >
-                <Avatar alt={user.name} src={user.avatar} sx={{ marginRight: '16px' }} />
+                <Avatar alt={receiver.name} src={receiver.avatar} sx={{ marginRight: '16px' }} />
                 <Box>
-                    <Typography variant="h6">{user.name}</Typography>
-                    <Typography variant="body2">Спеціаліст клієнтської служби</Typography>
+                    <Text type={'Title'} color={colors.text.primary}>{receiver.name}</Text>
+                    <Text type={'Body'} color={colors.text.secondary}>Продавець</Text>
                 </Box>
             </Box>
             <Box
@@ -181,12 +182,16 @@ const Chat = ({ post, sender, receiver, user }) => {
                     flexGrow: 1,
                     overflowY: 'auto',
                     padding: '16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backgroundColor: colors.background.secondary,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: messages.length > 0 ? 'flex-start' : 'center',
+                    height: 'calc(100vh - 170px)', // Adjust this value based on the height of the header and input
                     '&::-webkit-scrollbar': {
                         width: '10px',
                     },
                     '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: colors.background.primary,
+                        backgroundColor: colors.background.orange,
                         borderRadius: '10px',
                     },
                     '&::-webkit-scrollbar-track': {
@@ -195,7 +200,7 @@ const Chat = ({ post, sender, receiver, user }) => {
                 }}
             >
                 {messages && messages.map((msg, index) => (
-                    <Message key={index} message={msg} isUserMessage={msg.senderId !== user.id} />
+                    <Message key={index} message={msg} isUserMessage={msg.senderId !== sender.id} />
                 ))}
                 <div ref={messagesEndRef} />
             </Box>
@@ -205,11 +210,8 @@ const Chat = ({ post, sender, receiver, user }) => {
                     alignItems: 'center',
                     padding: '16px',
                     borderTop: `1px solid ${colors.divider}`,
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backgroundColor: colors.background.secondary,
                     borderRadius: '0 0 10px 10px',
-                    position: 'sticky',
-                    bottom: 0,
-                    zIndex: 1,
                 }}
             >
                 <TextField
@@ -220,16 +222,18 @@ const Chat = ({ post, sender, receiver, user }) => {
                     variant="outlined"
                     sx={{
                         marginRight: '8px',
-                        backgroundColor: colors.background.paper,
+                        backgroundColor: colors.background.secondary,
                         borderRadius: '10px',
                         '& .MuiOutlinedInput-root': {
                             borderRadius: '10px',
                         },
                     }}
                 />
-                <IconButton color="primary" onClick={sendMessage}>
-                    <SendIcon />
-                </IconButton>
+                <SButton
+                    isIconButton={true}
+                    icon={<SendIcon sx={{color: colors.text.orange}}/>}
+                    action={sendMessage}
+                />
             </Box>
         </Box>
     );

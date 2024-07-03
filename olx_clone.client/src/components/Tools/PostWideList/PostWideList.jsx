@@ -4,13 +4,14 @@ import {Box} from "@mui/material";
 import {scrollableBox} from "@/components/Tools/PostWideList/Styles.js";
 import PostWideCard from "@/components/Tools/PostWideCard/PostWideCard.jsx";
 import NoDataFound from "@/components/NoDataFound/NoDataFound.jsx";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
 
 const PostWideList = ({ads}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
 
     const containerRef = useRef(null);
-
+    
     const slowScroll = (event) => {
         event.preventDefault();
         const step = 80; 
@@ -28,23 +29,32 @@ const PostWideList = ({ads}) => {
     };
 
     useEffect(() => {
-        const container = containerRef.current;
-        container.addEventListener('wheel', slowScroll);
+        if(!(ads === null || ads.length < 1))
+        {
+            const container = containerRef.current;
+            container.addEventListener('wheel', slowScroll);
 
-        return () => {
-            container.removeEventListener('wheel', slowScroll);
-        };
+            return () => {
+                container.removeEventListener('wheel', slowScroll);
+            };
+        }
     }, []);
 
-    return (
-        <Box ref={containerRef} style={{...scrollableBox, scrollbarColor: `${colors.text.orange} ${colors.background.secondary}`,
-            maxWidth: 975, maxHeight: 640, height: '100vh', width: '100vw',
-        }} >
-            {ads ? ads.map(ad => (
-                <PostWideCard key={ad.id} ad={ad} container={containerRef} />
-            )) : <NoDataFound/>}
-        </Box>
-    );
+    
+    return !(ads === null || ads.length < 1) ? (
+        <>
+            <Box ref={containerRef} style={{...scrollableBox, scrollbarColor: `${colors.text.orange} ${colors.background.secondary}`,
+                maxWidth: 975, maxHeight: 640, height: '100vh', width: '100vw',
+            }} >
+                {ads ? ads.map(ad => (
+                    <PostWideCard key={ad.id} ad={ad} container={containerRef} />
+                )) : <NoDataFound/>}
+            </Box>
+            <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>
+                Всього оголошень: {ads ? ads.length : 0}
+            </Text>
+        </>
+    ) : <NoDataFound/>
 };
 
 export default PostWideList;

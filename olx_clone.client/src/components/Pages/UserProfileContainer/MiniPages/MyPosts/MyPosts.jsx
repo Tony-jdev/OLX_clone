@@ -52,9 +52,6 @@ const MyPosts = () => {
                 {selectedTab === 0 && <PostWideList ads={activeAds} />}
                 {selectedTab === 1 && <PostWideList ads={inactiveAds} />}
             </Box>
-            <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>
-                Всього оголошень: {ads ? ads.length : 0}
-            </Text>
         </Box>
     );
 };

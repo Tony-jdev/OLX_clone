@@ -4,7 +4,7 @@ import { selectPost, selectCustomer, selectSeller } from '@/Storage/Redux/Slices
 import Chat from "@/components/Tools/ChatComponent/Chat.jsx";
 import {fetchUserDataAsync} from "@/Storage/Redux/Slices/userInfoSlice.js";
 
-const ChatContainer = ({ prod, open, onClose }) => {
+const ChatContainer = ({open, onClose }) => {
     const dispatch = useDispatch();
     const post = useSelector(selectPost);
     const sender = useSelector(selectCustomer);
@@ -27,7 +27,7 @@ const ChatContainer = ({ prod, open, onClose }) => {
 
     return (
         <div>
-            <Chat post={post} sender={sender} receiver={receiver} open={open} onClose={onClose} user={{id: "Id", name: 'User', avatar: 'non'}} isSeller={true}/>
+            <Chat post={post} sender={sender} receiver={receiver} open={open} onClose={onClose} isSeller={true}/>
         </div>
     );
 }
