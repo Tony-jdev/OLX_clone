@@ -124,8 +124,9 @@ export const {
 export const fetchPostsAsync = () => async (dispatch, getState) => {
     const state = getState();
     console.log(state.posts.location);
-
-    const parsedLocation = parseLocationString(state.posts.location);
+    
+    //const parsedLocation = parseLocationString(state.posts.location);
+    const parsedLocation = state.posts.location;
     console.log(parsedLocation);
 
     const city = parsedLocation?.city ?? 'empty';
