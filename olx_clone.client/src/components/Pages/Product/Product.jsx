@@ -25,11 +25,12 @@ import {
     setCustomer, setPost,
     setSeller
 } from "@/Storage/Redux/Slices/chatSlice.js";
-import {selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {isUserLoggedIn, selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import {addRecentView} from "@/Helpers/recentViewsHelper.js";
 import {GetPostById} from "@/Api/postApi.js";
 import {fetchUserById} from "@/Api/userApi.js";
 import ProductList from "@/components/Tools/ProductList/ProductList.jsx";
+import {useAuth} from "@/providers/AuthProvider.jsx";
 
 const ProductPage = () => {
     const theme = useTheme();
@@ -44,7 +45,9 @@ const ProductPage = () => {
     const navigate = useNavigate();
     
     const user = useSelector(selectUser);
-    
+    const isUserLogined = useSelector(isUserLoggedIn);
+    const {openAuth} = useAuth();
+
     const customer = useSelector(selectCustomer);
     const seller = useSelector(selectSeller);
     const postChat = useSelector(selectPost);
@@ -108,7 +111,9 @@ const ProductPage = () => {
     }, [open]);
     
     const handleOpenChat = () => {
+        if(isUserLogined)
         openChat();
+        else openAuth();
     };
     
     if (post === null) {

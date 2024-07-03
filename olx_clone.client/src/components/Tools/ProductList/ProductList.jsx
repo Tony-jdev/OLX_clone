@@ -12,24 +12,6 @@ import OrangeProgress from "@/components/Tools/CentralProgress/OrangeProgress.js
 
 const ProductList = ({loading, error, posts, headerText, headerBtn, isShort, userId}) => {
 
-    const dispatch = useDispatch();
-    const user = useSelector(selectUser);
-    const token = useSelector(selectToken);
-
-    useEffect(() => {
-        if (token) {
-            dispatch(fetchUserDataAsync());
-        }
-    }, [token]);
-
-    if (!user) {
-        return <OrangeProgress/>;
-    }
-
-    const mainInfo = {
-        Id: user.userId,
-    }
-    
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -53,7 +35,6 @@ const ProductList = ({loading, error, posts, headerText, headerBtn, isShort, use
                             vip={product.isTop}
                             type={product.type}
                             city={product.city}
-                            userId={mainInfo.Id??""} 
                             intId={product.id}
                         />
                     </Grid>

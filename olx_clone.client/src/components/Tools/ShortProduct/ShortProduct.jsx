@@ -17,7 +17,7 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 import {addFavorite} from "@/Api/favouritesApi.js";
 
-const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id, intId, userId }) => {
+const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id, intId }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const navigate = useNavigate();
@@ -66,19 +66,19 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
                         icon={<Icon icon={LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
                         action={(e)=>{ 
                             e.stopPropagation(); 
-                            if(userId!=="") {
-                                console.log('clicked');
-                                const adFavourite = async ()=>{
-                                    const favoriteData = {
-                                        postId: intId,
-                                        applicationUserId: userId
-                                    };
-                                    console.log(favoriteData);
-                                    const res = await addFavorite(favoriteData);
-                                    console.log(res);
-                                }
-                                adFavourite();
-                            }
+                            //if(userId!=="") {
+                            //    console.log('clicked');
+                            //    const adFavourite = async ()=>{
+                            //        const favoriteData = {
+                            //            postId: intId,
+                            //            applicationUserId: userId
+                            //        };
+                            //        console.log(favoriteData);
+                            //        const res = await addFavorite(favoriteData);
+                            //        console.log(res);
+                            //    }
+                            //    adFavourite();
+                            //}
                         }}
                     />
                 </Box>
