@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductInfo from "@/components/Tools/ProductInfo/ProductInfo.jsx";
 import SellerInfo from "@/components/Tools/SellerInfo/SellerInfo.jsx";
@@ -28,6 +28,8 @@ import {
 import {selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import {addRecentView} from "@/Helpers/recentViewsHelper.js";
 import {GetPostById} from "@/Api/postApi.js";
+import {fetchUserById} from "@/Api/userApi.js";
+import ProductList from "@/components/Tools/ProductList/ProductList.jsx";
 
 const ProductPage = () => {
     const theme = useTheme();
@@ -48,7 +50,12 @@ const ProductPage = () => {
     const postChat = useSelector(selectPost);
 
     const [urls,setUrls] = useState([]);
-    
+    const [sellerPosts,setSellerPosts] = useState([]);
+
+    const productListRef = useRef(null);
+    const [open,setOpen] = useState(false);
+
+
     const { openChat, fetchChats } = useChat();
     
     useEffect(() => {
@@ -77,6 +84,13 @@ const ProductPage = () => {
         console.log(post);
         console.log(post?.user);
         
+        const fetchPosts = async () => {
+            const seller = await fetchUserById(post?.user.id);
+            console.log(seller);
+            setSellerPosts(seller.data.posts);
+        }
+        fetchPosts();
+        
         //addRecentView(post.sku);
 
         if(post)
@@ -86,6 +100,12 @@ const ProductPage = () => {
             dispatch(setPost(post));
         }
     }, [post, user]);
+
+    useEffect(() => {
+        if (open && productListRef.current) {
+            productListRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [open]);
     
     const handleOpenChat = () => {
         openChat();
@@ -130,11 +150,14 @@ const ProductPage = () => {
                     {urls && <Carousel items={urls} isWide={false} isOnlyImg={true} width={'953px'} withoutNBtns={true} stopAutoplay={true}/>}
                 </Box>
                 <Box style={{maxWidth:'466px', width: '100%'}}>
-                    <SellerInfo seller={'product'} OpenChat={handleOpenChat}/>
+                    <SellerInfo seller={seller} OpenChat={handleOpenChat} onShowSellerProds={()=>{setOpen(true);}}/>
                     <LocationInfo location={post.location} />
                 </Box>
             </Grid>
             <ProductInfo post={post}/>
+            {open && sellerPosts && sellerPosts.length > 0 && (<div ref={productListRef}>
+                <ProductList posts={sellerPosts} headerText={"Всі оголошення продавця"}/>
+            </div>)}
         </Container>
     );
 };

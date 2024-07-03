@@ -7,6 +7,7 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 import {LikedIcon, LikeIcon} from "@/assets/Icons/Icons.jsx";
+import {formatDateString} from "@/Helpers/DateHelper.js";
 
 const ProductInfo = ({post, liked=false}) => {
     const theme = useTheme();
@@ -15,7 +16,7 @@ const ProductInfo = ({post, liked=false}) => {
     const title = post.title;
     const description = post.description;
     const price = post.price;
-    const createdAt = post.createdAt;
+    const createdAt = formatDateString(post.createdAt);
     const type = post.type;
     const viewsCount = post.viewsCount;
     
@@ -34,7 +35,7 @@ const ProductInfo = ({post, liked=false}) => {
                         {price??'non'}₴
                     </Text>
                 </Box>
-                <Text>Кропивницький, 20 червня 2024 р</Text>
+                <Text>{createdAt}</Text>
             </Box>
             
             <Box>
@@ -46,8 +47,8 @@ const ProductInfo = ({post, liked=false}) => {
                     />
                 </Box>
                <Box>
-                   <Text>
-                       Відкрита бронь на плюшевих кошенят!!! Народилися 02.06, мама - шотландочка, тато-золота шиншила (клубний). 2 дівчинки-висловухі, 2 хлопчики- прямовухі. У кошенят широкі лапки, міцний каркас, густа шерсть, кругленькі мордочки.
+                   <Text type={'Body'}>
+                       {description}
                    </Text>
                </Box>
                 <Box>

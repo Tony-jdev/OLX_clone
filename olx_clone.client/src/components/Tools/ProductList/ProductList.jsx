@@ -40,7 +40,7 @@ const ProductList = ({loading, error, posts, headerText, headerBtn, isShort, use
     
     return (
         <Grid container>
-            {headerBtn != null && headerText != null && <ContainerHeader text={headerText} btn={headerBtn}/>}
+            {( headerBtn != null || headerText != null ) && <ContainerHeader text={headerText} btn={headerBtn}/>}
             <Grid container style={GridStyle} spacing={2.5} direction='row'>
                 {posts && posts.length > 0 ? posts.map(product => (
                     <Grid item key={product.id} style={{width: 'fit-content'}}>
