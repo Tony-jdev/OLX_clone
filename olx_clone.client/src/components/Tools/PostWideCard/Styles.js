@@ -5,7 +5,7 @@ export const CardContainer = {
     boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
     marginBottom: '9px',
     marginTop: '9px',
-    maxWidth: 950,
+    maxWidth: 1000,
     maxHeight: 200,
     width: '100%',
     height: '100vh',
@@ -22,7 +22,7 @@ export const ContentContainer = {
     marginTop: 15,
     marginBottom: 15,
     paddingRight: 20,
-    maxWidth: 693, 
+    maxWidth: 800, 
     maxHeight: 170, 
     width: '100%'
 };
@@ -41,7 +41,7 @@ export const TitleStyle = {
 export const ActionButtonsContainer = {
     display: 'flex',
     alignItems: 'center',
-    maxWidth: '500px',
+    maxWidth: '680px',
     width: '100%',
     justifyContent: 'space-between',
     marginTop: '10px',

@@ -1,45 +1,43 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Avatar, Box, Button, Grid, Typography } from '@mui/material';
-import { Delete, Edit, Favorite, Share, Visibility } from '@mui/icons-material';
-import { ActionButtonsContainer, AvatarStyle, CardContainer, ContentContainer, PriceStyle, 
-    StatIconMarginLeft, StatIconStyle, StatsContainer, TextContainer,
+import { Avatar, Box, Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { Delete, Edit, Visibility } from '@mui/icons-material';
+import {
+    ActionButtonsContainer,
+    AvatarStyle,
+    CardContainer,
+    ContentContainer,
+    PriceStyle,
+    StatIconStyle,
+    StatsContainer,
+    TextContainer,
 } from "@/components/Tools/PostWideCard/Styles.js";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
-import {IndicatorGridStyle} from "@/components/Tools/ShortProduct/Styles.js";
+import { IndicatorGridStyle } from "@/components/Tools/ShortProduct/Styles.js";
 import IndicatorBox from "@/components/Tools/IndicatorBox/IndicatorBox.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
-import {useTheme} from "@mui/material/styles";
-import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
-import {useNavigate} from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import { updatePostStatus, DeletePost } from "@/Api/postApi.js";
+import { useSelector } from "react-redux";
+import { selectToken } from "@/Storage/Redux/Slices/userInfoSlice.js";
 
-
-//ad:{
-//    "id": 0,
-//    "title": "string",
-//    "sku": "string",
-//    "price": 0,
-//    "location": "string",
-//    "type": "string",
-//    "isTop": true,
-//    "photoUrl": "string"
-//}
-
-const PostWideCard = ({ ad, container }) => {
+const PostWideCard = ({ ad, container, onPostUpdate }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
 
     const navigate = useNavigate();
 
+    const token = useSelector(selectToken);
+
     const [opacity, setOpacity] = useState(1);
     const [scale, setScale] = useState(1);
     const cardRef = useRef(null);
-    
+
     const vip = ad.vip;
     const isUsed = ad.type !== 'New';
 
-    const [editModalOpen, setEditModalOpen] = useState(false);
-    
-    
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [sellConfirmOpen, setSellConfirmOpen] = useState(false);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -71,15 +69,46 @@ const PostWideCard = ({ ad, container }) => {
         };
     }, [container]);
 
-
-    const handleEdit = () => {
-        setEditModalOpen(true);
+    const handleDeactivate = async () => {
+        try {
+            await updatePostStatus(ad.id, 1); // 'Inactive' represents deactivated status
+            onPostUpdate(); // Refresh posts
+        } catch (error) {
+            console.error('Failed to deactivate post:', error);
+        }
     };
 
-    const handleCloseEditModal = () => {
-        setEditModalOpen(false);
+    const handleActivate = async () => {
+        try {
+            await updatePostStatus(ad.id, 0); // 'Active' represents activated status
+            onPostUpdate(); // Refresh posts
+        } catch (error) {
+            console.error('Failed to activate post:', error);
+        }
     };
-    
+
+    const handleDelete = async () => {
+        try {
+            await DeletePost(ad.id, token);
+            onPostUpdate(); // Refresh posts
+        } catch (error) {
+            console.error('Failed to delete post:', error);
+        } finally {
+            setDeleteConfirmOpen(false);
+        }
+    };
+
+    const handleSell = async () => {
+        try {
+            await updatePostStatus(ad.id, 2); // 'Sold' represents sold status
+            onPostUpdate(); // Refresh posts
+        } catch (error) {
+            console.error('Failed to mark as sold:', error);
+        } finally {
+            setSellConfirmOpen(false);
+        }
+    };
+
     return (
         <Box
             ref={cardRef}
@@ -107,51 +136,155 @@ const PostWideCard = ({ ad, container }) => {
                 </Box>
                 <Grid container alignItems='flex-end' justifyContent='space-between' style={{ maxHeight: 70, height: '100%' }}>
                     <Box style={StatsContainer}>
-                        <Visibility style={StatIconStyle} />{ad.views}
+                        <Visibility style={StatIconStyle} />{ad.viewsCount ?? 0}
                     </Box>
-                    <Box style={ActionButtonsContainer}>
-                        <SButton
-                            prew={<Edit sx={{ marginRight: '5px', height: '16px', }} />}
-                            textType={'Body'}
-                            Color={colors.text.primary}
-                            text={"Редагувати"}
-                            borderInVisible={true}
-                            sl={{ background: colors.types.warning}}
-                            sr={{ width: '160px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
-                            hoverColor={colors.types.warning}
-                            hoverBack={colors.background.secondary}
-                            hoverShadow={colors.types.shadows.boxShadowWarning}
-                            action={()=>navigate('/create/'+ad.sku)}
-                        />
-                        <SButton
-                            prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
-                            textType={'Body'}
-                            text={"Деактивувати"}
-                            borderInVisible={true}
-                            Color={colors.text.primary}
-                            sl={{ background: colors.types.error}}
-                            sr={{ width: '160px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
-                            hoverColor={colors.types.error}
-                            hoverBack={colors.background.secondary}
-                            hoverShadow={colors.types.shadows.boxShadowError}
-                            action={() => { }}
-                        />
-                        <SButton
-                            prew={<Visibility sx={{ marginRight: '5px', height: '16px' }} />}
-                            textType={'Body'}
-                            text={"Рекламувати"}
-                            Color={colors.text.primary}
-                            borderInVisible={true}
-                            sl={{ background: colors.types.default }}
-                            sr={{ width: '160px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
-                            hoverColor={colors.types.default}
-                            hoverBack={colors.background.secondary}
-                            hoverShadow={colors.types.shadows.boxShadowDefault}
-                            action={() => { }}
-                        />
-                    </Box>
+                    {ad.status !== 'Sold' && (
+                        <Box style={ActionButtonsContainer}>
+                            {ad.status === 'Active' ? (
+                                <>
+                                    <SButton
+                                        prew={<Edit sx={{ marginRight: '5px', height: '16px', }} />}
+                                        textType={'Body'}
+                                        Color={colors.text.primary}
+                                        text={"Редагувати"}
+                                        borderInVisible={true}
+                                        sl={{ background: colors.types.warning }}
+                                        sr={{ width: '150px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
+                                        hoverColor={colors.types.warning}
+                                        hoverBack={colors.background.secondary}
+                                        hoverShadow={colors.types.shadows.boxShadowWarning}
+                                        action={() => navigate("/create/" + ad.sku)}
+                                    />
+                                    <SButton
+                                        prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
+                                        textType={'Body'}
+                                        text={"Деактивувати"}
+                                        borderInVisible={true}
+                                        Color={colors.text.primary}
+                                        sl={{ background: colors.types.error }}
+                                        sr={{ width: '150px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
+                                        hoverColor={colors.types.error}
+                                        hoverBack={colors.background.secondary}
+                                        hoverShadow={colors.types.shadows.boxShadowError}
+                                        action={handleDeactivate}
+                                    />
+                                    <SButton
+                                        prew={<Visibility sx={{ marginRight: '5px', height: '16px' }} />}
+                                        textType={'Body'}
+                                        text={"Рекламувати"}
+                                        Color={colors.text.primary}
+                                        borderInVisible={true}
+                                        sl={{ background: colors.types.default }}
+                                        sr={{ width: '150px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
+                                        hoverColor={colors.types.default}
+                                        hoverBack={colors.background.secondary}
+                                        hoverShadow={colors.types.shadows.boxShadowDefault}
+                                        action={() => { }}
+                                    />
+                                    <SButton
+                                        textType={'Body'}
+                                        text={"Продано"}
+                                        Color={colors.text.primary}
+                                        borderInVisible={true}
+                                        sl={{ background: colors.types.success }}
+                                        sr={{ width: '150px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
+                                        hoverColor={colors.types.success}
+                                        hoverBack={colors.background.secondary}
+                                        hoverShadow={colors.types.shadows.boxShadowSuccess}
+                                        action={() => setSellConfirmOpen(true)}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <SButton
+                                        prew={<Edit sx={{ marginRight: '5px', height: '16px', }} />}
+                                        textType={'Body'}
+                                        Color={colors.text.primary}
+                                        text={"Редагувати"}
+                                        borderInVisible={true}
+                                        sl={{ background: colors.types.warning }}
+                                        sr={{ width: '160px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
+                                        hoverColor={colors.types.warning}
+                                        hoverBack={colors.background.secondary}
+                                        hoverShadow={colors.types.shadows.boxShadowWarning}
+                                        action={() => navigate("/create/" + ad.sku)}
+                                    />
+                                    <SButton
+                                        prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
+                                        textType={'Body'}
+                                        text={"Видалити"}
+                                        borderInVisible={true}
+                                        Color={colors.text.primary}
+                                        sl={{ background: colors.types.error }}
+                                        sr={{ width: '160px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
+                                        hoverColor={colors.types.error}
+                                        hoverBack={colors.background.secondary}
+                                        hoverShadow={colors.types.shadows.boxShadowError}
+                                        action={() => setDeleteConfirmOpen(true)}
+                                    />
+                                    <SButton
+                                        prew={<Visibility sx={{ marginRight: '5px', height: '16px' }} />}
+                                        textType={'Body'}
+                                        text={"Активувати"}
+                                        Color={colors.text.primary}
+                                        borderInVisible={true}
+                                        sl={{ background: colors.types.default }}
+                                        sr={{ width: '160px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
+                                        hoverColor={colors.types.default}
+                                        hoverBack={colors.background.secondary}
+                                        hoverShadow={colors.types.shadows.boxShadowDefault}
+                                        action={handleActivate}
+                                    />
+                                </>
+                            )}
+                        </Box>
+                    )}
                 </Grid>
             </Box>
+
+            <Dialog
+                open={deleteConfirmOpen}
+                onClose={() => setDeleteConfirmOpen(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Are you sure you want to delete this post?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteConfirmOpen(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleDelete} color="primary" autoFocus>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={sellConfirmOpen}
+                onClose={() => setSellConfirmOpen(false)}
+                aria-labelledby="alert-sell-title"
+                aria-describedby="alert-sell-description"
+            >
+                <DialogTitle id="alert-sell-title">{"Confirm Sale"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-sell-description">
+                        Are you sure you want to mark this post as sold? Confirm only if the product has been sold and you have received payment.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setSellConfirmOpen(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSell} color="primary" autoFocus>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };

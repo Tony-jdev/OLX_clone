@@ -25,11 +25,16 @@ const MyPosts = () => {
     }, [dispatch]);
 
     const activeAds = ads.filter(ad => ad.status === 'Active');
-    const inactiveAds = ads.filter(ad => ad.status !== 'Active');
+    const inactiveAds = ads.filter(ad => ad.status === 'Inactive');
+    const soldAds = ads.filter(ad => ad.status === 'Sold');
+
+    const refreshPosts = () => {
+        dispatch(fetchUserPostsAsync());
+    };
 
     return (
         <Box style={{
-            maxWidth: 980, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
+            maxWidth: 1030, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
             borderRadius: '10px',
             boxShadow: colors.boxShadow,
             background: colors.background.secondary
@@ -47,10 +52,12 @@ const MyPosts = () => {
             >
                 <Tab label={<Text type={'Body'}>Активні</Text>} />
                 <Tab label={<Text type={'Body'}>Неактивні</Text>} />
+                <Tab label={<Text type={'Body'}>Продані</Text>} />
             </Tabs>
             <Box sx={{ marginTop: '20px' }}>
-                {selectedTab === 0 && <PostWideList ads={activeAds} />}
-                {selectedTab === 1 && <PostWideList ads={inactiveAds} />}
+                {selectedTab === 0 && <PostWideList ads={activeAds} onPostUpdate={refreshPosts} />}
+                {selectedTab === 1 && <PostWideList ads={inactiveAds} onPostUpdate={refreshPosts} />}
+                {selectedTab === 2 && <PostWideList ads={soldAds} onPostUpdate={refreshPosts} />}
             </Box>
         </Box>
     );

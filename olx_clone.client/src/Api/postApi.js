@@ -108,12 +108,32 @@ export const DeletePostPhoto = async (photoId, token) => {
         throw new Error('Failed to delete photo');
     }
 };
-export const DeletePost = async (id) => {
+export const DeletePost = async (id, token) => {
     try {
-        const response = await axios.delete(`${baseUrl}/api/posts/${id}`);
+        const response = await axios.delete(`${baseUrl}/api/posts/${id}`, {
+            headers: {
+                'Authorization': "Bearer " + token
+            },
+        });
         return response.data;
     } catch (error) {
         throw new Error('Failed to delete post');
     }
 };
 
+export const updatePostStatus = async (postId, newStatus) => {
+    try {
+        const response = await axios.patch(`${baseUrl}/api/posts/${postId}/status`, {
+            newStatus: newStatus
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to update post status:', error);
+        throw error;
+    }
+};
