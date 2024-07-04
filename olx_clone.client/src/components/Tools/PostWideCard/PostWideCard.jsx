@@ -134,11 +134,11 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
             <Box style={{ ...ContentContainer }}>
                 <Box style={TextContainer}>
                     <Box>
-                        <Text type="Headline" text={ad.title} />
+                        <Text type="Title" text={ad.title} />
                         <Text type="Body" text={ad.category} />
                         <Text type="Body" text={ad.date} />
                     </Box>
-                    <Text type="Headline" style={{ ...PriceStyle }} text={`${ad.price} ₴`} />
+                    <Text type="Title" style={{ ...PriceStyle }} sr={{textWrap: 'nowrap'}} text={`${ad.price} ₴`} />
                 </Box>
                 <Grid container alignItems='flex-end' justifyContent='space-between' style={{ maxHeight: 70, height: '100%' }}>
                     <Box style={StatsContainer}>

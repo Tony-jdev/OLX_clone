@@ -34,7 +34,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
                 boxShadow: colors.boxShadow,
                 transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
                 maxWidth: 272,
-                maxHeight: 430,
+                maxHeight: '450px',
                 width: '100%',
                 height: '100vh',
             }}
@@ -55,9 +55,11 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
                 </Grid>
                 <Box component="img" sx={CardImgStyle} src={photo} alt={name} />
             </Box>
-            <Box style={CardContentStyle}>
+            <Box style={{...CardContentStyle, display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
                <Box>
-                   <Text type={'Body'} sr={{textAlign: 'start', marginBottom: '30px'}}>{name}</Text>
+                   <Text type={'Body'} sr={{textAlign: 'start', marginBottom: '30px', textWrap: 'nowrap', whiteSpace: 'nowrap',
+                       overflow: 'hidden',
+                       textOverflow: 'ellipsis',}}>{name}</Text>
                </Box>
                 <Box style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text type={'Title'} sr={{alignSelf: 'center'}}>{price}₴</Text>

@@ -93,9 +93,9 @@ const UserProfile = () => {
     const handleUpdate = async (field, value) => {
         const updatedUser = {
             id: user.userId,
-            name: field === 'name' ? value : user.name,
-            surname: field === 'surname' ? value : user.surname,
-            phoneNumber: field === 'phone' ? value : user.phoneNumber,
+            name: field === 'name' ? value : user.name ?? "Noname",
+            surname: field === 'surname' ? value : user.surname ?? 'Noname',
+            phoneNumber: field === 'phone' ? value : user.phoneNumber ?? "",
             address: user.address ?? '',
         };
          console.log(user);

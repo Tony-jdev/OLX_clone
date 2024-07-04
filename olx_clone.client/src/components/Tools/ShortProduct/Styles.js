@@ -11,7 +11,7 @@ export const CardImgStyle={
 }
 export const CardContentStyle={
     width: '100%', 
-    height: 'auto', 
+    height: 'auto',
     padding: 20, 
     paddingTop: 0
 }

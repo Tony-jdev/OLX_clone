@@ -134,12 +134,12 @@ const CreatePostPage = () => {
     const handleSubmit = async () => {
         const newErrors = {};
 
-        if (title.length < 3 || title.length > 500) {
-            newErrors.title = 'Назва повинна містити від 3 до 500 символів.';
+        if (title.length < 3 || title.length > 75) {
+            newErrors.title = 'Назва повинна містити від 3 до 75 символів.';
         }
 
-        if (description.length < 3 || description.length > 500) {
-            newErrors.description = 'Опис повинен містити від 3 до 500 символів.';
+        if (description.length < 3 || description.length > 1250) {
+            newErrors.description = 'Опис повинен містити від 3 до 1250 символів.';
         }
 
         if (images.length === 0) {
