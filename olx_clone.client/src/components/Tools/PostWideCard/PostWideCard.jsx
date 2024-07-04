@@ -98,7 +98,8 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
         }
     };
 
-    const handleSell = async () => {
+    const handleSell = async (e) => {
+        e.stopPropagation();
         try {
             await updatePostStatus(ad.id, 2); // 'Sold' represents sold status
             onPostUpdate(); // Refresh posts
@@ -107,6 +108,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
         } finally {
             setSellConfirmOpen(false);
         }
+    };
+
+    const handleCardClick = () => {
+        navigate(`/post/${ad.sku}`);
     };
 
     return (
@@ -119,6 +124,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                 transition: 'opacity 0.05s, transform 0.125s',
                 boxShadow: colors.boxShadow,
             }}
+            onClick={handleCardClick}
         >
             <Avatar src={ad.photoUrl} variant="rounded" style={AvatarStyle} />
             <Grid container style={IndicatorGridStyle}>
@@ -139,7 +145,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                         <Visibility style={StatIconStyle} />{ad.viewsCount ?? 0}
                     </Box>
                     {ad.status !== 'Sold' && (
-                        <Box style={ActionButtonsContainer}>
+                        <Box style={ActionButtonsContainer} onClick={(e) => e.stopPropagation()}>
                             {ad.status === 'Active' ? (
                                 <>
                                     <SButton
@@ -153,7 +159,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         hoverColor={colors.types.warning}
                                         hoverBack={colors.background.secondary}
                                         hoverShadow={colors.types.shadows.boxShadowWarning}
-                                        action={() => navigate("/create/" + ad.sku)}
+                                        action={(e) => {
+                                            e.stopPropagation();
+                                            navigate("/create/" + ad.sku);
+                                        }}
                                     />
                                     <SButton
                                         prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
@@ -166,7 +175,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         hoverColor={colors.types.error}
                                         hoverBack={colors.background.secondary}
                                         hoverShadow={colors.types.shadows.boxShadowError}
-                                        action={handleDeactivate}
+                                        action={(e) => {
+                                            e.stopPropagation();
+                                            handleDeactivate();
+                                        }}
                                     />
                                     <SButton
                                         prew={<Visibility sx={{ marginRight: '5px', height: '16px' }} />}
@@ -179,7 +191,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         hoverColor={colors.types.default}
                                         hoverBack={colors.background.secondary}
                                         hoverShadow={colors.types.shadows.boxShadowDefault}
-                                        action={() => { }}
+                                        action={(e) => {
+                                            e.stopPropagation();
+                                            // Your advertise action here
+                                        }}
                                     />
                                     <SButton
                                         textType={'Body'}
@@ -191,7 +206,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         hoverColor={colors.types.success}
                                         hoverBack={colors.background.secondary}
                                         hoverShadow={colors.types.shadows.boxShadowSuccess}
-                                        action={() => setSellConfirmOpen(true)}
+                                        action={(e) => {
+                                            e.stopPropagation();
+                                            setSellConfirmOpen(true);
+                                        }}
                                     />
                                 </>
                             ) : (
@@ -207,7 +225,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         hoverColor={colors.types.warning}
                                         hoverBack={colors.background.secondary}
                                         hoverShadow={colors.types.shadows.boxShadowWarning}
-                                        action={() => navigate("/create/" + ad.sku)}
+                                        action={(e) => {
+                                            e.stopPropagation();
+                                            navigate("/create/" + ad.sku);
+                                        }}
                                     />
                                     <SButton
                                         prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
@@ -220,7 +241,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         hoverColor={colors.types.error}
                                         hoverBack={colors.background.secondary}
                                         hoverShadow={colors.types.shadows.boxShadowError}
-                                        action={() => setDeleteConfirmOpen(true)}
+                                        action={(e) => {
+                                            e.stopPropagation();
+                                            setDeleteConfirmOpen(true);
+                                        }}
                                     />
                                     <SButton
                                         prew={<Visibility sx={{ marginRight: '5px', height: '16px' }} />}
@@ -233,7 +257,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         hoverColor={colors.types.default}
                                         hoverBack={colors.background.secondary}
                                         hoverShadow={colors.types.shadows.boxShadowDefault}
-                                        action={handleActivate}
+                                        action={(e) => {
+                                            e.stopPropagation();
+                                            handleActivate();
+                                        }}
                                     />
                                 </>
                             )}

@@ -112,7 +112,12 @@ const ProductPage = () => {
     
     const handleOpenChat = () => {
         if(isUserLogined)
-        openChat();
+        {
+            if(user.userId !== post.user.id)
+            {
+                openChat();
+            }
+        }
         else openAuth();
     };
     
