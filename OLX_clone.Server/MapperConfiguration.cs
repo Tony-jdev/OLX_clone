@@ -31,6 +31,7 @@ public class MapperConfiguration : Profile
                 opt => opt.MapFrom(src => src.Email));
         
         CreateMap<CreateChatDto, Chat>();
+        CreateMap<CreateChatMessageDto, ChatMessage>();
         CreateMap<Chat, GetChatDetailsDto>()
             .ForMember(dto => dto.Name, conf => conf.MapFrom(chat => chat.Post.Title));
         CreateMap<Chat, GetChatDto>()

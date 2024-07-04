@@ -123,12 +123,27 @@ builder.Services.AddAuthentication(u =>
 
 var app = builder.Build();
 
-// Application Middleware
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+// Static files
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseHttpsRedirection();
+
+// Routing
+app.UseRouting();  // This must come before UseAuthentication, UseAuthorization, and UseEndpoints
+
+// Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Middleware
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 //app.UseRequestLogging();
 app.UseHangfireDashboard();
@@ -145,11 +160,19 @@ app.MapHangfireDashboard("/hangfiredashboard", new DashboardOptions()
     }
 });
 
-// Configure the HTTP request pipeline.
+// Endpoints
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chathub");
+    endpoints.MapControllers();
+});
+
+// Fallback
+app.MapFallbackToFile("/index.html");
+
+// Seed data
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
@@ -158,9 +181,6 @@ if (app.Environment.IsDevelopment())
         await UserSeeder.Initialize(services, userManager, roleManager);
     }
 }
-
-app.MapControllers();
-app.MapFallbackToFile("/index.html");
 
 RecurringJob.AddOrUpdate<IBoostExpirationService>(x => x.CheckBoostExpiration(), Cron.Hourly); 
 

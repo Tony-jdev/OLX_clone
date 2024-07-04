@@ -53,7 +53,7 @@ public class PostService : IPostService
     {
         var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy, location, priceFrom, priceTo, status);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 15);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 16);
         
         await SetPhotoUrls(pagedPosts.Items);
         
@@ -69,7 +69,7 @@ public class PostService : IPostService
             categoryIds, searchTerm, orderBy, location, priceFrom, priceTo, status);
 
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
-        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 15);
+        var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 16);
         
         await SetPhotoUrls(pagedPosts.Items);
         
