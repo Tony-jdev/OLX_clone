@@ -481,3 +481,37 @@ export function eVseIcon(props) {
     );
 }
 
+export function PenEditIcon(props) {
+    return (
+        <SvgIcon {...props} viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_2549_17359)">
+                <path
+                    d="M2.625 15.094V18.3752H5.90625L15.5837 8.69773L12.3025 5.41648L2.625 15.094ZM18.1212 6.16023C18.4625 5.81898 18.4625 5.26773 18.1212 4.92648L16.0738 2.87898C15.7325 2.53773 15.1812 2.53773 14.84 2.87898L13.2388 4.48023L16.52 7.76148L18.1212 6.16023Z"
+                    fill="#FF9D00"/>
+            </g>
+            <defs>
+                <clipPath id="clip0_2549_17359">
+                    <rect width="21" height="21" fill="white"/>
+                </clipPath>
+            </defs>
+        </SvgIcon>
+    );
+}
+
+export function MailIcon(props) {
+    return (
+        <SvgIcon {...props} width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_2936_844)">
+                <path
+                    d="M33 9C33 7.35 31.65 6 30 6H6C4.35 6 3 7.35 3 9V27C3 28.65 4.35 30 6 30H30C31.65 30 33 28.65 33 27V9ZM30 9L18 16.5L6 9H30ZM30 27H6V12L18 19.5L30 12V27Z"
+                    fill="#FF9D00"/>
+            </g>
+            <defs>
+                <clipPath id="clip0_2936_844">
+                    <rect width="36" height="36" fill="white"/>
+                </clipPath>
+            </defs>
+        </SvgIcon>
+    );
+}
+

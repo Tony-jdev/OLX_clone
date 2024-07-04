@@ -14,3 +14,17 @@ export const fetchUserById = async (userId) => {
         throw new Error('Failed to fetch');
     }
 };
+
+export const updateUserById = async (userId, userData) => {
+    try {
+        const response = await axios.put(`${baseUrl}/api/users/${userId}`, userData, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to update user');
+    }
+};

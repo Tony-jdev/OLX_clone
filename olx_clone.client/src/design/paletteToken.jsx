@@ -89,7 +89,7 @@ const getDesignTokens = (mode) => ({
                 }
                 input:-webkit-autofill {
                   box-shadow: 0 0 0 1000px ${theme.palette.colors.background.revers} inset !important;
-                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.primary} !important;
                   background-color: ${theme.palette.colors.background.input} !important;
                 }
                 input:-webkit-autofill:focus {
