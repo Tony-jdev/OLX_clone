@@ -47,6 +47,12 @@ export const userAuthSlice = createSlice({
             state.email = "";
             state.password = "";
         },
+        clearInfo: (state) => {
+            state.loading = false;
+            state.success = false;
+            state.message = false;
+            state.error = null;
+        },
         clearData: (state) => {
             state.name = "";
             state.surname = "";
@@ -70,6 +76,7 @@ export const {
     setMessage,
     setError,
     clearInput,
+    clearInfo,
     clearData } = userAuthSlice.actions;
 
 export const fetchRegistrationAsync = () => async (dispatch, getState) => {
@@ -80,8 +87,6 @@ export const fetchRegistrationAsync = () => async (dispatch, getState) => {
     const password = state.userAuth.password;
 
     const user = {
-        name,
-        surname,
         email,
         password
     };
@@ -118,11 +123,11 @@ export const fetchLogInAsync = () => async (dispatch, getState) => {
             dispatch(setMessage(response.message));
         }
         else {
-            dispatch(setMessage("Error password or email"));
+            dispatch(setMessage(response.message));
         }
         return response.success ?? false;
     } catch (error) {
-        dispatch(setError(error.message));
+        dispatch(setError(error));
     } finally {
         dispatch(setLoading(false));
     }

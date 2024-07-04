@@ -4,6 +4,7 @@ import userAuthReducer from './Slices/userAuthSlice.js';
 import userInfoReducer from './Slices/userInfoSlice.js';
 import userDataReducer from './Slices/userDataSlice.js';
 import themeAndLocaleReducer from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
+import chatReducer from './Slices/chatSlice.js';
 import {combineReducers} from "redux";
 import persistConfig from "@/Storage/Redux/persistConfig.js";
 import {persistReducer, persistStore} from "redux-persist";
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     userInfo: userInfoReducer,
     userData: userDataReducer,
     themeAndLocale: themeAndLocaleReducer,
+    chat: chatReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

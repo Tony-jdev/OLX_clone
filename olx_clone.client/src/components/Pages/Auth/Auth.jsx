@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import { Grid, TextField, Typography, Box, Collapse, Modal } from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import { Grid, TextField, Box, Modal } from '@mui/material';
 import { useIntl, FormattedMessage } from 'react-intl';
 import {
-    AuthContainer,
-    FormContainer,
     FormField,
     ToggleContainer,
     ActiveToggleOption,
     InactiveToggleOption,
     AuthModalContainer,
-    SocialButton,
 } from './Styles';
 import { useTheme } from "@mui/material/styles";
 import SButton from "@/components/Tools/Button/SButton.jsx";
@@ -19,50 +16,54 @@ import {
     fetchRegistrationAsync,
     selectEmail, selectError,
     selectLoading, selectMessage,
-    selectName,
     selectPassword, selectSuccess,
-    selectSurname, setEmail, setName, setPassword, setSurname, setSuccess, setMessage, clearData, clearInput
+    setEmail, setPassword, setSuccess, setMessage, clearData, clearInput, clearInfo
 } from "@/Storage/Redux/Slices/userAuthSlice.js";
-import SAlert from "@/components/Tools/Alert/SAlert.jsx";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
+import {useAlert} from "@/providers/AlertsProvider.jsx";
+import Icon from "@/components/Tools/IconContainer/Icon.jsx";
+import {eVseIcon} from "@/assets/Icons/Icons.jsx";
+import '../../../../public/EVSE.png'
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-const nameSurnameRegex = /^[A-Za-z]{3,}$/;
 
-const AuthModal = ({ open, handleClose }) => {
+const AuthModal = ({ open, handleClose}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
-
+    
     const [isRegister, setIsRegister] = useState(false);
 
     const dispatch = useDispatch();
-    const name = useSelector(selectName);
-    const surname = useSelector(selectSurname);
     const email = useSelector(selectEmail);
     const password = useSelector(selectPassword);
     const loading = useSelector(selectLoading);
     const success = useSelector(selectSuccess);
     const message = useSelector(selectMessage);
     const error = useSelector(selectError);
-
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-
+    
     const [errors, setErrors] = useState({});
-
+    
     const intl = useIntl();
 
     const validateEmail = (email) => emailRegex.test(email);
     const validatePassword = (password) => passwordRegex.test(password);
-    const validateNameSurname = (value) => nameSurnameRegex.test(value);
 
+    const { showAlert } = useAlert();
+
+    const alertHandler = () => {
+        if(message){
+            showAlert(success ? 'success' : 'warning', message );
+        }
+        else if(error)
+        {
+            showAlert('error', error.message);
+        }
+        //dispatch(clearInfo());
+    }
+    
     const handleSubmit = () => {
         let validationErrors = {};
-        if (isRegister && (!name || !validateNameSurname(name))) {
-            validationErrors.name = intl.formatMessage({ id: 'auth.invalidName' });
-        }
-        if (isRegister && (!surname || !validateNameSurname(surname))) {
-            validationErrors.surname = intl.formatMessage({ id: 'auth.invalidSurname' });
-        }
         if (!email || !validateEmail(email)) {
             validationErrors.email = intl.formatMessage({ id: 'auth.invalidEmail' });
         }
@@ -79,95 +80,112 @@ const AuthModal = ({ open, handleClose }) => {
 
     const handleOpenSnackbarLogIn = async (success) => {
         if (success) {
-            setOpenSnackbar(true);
             setTimeout(() => {
                 dispatch(clearData());
                 handleClose();
             }, 2000);
         } else {
             dispatch(setSuccess(false));
-            dispatch(setMessage('Input error data'));
-            setOpenSnackbar(true);
+            //dispatch(setMessage('Input error data'));
         }
     };
     const handleOpenSnackbarRegIn = async (success) => {
         if (success) {
-            setOpenSnackbar(true);
             setIsRegister(false);
             dispatch(clearInput());
         } else {
             dispatch(setSuccess(false));
             dispatch(setMessage('Registration Error'));
-            setOpenSnackbar(true);
         }
     };
 
     const regHandler = async () => {
         const success = await dispatch(fetchRegistrationAsync());
-        await handleOpenSnackbarRegIn(success);
     }
     const logHandler = async () => {
         const success = await dispatch(fetchLogInAsync());
-        await handleOpenSnackbarLogIn(success);
     }
 
+    useEffect(() => {
+        alertHandler();
+    }, [message, error]);
+    
     return (
         <Modal open={open} onClose={handleClose}>
-            <Grid container sx={AuthModalContainer}>
-                <Box style={{ width: '100%' }}>
+            <Grid container sx={{...AuthModalContainer, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: colors.background.secondary, padding: '20px', borderRadius: '20px', boxShadow: colors.boxShadow}}>
+                <img src={'../../../../public/EVSE.png'} style={{width: '225px', height: '89px', marginTop: '-120px', marginBottom: '40px' }} alt={'error'}/>
+                <Box style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
                     <SButton
-                        type='socialButton'
+                        type='orangeRoundButton'
+                        textType={'Title'}
+                        Color={colors.text.primary}
                         text={<FormattedMessage id="auth.continueFacebook" />}
-                        sl={{ background: colors.facebook, marginBottom: '10px' }}
+                        sl={{ background: colors.background.lightGradient}}
+                        sr={{maxWidth: 370, maxHeight: 48, height: '100vh', width: '100%', marginBottom: '10px'}}
                     />
                     <SButton
-                        type='socialButton'
+                        type='orangeRoundButton'
+                        textType={'Title'}
+                        Color={colors.text.primary}
                         text={<FormattedMessage id="auth.continueGoogle" />}
-                        sl={{ background: colors.google, marginBottom: '10px' }}
+                        sl={{ background: colors.background.lightGradient }}
+                        sr={{maxWidth: 370, maxHeight: 48, height: '100vh', width: '100%', marginBottom: '10px'}}
                     />
                     <SButton
-                        type='socialButton'
+                        type='orangeRoundButton'
+                        textType={'Title'}
+                        Color={colors.text.primary}
                         text={<FormattedMessage id="auth.continueApple" />}
-                        sl={{ background: colors.apple, marginBottom: '10px' }}
+                        sl={{ background: colors.background.lightGradient}}
+                        sr={{maxWidth: 370, maxHeight: 48, height: '100vh', width: '100%', marginBottom: '10px'}}
                     />
-                    <Typography variant="h6" sx={{ textAlign: 'center', margin: '20px 0' }}>або</Typography>
+                    <Text type={'Body'} sr={{textAlign: 'center'}}>або</Text>
                     <Grid container sx={ToggleContainer}>
-                        <Typography
-                            onClick={() => setIsRegister(false)}
-                            sx={isRegister ? {...InactiveToggleOption, color: colors.text.revers, borderColor: colors.text.orange} : {...ActiveToggleOption, color: colors.text.orange}}
-                        >
-                            <FormattedMessage id="auth.login" />
-                        </Typography>
-                        <Typography
-                            onClick={() => setIsRegister(true)}
-                            sx={!isRegister ? {...InactiveToggleOption, color: colors.text.revers, borderColor: colors.text.orange} : {...ActiveToggleOption, color: colors.text.orange}}
-                        >
-                            <FormattedMessage id="auth.register" />
-                        </Typography>
+                        <SButton
+                            action={() => setIsRegister(false)}
+                            type={'transparentButton'}
+                            Color={isRegister ? colors.text.revers : colors.text.orange}
+                            text={<FormattedMessage id="auth.login" />}
+                            sr={{...(isRegister ? InactiveToggleOption : ActiveToggleOption), 
+                                borderColor: !isRegister ? colors.text.orange : '',
+                                width: '50%',
+                            }}
+                        />
+                        <SButton
+                            action={() => setIsRegister(true)}
+                            type={'transparentButton'}
+                            Color={!isRegister ? colors.text.revers : colors.text.orange}
+                            text={<FormattedMessage id="auth.register" />}
+                            sr={{...(!isRegister ? InactiveToggleOption : ActiveToggleOption), 
+                                borderColor: isRegister ? colors.text.orange : '',
+                                width: '50%',
+                        }}
+                        />
                     </Grid>
-                    <Collapse in={isRegister} timeout={{ enter: 1000, exit: 1000 }}>
-                        <TextField
-                            sx={{...FormField, '& .MuiInputLabel-root': { color: colors.text.orange } }}
-                            label={<FormattedMessage id="auth.name" />}
-                            value={name}
-                            onChange={(e) => dispatch(setName(e.target.value))}
-                            error={!!errors.name}
-                            helperText={errors.name}
-                            InputLabelProps={{ shrink: true }}
-                        />
-                        <TextField
-                            sx={{...FormField, '& .MuiInputLabel-root': { color: colors.text.orange } }}
-                            label={<FormattedMessage id="auth.surname" />}
-                            value={surname}
-                            onChange={(e) => dispatch(setSurname(e.target.value))}
-                            error={!!errors.surname}
-                            helperText={errors.surname}
-                            InputLabelProps={{ shrink: true }}
-                        />
-                    </Collapse>
                     <TextField
-                        sx={{...FormField, '& .MuiInputLabel-root': { color: colors.text.orange } }}
-                        label={<FormattedMessage id="auth.email" />}
+                        sx={{
+                            ...FormField,
+                            '& .MuiOutlinedInput-root': {
+                                background: colors.background.input,
+                                border: 'none',
+                                borderRadius: '20px',
+                                height: '48px',
+                                width: '370px',
+                                '& fieldset': {
+                                    border: 'none',
+                                    //borderColor: colors.text.orange,
+                                },
+                                '&:hover fieldset': {
+                                    border: 'none',
+                                    //borderColor: colors.text.orange,
+                                },
+                                '&.Mui-focused fieldset': {
+                                    border: 'none',
+                                    //borderColor: colors.text.orange,
+                                },
+                            },
+                        }}
+                        label={<Text type={'Body'} color={colors.text.orange}><FormattedMessage id="auth.email" /></Text>}
                         value={email}
                         onChange={(e) => dispatch(setEmail(e.target.value))}
                         error={!!errors.email}
@@ -175,8 +193,28 @@ const AuthModal = ({ open, handleClose }) => {
                         InputLabelProps={{ shrink: true }}
                     />
                     <TextField
-                        sx={{...FormField, '& .MuiInputLabel-root': { color: colors.text.orange } }}
-                        label={<FormattedMessage id="auth.password" />}
+                        sx={{...FormField,
+                            '& .MuiOutlinedInput-root': {
+                                background: colors.background.input,
+                                border: 'none',
+                                borderRadius: '20px',
+                                height: '48px',
+                                width: '370px',
+                                '& fieldset': {
+                                    border: 'none',
+                                    //borderColor: colors.text.orange,
+                                },
+                                '&:hover fieldset': {
+                                    border: 'none',
+                                    //borderColor: colors.text.orange,
+                                },
+                                '&.Mui-focused fieldset': {
+                                    border: 'none',
+                                    //borderColor: colors.text.orange,
+                                },
+                            },
+                        }}
+                        label={<Text type={'Body'} color={colors.text.orange}><FormattedMessage id="auth.password" /></Text>}
                         type="password"
                         value={password}
                         onChange={(e) => dispatch(setPassword(e.target.value))}
@@ -184,24 +222,16 @@ const AuthModal = ({ open, handleClose }) => {
                         helperText={errors.password}
                         InputLabelProps={{ shrink: true }}
                     />
-                    <Typography sx={{ textAlign: 'right', marginBottom: '10px' }}>
-                        <FormattedMessage id="auth.forgotPassword" />
-                    </Typography>
                     <SButton
-                        type='whiteOutlined'
+                        type='orangeRoundButton'
                         textType={'Title'}
+                        Color={colors.text.primary}
                         text={<FormattedMessage id={isRegister ? 'auth.registerButton' : 'auth.loginButton'} />}
-                        sl={{ width: '100%', color: colors.text.revers }}
+                        sl={{ background: colors.background.darkGradient}}
+                        sr={{maxWidth: 370, maxHeight: 48, height: '100vh', width: '100%', marginBottom: '10px', marginTop: '20px'}}
                         action={handleSubmit}
                     />
                 </Box>
-                <SAlert
-                    message={message}
-                    autoHideTime={2000}
-                    openS={openSnackbar}
-                    setOpenS={setOpenSnackbar}
-                    severity={success ? 'success' : 'error'}
-                />
             </Grid>
         </Modal>
     );

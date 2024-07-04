@@ -5,6 +5,7 @@ import Carousel from '@/components/Tools/Carousel/Carousel.jsx';
 import CategoryMasonry from "@/components/Tools/CategoryMasonry/CategoryMasonry.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    clearData,
     fetchVipPostsAsync,
     selectError,
     selectLoading,
@@ -18,14 +19,8 @@ import TutorialPanel from "@/components/Tools/TutorialPanel/TutorialPanel.jsx";
 import {useNavigate} from "react-router-dom";
 import {AddOutlinedIcon} from "@/assets/Icons/Icons.jsx";
 import Carusel from "@/components/Tools/CaruselM3/Carusel.jsx";
-
-const itemss = [
-    { image: 'https://th.bing.com/th/id/OIP.bZDmBBbw15Uog6Em-3dJeQHaE8?rs=1&pid=ImgDetMain', name: 'Item 1', price: '100$' },
-    { image: 'https://th.bing.com/th/id/OIP.bZDmBBbw15Uog6Em-3dJeQHaE8?rs=1&pid=ImgDetMain', name: 'Item 2', price: '200$' },
-    { image: 'https://th.bing.com/th/id/OIP.bZDmBBbw15Uog6Em-3dJeQHaE8?rs=1&pid=ImgDetMain', name: 'Item 3', price: '300$' },
-];
-
-
+import Categories from "@/Helpers/mainCategoriesHelper.js";
+import {useAddPost} from "@/providers/AddPostModalProvider.jsx";
 function HomePage() {
     const theme = useTheme();
     const { colors } = theme.palette;
@@ -37,6 +32,11 @@ function HomePage() {
     const loading = useSelector(selectLoading);
     const error = useSelector(selectError);
 
+    const { showAddPostModal } = useAddPost();
+    
+    useEffect(()=>{
+        dispatch(clearData());
+    }, [])
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -72,9 +72,10 @@ function HomePage() {
                 textType={'Title'}
                 text={<FormattedMessage id='btn.add' /> }
                 Color={colors.text.input}
+                hoverBack={colors.background.def}
                 prew={<AddOutlinedIcon sx={{marginRight: '5px'}}/>}
                 sl={{background: colors.background.def}}
-                action={()=>{}}
+                action={()=>navigate('/create')}
             />,
             imageUrl: "@/../public/Ads/Ads0.png"
         },
@@ -88,7 +89,7 @@ function HomePage() {
                 text={<FormattedMessage id='btn.see' />}
                 Color={colors.text.primary}
                 sl={{background: colors.background.darkGradient}}
-                action={()=>{}}
+                action={()=>{navigate('./search/'+Categories[5]);}}
             />,
             imageUrl: "@/../public/Ads/Ads1.png"
         },
@@ -102,7 +103,7 @@ function HomePage() {
                 text={<FormattedMessage id='btn.see' />}
                 Color={colors.text.primary}
                 sl={{background: colors.background.darkGradient}}
-                action={()=>{}}
+                action={()=>{navigate('./search/'+Categories[8]);}}
             />,
             imageUrl: "@/../public/Ads/Ads2.png"
         },

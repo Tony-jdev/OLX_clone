@@ -1,20 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Box,
-    Modal,
-    TextField,
-    Radio,
-    RadioGroup,
-    FormControlLabel,
-    FormControl,
-    FormLabel,
-    Grid,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Button
+    Box, Modal, TextField, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Text from '@/components/Tools/TextContainer/Text.jsx';
@@ -46,7 +32,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [images, setImages] = useState([]);
-    const [condition, setCondition] = useState('new');
+    const [condition, setCondition] = useState('New');
     const [price, setPrice] = useState(0.00);
     const [errors, setErrors] = useState({});
     const [category, setCategory] = useState(null);
@@ -64,7 +50,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
                     setTitle(fetchedPost.data.title);
                     setDescription(fetchedPost.data.description);
                     setImages(fetchedPost.data.photos || []);
-                    setCondition(fetchedPost.data.type || 'new');
+                    setCondition(fetchedPost.data.type || 'New');
                     setCategory(fetchedPost.data.category.parentId === 0 ? fetchedPost.data.category.id : fetchedPost.data.category.parentId);
                     setSubCategory(fetchedPost.data.category.parentId !== 0 ? fetchedPost.data.category.id : null);
                     setLocation(parseLocationString(fetchedPost.data.location));
@@ -162,7 +148,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
         setTitle('');
         setDescription('');
         setImages([]);
-        setCondition('new');
+        setCondition('New');
         setErrors({});
         setCategory(null);
         setSubCategory(null);
@@ -191,10 +177,10 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
                                 label={<Text type="Body" text="Назва" />}
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                fullWidth
                                 margin="normal"
                                 error={!!errors.title}
                                 helperText={errors.title}
+                                fullWidth
                                 inputProps={{ maxLength: 500 }}
                             />
                             <Text type="Label" text={`${title?.length ?? '0'} / 500 символів`} color={colors.text.secondary} sx={{ position: 'absolute', bottom: '-20px', right: '10px' }} />
@@ -275,7 +261,7 @@ const AddPostModal = ({ open, handleClose, edit, post }) => {
                                     sx={radioGroupStyle}
                                 >
                                     <FormControlLabel value="New" control={<Radio />} label={<Text type="Body" text="Новий" />} />
-                                    <FormControlLabel value="Usd" control={<Radio />} label={<Text type="Body" text="Б/У" />} />
+                                    <FormControlLabel value="Used" control={<Radio />} label={<Text type="Body" text="Б/У" />} />
                                 </RadioGroup>
                             </FormControl>
                             <LocationPickerButton Color={colors.text.revers} setLocation={setLocation} location={location}/>

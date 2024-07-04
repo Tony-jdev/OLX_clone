@@ -22,7 +22,7 @@ const TopFilters = () => {
     return (
         <Box display="flex" alignItems="center" style={{marginTop: 30, marginBottom: 30}}>
             <Typography variant="body1">Сортувати за:</Typography>
-            <Select defaultValue={orderBy}
+            <Select defaultValue={orderBy || sortingOptions[0].value}
                     sx={{
                         marginLeft: '5px',
 

@@ -10,20 +10,21 @@ import {
 import {LikedIcon, LikeIcon} from "@/assets/Icons/Icons.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useTheme} from "@mui/material/styles";
-import {useNavigate} from "react-router-dom";
+import {Await, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectSelectedPostId, setSelectedPostId} from "@/Storage/Redux/Slices/postSlice.js";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
+import {addFavorite} from "@/Api/favouritesApi.js";
 
-const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id }) => {
+const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id, intId }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedId = useSelector(selectSelectedPostId);
     const isVip = vip ?? false;
-    const isUsed = type === 'Usd';
+    const isUsed = type !== 'New';
     
     return (
         <Box
@@ -33,7 +34,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id 
                 boxShadow: colors.boxShadow,
                 transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
                 maxWidth: 272,
-                maxHeight: 430,
+                maxHeight: '450px',
                 width: '100%',
                 height: '100vh',
             }}
@@ -54,16 +55,33 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id 
                 </Grid>
                 <Box component="img" sx={CardImgStyle} src={photo} alt={name} />
             </Box>
-            <Box style={CardContentStyle}>
+            <Box style={{...CardContentStyle, display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
                <Box>
-                   <Text type={'Body'}>Віддамо котика на ім’я Борис Васильович </Text>
+                   <Text type={'Body'} sr={{textAlign: 'start', marginBottom: '30px', textWrap: 'nowrap', whiteSpace: 'nowrap',
+                       overflow: 'hidden',
+                       textOverflow: 'ellipsis',}}>{name}</Text>
                </Box>
                 <Box style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text type={'Title'} sr={{alignSelf: 'center'}}>500₴</Text>
+                    <Text type={'Title'} sr={{alignSelf: 'center'}}>{price}₴</Text>
                     <SButton
                         isIconButton={true}
                         icon={<Icon icon={LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
-                        action={(e)=>{ e.stopPropagation(); console.log('clicked')}}
+                        action={(e)=>{ 
+                            e.stopPropagation(); 
+                            //if(userId!=="") {
+                            //    console.log('clicked');
+                            //    const adFavourite = async ()=>{
+                            //        const favoriteData = {
+                            //            postId: intId,
+                            //            applicationUserId: userId
+                            //        };
+                            //        console.log(favoriteData);
+                            //        const res = await addFavorite(favoriteData);
+                            //        console.log(res);
+                            //    }
+                            //    adFavourite();
+                            //}
+                        }}
                     />
                 </Box>
             </Box>

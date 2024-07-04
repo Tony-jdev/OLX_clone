@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductInfo from "@/components/Tools/ProductInfo/ProductInfo.jsx";
 import SellerInfo from "@/components/Tools/SellerInfo/SellerInfo.jsx";
@@ -17,6 +17,20 @@ import {
 } from "@/Storage/Redux/Slices/postSlice.js";
 import Carousel from "@/components/Tools/Carousel/Carousel.jsx";
 import {useTheme} from "@mui/material/styles";
+import {useChat} from "@/providers/ChatProvider.jsx";
+import {
+    selectCustomer,
+    selectPost,
+    selectSeller,
+    setCustomer, setPost,
+    setSeller
+} from "@/Storage/Redux/Slices/chatSlice.js";
+import {isUserLoggedIn, selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {addRecentView} from "@/Helpers/recentViewsHelper.js";
+import {GetPostById} from "@/Api/postApi.js";
+import {fetchUserById} from "@/Api/userApi.js";
+import ProductList from "@/components/Tools/ProductList/ProductList.jsx";
+import {useAuth} from "@/providers/AuthProvider.jsx";
 
 const ProductPage = () => {
     const theme = useTheme();
@@ -29,21 +43,83 @@ const ProductPage = () => {
     const loading = useSelector(selectLoading);
     const error = useSelector(selectError);
     const navigate = useNavigate();
+    
+    const user = useSelector(selectUser);
+    const isUserLogined = useSelector(isUserLoggedIn);
+    const {openAuth} = useAuth();
+
+    const customer = useSelector(selectCustomer);
+    const seller = useSelector(selectSeller);
+    const postChat = useSelector(selectPost);
 
     const [urls,setUrls] = useState([]);
+    const [sellerPosts,setSellerPosts] = useState([]);
 
+    const productListRef = useRef(null);
+    const [open,setOpen] = useState(false);
+
+
+    const { openChat, fetchChats } = useChat();
+    
+    useEffect(() => {
+        fetchChats();
+    }, [fetchChats]);
 
     useEffect(() => {
         dispatch(setSelectedPostId(id));
-        dispatch(fetchPostByIdAsync(id));
+        const fetch = async ()=>{
+            await dispatch(fetchPostByIdAsync(id));
+        }
+        fetch();
         window.scrollTo(0, 0);
     }, [dispatch, id]);
+    
 
     useEffect(() => {
         if (post && post.photos) {
             setUrls(post.photos.map(photo => photo.photoUrl));
         }
     }, [post]);
+
+    useEffect(() => {
+
+        console.log(user);
+        console.log(post);
+        console.log(post?.user);
+        
+        const fetchPosts = async () => {
+            const seller = await fetchUserById(post?.user.id);
+            console.log(seller);
+            setSellerPosts(seller.data.posts);
+        }
+        fetchPosts();
+        
+        //addRecentView(post.sku);
+
+        if(post)
+        {
+            dispatch(setCustomer(user));
+            dispatch(setSeller(post.user));
+            dispatch(setPost(post));
+        }
+    }, [post, user]);
+
+    useEffect(() => {
+        if (open && productListRef.current) {
+            productListRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [open]);
+    
+    const handleOpenChat = () => {
+        if(isUserLogined)
+        {
+            if(user.userId !== post.user.id)
+            {
+                openChat();
+            }
+        }
+        else openAuth();
+    };
     
     if (post === null) {
         return <Container>
@@ -84,11 +160,14 @@ const ProductPage = () => {
                     {urls && <Carousel items={urls} isWide={false} isOnlyImg={true} width={'953px'} withoutNBtns={true} stopAutoplay={true}/>}
                 </Box>
                 <Box style={{maxWidth:'466px', width: '100%'}}>
-                    <SellerInfo seller={'product'} />
+                    <SellerInfo seller={seller} OpenChat={handleOpenChat} onShowSellerProds={()=>{setOpen(true);}}/>
                     <LocationInfo location={post.location} />
                 </Box>
             </Grid>
             <ProductInfo post={post}/>
+            {open && sellerPosts && sellerPosts.length > 0 && (<div ref={productListRef}>
+                <ProductList posts={sellerPosts} headerText={"Всі оголошення продавця"}/>
+            </div>)}
         </Container>
     );
 };

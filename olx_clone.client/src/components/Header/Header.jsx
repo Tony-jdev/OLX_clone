@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { FormattedMessage } from 'react-intl';
 import { AppBar, Toolbar, TextField, Box, InputAdornment, Grid, CardMedia, Container } from '@mui/material';
 import { AppBarStyle, ContainerStyle, ToolBarStyle, FirstGridStyle, BoxContainerStyle, LogoStyle, PropsFieldStyle, FieldStyle, FlexBoxStyle, AddButtonStyle, AddIconStyle, ProfileButtonStyle, BottomGridStyle, LastBoxStyle } from "@/components/Header/Styles.js";
@@ -11,49 +11,36 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeLocale, changeTheme, selectLocale, selectTheme} from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
 import LocationPickerButton from "@/components/Tools/LocationPickerButton/LocationPickerButton.jsx";
 import {useNavigate} from "react-router-dom";
-import {selectSearchText, setSearchText} from "@/Storage/Redux/Slices/postSlice.js";
+import {selectLocation, selectSearchText, setLocation, setSearchText} from "@/Storage/Redux/Slices/postSlice.js";
 import Categories from "@/Helpers/mainCategoriesHelper.js";
 import {isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
-import AuthModal from "@/components/Pages/Auth/Auth.jsx";
+import {useAuth} from "@/providers/AuthProvider.jsx";
+import {useAddPost} from "@/providers/AddPostModalProvider.jsx";
 const Header = () => {
     const navigate = useNavigate();
 
     const mode = useSelector(selectTheme) ?? 'light';
     const locale = useSelector(selectLocale) ?? 'uk';
     const dispatch = useDispatch();
-    
+
+    const {openAuth} = useAuth();
+
     const theme = useTheme();
     const { colors } = theme.palette;
     const colorMode = useContext(ColorModeContext);
 
     const searchText = useSelector(selectSearchText) ?? '';
     const [text, setText] = useState(searchText ?? '');
+    
+    const location = useSelector(selectLocation);
+    const [newLocation, setNewLocation] = useState(location); 
 
     const isUserLogined = useSelector(isUserLoggedIn);
     const [open, setOpen] = useState(false);
 
-    const [openAuth, setOpenAuth] = useState(false);
-
-    const handleClickOpenAuth = () => {
-        setOpenAuth(true);
-        console.log('opened!');
-    };
-
-    const handleCloseAuth = () => {
-        setOpenAuth(false);
-        console.log('closed!');
-    };
-
-    const handleOpen = () => {
-        if(isUserLogined)
-        setOpen(true);
-        else navigate('/auth');
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const { showAddPostModal } = useAddPost();
+    
     
     const toggleTheme = () => {
         const newTheme = mode === 'light' ? 'dark' : 'light';
@@ -67,8 +54,9 @@ const Header = () => {
     
     const searchThings = () => {
         dispatch(setSearchText(text));
-        navigate('./search');
+        navigate(`./search`, { state: { refresh: new Date().getTime() } });    
     }
+    
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             searchThings();
@@ -88,6 +76,15 @@ const Header = () => {
         }
         return color;
     }
+
+    useEffect(() => {
+        console.log(location);
+        console.log(newLocation);
+    }, []);
+    
+    useEffect(() => {
+        dispatch(setLocation(newLocation));
+    }, [newLocation]);
     
     return (
         <AppBar style={AppBarStyle} sx={{ backgroundColor: colors.background.primary }}>
@@ -135,7 +132,7 @@ const Header = () => {
                                 }} 
                             >
                             </TextField>
-                            <LocationPickerButton/>
+                            <LocationPickerButton location={location} setLocation={setNewLocation}/>
                         </Box>
                         <Box style={FlexBoxStyle}>
                             <SButton
@@ -148,9 +145,8 @@ const Header = () => {
                               sr={{width: '200px', height: '40px'}}
                               prew={<AddIcon style={AddIconStyle} sx={{ color: colors.text.primary }} />}
                               text={<FormattedMessage id="header.addButtonLabel"/>}
-                              action={handleOpen}
+                              action={()=>navigate('/create')}
                             />
-                            <AddPostModal open={open} handleClose={handleClose}/>
 
                             <SButton isIconButton={true} 
                                      action={toggleTheme} 
@@ -162,7 +158,7 @@ const Header = () => {
                                 isIconButton={true}
                                 icon={ <ProfileIcon /> }
                                 sl={{...ProfileButtonStyle, color: colors.text.primary}}
-                                action={handleClickOpenAuth}
+                                action={()=>navigate('/user')}
                             />
                             
                             <SButton
@@ -178,7 +174,6 @@ const Header = () => {
                                 sl={{color: colors.text.primary }}
                             />
                         </Box>
-                        <AuthModal open={openAuth} handleClose={handleCloseAuth} />
                     </Grid>
                 </Toolbar>
                 <Toolbar style={ToolBarStyle}>

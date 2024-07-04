@@ -1,49 +1,64 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Box, Typography, Tab, Tabs } from '@mui/material';
 import Text from "@/components/Tools/TextContainer/Text.jsx";
-import {
-    TabsContainerStyles
-} from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/Styles.js";
-import {useTheme} from "@mui/material/styles";
+import { TabsContainerStyles } from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/Styles.js";
+import { useTheme } from "@mui/material/styles";
 import PostWideList from "@/components/Tools/PostWideList/PostWideList.jsx";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchUserPostsAsync, selectUserPosts} from "@/Storage/Redux/Slices/userDataSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserPostsAsync, selectUserPosts } from "@/Storage/Redux/Slices/userDataSlice.js";
 
 const MyPosts = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
-    
+
     const [selectedTab, setSelectedTab] = React.useState(0);
 
     const dispatch = useDispatch();
     const ads = useSelector(selectUserPosts);
-    
+
     const handleChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
 
-    useEffect(  () => {
+    useEffect(() => {
         dispatch(fetchUserPostsAsync());
     }, [dispatch]);
-    
-    
+
+    const activeAds = ads.filter(ad => ad.status === 'Active');
+    const inactiveAds = ads.filter(ad => ad.status === 'Inactive');
+    const soldAds = ads.filter(ad => ad.status === 'Sold');
+
+    const refreshPosts = () => {
+        dispatch(fetchUserPostsAsync());
+    };
+
     return (
-        <Box style={{maxWidth: 980, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
+        <Box style={{
+            maxWidth: 1030, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
             borderRadius: '10px',
             boxShadow: colors.boxShadow,
-            background: colors.background.secondary}}>
-            <Tabs value={selectedTab} onChange={handleChange} aria-label="profile tabs" sx={{...TabsContainerStyles, 
-                '& .MuiTabs-indicator': {
-                    backgroundColor: colors.text.revers,
-                },}}>
+            background: colors.background.secondary
+        }}>
+            <Tabs
+                value={selectedTab}
+                onChange={handleChange}
+                aria-label="profile tabs"
+                sx={{
+                    ...TabsContainerStyles,
+                    '& .MuiTabs-indicator': {
+                        backgroundColor: colors.text.revers,
+                    },
+                }}
+            >
                 <Tab label={<Text type={'Body'}>Активні</Text>} />
-                <Tab label={<Text type={'Body'}>Неактивні</Text>}/>
+                <Tab label={<Text type={'Body'}>Неактивні</Text>} />
+                <Tab label={<Text type={'Body'}>Продані</Text>} />
             </Tabs>
-            <Box sx={{marginTop: '20px'}}>
-                {selectedTab === 0 && <PostWideList ads={ads} />}
-                {selectedTab === 1 && <PostWideList ads={ads} />}
+            <Box sx={{ marginTop: '20px' }}>
+                {selectedTab === 0 && <PostWideList ads={activeAds} onPostUpdate={refreshPosts} />}
+                {selectedTab === 1 && <PostWideList ads={inactiveAds} onPostUpdate={refreshPosts} />}
+                {selectedTab === 2 && <PostWideList ads={soldAds} onPostUpdate={refreshPosts} />}
             </Box>
-            <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>Всього оголошень: {ads ? ads.length : 0}</Text>
         </Box>
     );
 };

@@ -21,6 +21,7 @@ const getDesignTokens = (mode) => ({
                         secondary: '#fffcf8',
                         orange: '#ff9d00',
                         def: '#fffcf8',
+                        input: '#ffebcc',
                         lightGradient: 'linear-gradient(45deg, #ffc66b  30%, #ff9d00 90%)',
                         darkGradient: 'linear-gradient(45deg, #727171  30%, #313030 90%)',
                     },
@@ -30,6 +31,7 @@ const getDesignTokens = (mode) => ({
                         orange: '#ff9d00',
                         input: '#313030',
                         revers: '#313030',
+                        unrevers: '#fffcf8',
                     },
                     boxShadow: '0px 26px 11px rgba(49, 48, 48, 0.01), 0px 15px 9px rgba(49, 48, 48, 0.05), 0px 7px 7px rgba(49, 48, 48, 0.09), 0px 2px 4px rgba(49, 48, 48, 0.1)',
                     white: '#fff',
@@ -55,6 +57,7 @@ const getDesignTokens = (mode) => ({
                         secondary: '#313030',
                         orange: '#ff9d00',
                         def: '#fffcf8',
+                        input: '#ffebcc',
                         lightGradient: 'linear-gradient(45deg, #ffc66b  30%, #ff9d00 90%)',
                         darkGradient: 'linear-gradient(45deg, #727171  30%, #313030 90%)',
                     },
@@ -64,6 +67,7 @@ const getDesignTokens = (mode) => ({
                         orange: '#ff9d00',
                         input: '#313030',
                         revers: '#fffcf8',
+                        unrevers: '#313030',
                     },
                     boxShadow: '0px 26px 11px rgba(255, 200, 10, 0.05), 0px 15px 9px rgba(255, 200, 10, 0.1), 0px 7px 7px rgba(255, 200, 10, 0.15), 0px 2px 4px rgba(255, 200, 10, 0.25)',
                     white: '#fff',
@@ -84,19 +88,19 @@ const getDesignTokens = (mode) => ({
                     background: none !important;
                 }
                 input:-webkit-autofill {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
-                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
-                  background-color: ${theme.palette.colors.background.secondary} !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.revers} inset !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.primary} !important;
+                  background-color: ${theme.palette.colors.background.input} !important;
                 }
                 input:-webkit-autofill:focus {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.input} inset !important;
                   -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
-                  background-color: ${theme.palette.colors.background.secondary} !important;
+                  background-color: ${theme.palette.colors.background.input} !important;
                 }
                 input:-webkit-autofill:hover {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.secondary} inset !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.input} inset !important;
                   -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
-                  background-color: ${theme.palette.colors.background.secondary} !important;
+                  background-color: ${theme.palette.colors.background.input} !important;
                 }
             `,
         },

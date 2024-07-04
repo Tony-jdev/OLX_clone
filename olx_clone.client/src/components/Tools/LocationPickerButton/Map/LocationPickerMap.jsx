@@ -5,8 +5,10 @@ import L from 'leaflet';
 import axios from 'axios';
 import ukraineGeoJSON from './custom.geo.json'; 
 import FullscreenMapModal from "@/components/Tools/LocationPickerButton/Map/FullscreenMapModal.jsx";
-import {Box, Grid} from "@mui/material";
-import {parseLocationString} from "@/Helpers/locationHelper.js";
+import {Box, colors, FormControlLabel, Grid, Switch} from "@mui/material";
+import {parseLocationString, validateLocation} from "@/Helpers/locationHelper.js";
+import SButton from "@/components/Tools/Button/SButton.jsx";
+import {useTheme} from "@mui/material/styles";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -29,10 +31,18 @@ const reverseGeocode = async (lat, lon) => {
     return response.data;
 };
 
-const LocationPickerMap = ({ onLocationSelect, location, unparseLocation, readOnly, allowMove, onClick}) => {
+const LocationPickerMap = ({ onLocationSelect, location, unparseLocation, readOnly, allowMove, onClick, isSetDefBtn, isSetOnlyRegion, isCloseBtn, onClose, setDef}) => {
+    const theme = useTheme();
+    const { colors } = theme.palette;
+    
     const parsedLoc = parseLocationString(unparseLocation);
     const initialPosition = parsedLoc ? [parsedLoc.lat, parsedLoc.lng] : defaultPosition;
-    const [position, setPosition] = useState(location ?? initialPosition);
+    
+    const [position, setPosition] = useState(validateLocation(location) ?  location : initialPosition ?? defaultPosition);
+
+    const [onlyRegion, setOnlyRegion] = useState(false);
+    
+    
     const LocationMarker = () => {
             useMapEvents({
                 click: async (e) => {
@@ -54,10 +64,10 @@ const LocationPickerMap = ({ onLocationSelect, location, unparseLocation, readOn
                         try {
                             const locationData = await reverseGeocode(newPosition[0], newPosition[1]);
                             const selectedLocation = {
+                                city: onlyRegion ? 'empty' : (locationData.address.city || locationData.address.town || locationData.address.village),
+                                region: locationData.address.state,
                                 lat: newPosition[0],
                                 lng: newPosition[1],
-                                city: locationData.address.city || locationData.address.town || locationData.address.village,
-                                region: locationData.address.state,
                             };
                             onLocationSelect(selectedLocation);
                         } catch (error) {
@@ -118,6 +128,40 @@ const LocationPickerMap = ({ onLocationSelect, location, unparseLocation, readOn
                 <GeoJSON data={ukraineGeoJSON} />
                 {readOnly ? <LocationCircle/> : <LocationMarker />}
             </MapContainer>
+            <Grid container direction={'row'} sx={{margin: 1}}>
+                {   
+                    isSetDefBtn && 
+                    <SButton
+                        text={'set Defoult'}
+                        textType={'Body'}
+                        type='orangeRoundButton'
+                        sl={{boxShadow: colors.boxShadow}}
+                        sr={{padding: '4px 8px 4px 8px', marginRight: '10px'}}
+                        hoverShadow={colors.types.shadows.boxShadowWarning}
+                        action={()=>{
+                            setPosition(defaultPosition);
+                            setDef(null);
+                        }}
+                    />
+                }
+                {isSetOnlyRegion &&
+                    <FormControlLabel
+                        control={<Switch checked={onlyRegion} onChange={() => setOnlyRegion(!onlyRegion)} />}
+                        label="Only Region"
+                    />
+                }
+                {   isCloseBtn &&
+                    <SButton
+                        text={'Close'}
+                        textType={'Body'}
+                        type='orangeRoundButton'
+                        sl={{boxShadow: colors.boxShadow}}
+                        sr={{padding: '4px 8px 4px 8px', marginLeft: '10px', marginRight: '8px'}}
+                        hoverShadow={colors.types.shadows.boxShadowError}
+                        action={onClose}
+                    />
+                }
+            </Grid>
         </>
     );
 };
