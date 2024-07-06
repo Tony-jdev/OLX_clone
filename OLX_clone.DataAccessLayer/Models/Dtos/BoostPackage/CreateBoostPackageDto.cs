@@ -16,7 +16,7 @@ public class CreateBoostPackageDto
     public int BoostCount { get; set; }
 
     [Required]
-    public string Type { get; set; }
+    public BoostType Type { get; set; }
 
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "Number of days must be at least 1.")]

@@ -29,6 +29,17 @@ public class UserController: ControllerBase
         return Ok(apiResponse);
     }
     
+    [HttpPost("{userId}/upload-photo")]
+    public async Task<ActionResult<ApiResponse<string>>> UploadProfilePhoto(string userId, IFormFile file)
+    {
+        var apiResponse = await _userService.UploadUserPhoto(userId, file);
+        if (!apiResponse.Success)
+        {
+            return BadRequest(apiResponse);
+        }
+        return Ok(apiResponse);
+    }
+    
     [HttpPut("{userId}")]
     public async Task<ActionResult<ApiResponse<IEnumerable<IdentityError>>>> UpdateUser(
         string userId, [FromBody] UpdateApplicationUserDto applicationUserUpdateDto)
