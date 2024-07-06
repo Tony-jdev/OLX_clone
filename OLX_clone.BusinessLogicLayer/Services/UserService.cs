@@ -42,7 +42,7 @@ public class UserService : IUserService
             Name = user.Name,
             Surname = user.Surname,
             PhoneNumber = user.PhoneNumber,
-            Posts = userPosts
+            Posts = userPosts,
         };
 
         return new ApiResponse<GetApplicationUserDetailsDto>
@@ -85,29 +85,6 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateLastSeen(string userId)
-    {
-        var userFromDb = await _userManager.FindByIdAsync(userId);
-        if (userFromDb == null)
-        {
-            throw new NotFoundException("User not found.");
-        }
-
-        userFromDb.LastSeenOnline = DateTime.Now;
-        var result = await _userManager.UpdateAsync(userFromDb);
-        if (result.Succeeded)
-        {
-            return new ApiResponse<IEnumerable<IdentityError>> { Success = true, Message = "User updated successfully." };
-        }
-
-        return new ApiResponse<IEnumerable<IdentityError>>
-        {
-            Data = result.Errors,
-            Success = false,
-            Message = "Error updating user."
-        };
-    }
-
     public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateOnlineStatus(string userId)
     {
         var userFromDb = await _userManager.FindByIdAsync(userId);
@@ -117,6 +94,7 @@ public class UserService : IUserService
         }
 
         userFromDb.Online = !userFromDb.Online;
+        userFromDb.LastSeenOnline = DateTime.Now;
         var result = await _userManager.UpdateAsync(userFromDb);
         if (result.Succeeded)
         {

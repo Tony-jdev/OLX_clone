@@ -10,6 +10,5 @@ public interface IUserService
     Task<ApiResponse<GetApplicationUserDetailsDto>> GetUserProfile(string userId);
     Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUser(UpdateApplicationUserDto applicationUserUpdateApplicationDto);
     Task<ApiResponse<IEnumerable<IdentityError>>> UpdateBalance(Transaction transaction);
-    Task<ApiResponse<IEnumerable<IdentityError>>> UpdateLastSeen(string userId);
     Task<ApiResponse<IEnumerable<IdentityError>>> UpdateOnlineStatus(string userId);
 }
