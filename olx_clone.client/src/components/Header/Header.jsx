@@ -20,6 +20,8 @@ import {useAddPost} from "@/providers/AddPostModalProvider.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 import {LabelMedium, TitleLarge, TitleMedium, TitleSmall} from "@/components/Tools/TextContainer/Styles.js";
 import {fontSize} from "@mui/system";
+import UnderlineWrapper from "@/components/Tools/Button/LineWrapper.jsx";
+import SquareAndTextWrapper from "@/components/Tools/Button/SquareWrapper.jsx";
 const Header = () => {
     const navigate = useNavigate();
 
@@ -195,57 +197,86 @@ const Header = () => {
                         <Box style={LastBoxStyle} >
                             <LocationPickerButton location={location} setLocation={setNewLocation} Color={colors.text.orange}/>
 
-                            <SButton type='transparentButton'
-                                     textSt={TitleMedium}
-                                     Color={colors.text.primary}
-                                     text={<FormattedMessage id="category.realEstate"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     prewColor={colors.categories.p}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[3]);
-                                     }}                            />
-                            <SButton type='transparentButton'
-                                     textSt={TitleMedium}
-                                     Color={colors.text.primary}
-                                     prewColor={colors.categories.g}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
-                                     text={<FormattedMessage id="category.animals"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[5]);
-                                     }}                            />
-                            <SButton type='transparentButton'
-                                     textSt={TitleMedium}
-                                     Color={colors.text.primary}
-                                     prewColor={colors.categories.y}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
-                                     text={<FormattedMessage id="category.childrensWorld"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[8]);
-                                     }}                            />
-                            <SButton type='transparentButton'
-                                     textSt={TitleMedium}
-                                     Color={colors.text.primary}
-                                     prewColor={colors.categories.o}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
-                                     text={<FormattedMessage id="category.fashion"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{
-                                         navigate('./search/'+Categories[1]);
-                                     }}                            />
-                            <SButton type='transparentButton'
-                                     textSt={TitleMedium}
-                                     Color={colors.text.primary}
-                                     prewColor={colors.categories.b}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
-                                     text={<FormattedMessage id="category.electronics"/>}
-                                     sl={{ color: colors.text.primary }}
-                                     action={()=>{ 
-                                         navigate('./search/'+Categories[0]);
-                                     }}
-                            />
+                            <UnderlineWrapper underlineColor={colors.categories.p}>
+                                <SquareAndTextWrapper
+                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                    squareColor={colors.categories.p}
+                                    textColor={colors.text.primary}
+                                >
+                                    <SButton
+                                        type='transparentButton'
+                                        sr={{padding: "0px 8px 0px 18px"}}
+                                        action={() => navigate('./search/' + Categories[3])}
+                                        text={<FormattedMessage id="category.realEstate" />}
+                                        textType="TitleMedium"
+                                        textSt={TitleMedium}
+                                    />
+                                </SquareAndTextWrapper>
+                            </UnderlineWrapper>
+                            <UnderlineWrapper underlineColor={colors.categories.g}>
+                                <SquareAndTextWrapper
+                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                    squareColor={colors.categories.g}
+                                    textColor={colors.text.primary}
+                                >
+                                    <SButton
+                                        type='transparentButton'
+                                        sr={{padding: "0px 8px 0px 18px"}}
+                                        action={() => navigate('./search/' + Categories[5])}
+                                        text={<FormattedMessage id="category.animals"/>}
+                                        textType="TitleMedium"
+                                        textSt={{}}
+                                    />
+                                </SquareAndTextWrapper>
+                            </UnderlineWrapper>
+                            <UnderlineWrapper underlineColor={colors.categories.y}>
+                                <SquareAndTextWrapper
+                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                    squareColor={colors.categories.y}
+                                    textColor={colors.text.primary}
+                                >
+                                    <SButton
+                                        type='transparentButton'
+                                        sr={{padding: "0px 8px 0px 18px"}}
+                                        action={() => navigate('./search/' + Categories[8])}
+                                        text={<FormattedMessage id="category.childrensWorld"/>}
+                                        textType="TitleMedium"
+                                        textSt={{}}
+                                    />
+                                </SquareAndTextWrapper>
+                            </UnderlineWrapper>
+                            <UnderlineWrapper underlineColor={colors.categories.o}>
+                                <SquareAndTextWrapper
+                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                    squareColor={colors.categories.o}
+                                    textColor={colors.text.primary}
+                                >
+                                    <SButton
+                                        type='transparentButton'
+                                        sr={{padding: "0px 8px 0px 18px"}}
+                                        action={() => navigate('./search/' + Categories[1])}
+                                        text={<FormattedMessage id="category.fashion"/>}
+                                        textType="TitleMedium"
+                                        textSt={{}}
+                                    />
+                                </SquareAndTextWrapper>
+                            </UnderlineWrapper>
+                            <UnderlineWrapper underlineColor={colors.categories.b}>
+                                <SquareAndTextWrapper
+                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                    squareColor={colors.categories.b}
+                                    textColor={colors.text.primary}
+                                >
+                                    <SButton
+                                        type='transparentButton'
+                                        sr={{padding: "0px 8px 0px 18px"}}
+                                        action={() => navigate('./search/' + Categories[0])}
+                                        text={<FormattedMessage id="category.electronics"/>}
+                                        textType="TitleMedium"
+                                        textSt={{}}
+                                    />
+                                </SquareAndTextWrapper>
+                            </UnderlineWrapper>
                         </Box>
                     </Grid>
                 </Toolbar>

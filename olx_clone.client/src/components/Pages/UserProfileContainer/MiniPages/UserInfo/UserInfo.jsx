@@ -19,7 +19,7 @@ import { fetchUserDataAsync, selectToken, selectUser } from "@/Storage/Redux/Sli
 import OrangeProgress from "@/components/Tools/CentralProgress/OrangeProgress.jsx";
 import { useTheme } from "@mui/material/styles";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
-import { PenEditIcon } from "@/assets/Icons/Icons.jsx";
+//import { PenEditIcon } from "@/assets/Icons/Icons.jsx";
 import { updateUserById } from "@/Api/userApi.js";
 import { InfoBlock, ButtonGroup } from "@/components/Pages/UserProfileContainer/MiniPages/UserInfo/Styles.js";
 //import { uploadAvatar } from "@/Api/avatarApi.js"; // You need to create this API method
