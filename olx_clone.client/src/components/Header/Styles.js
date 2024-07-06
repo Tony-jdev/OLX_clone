@@ -4,6 +4,7 @@ export const AppBarStyle = {
 };
 export const ContainerStyle= {
     maxWidth: 1440,
+    padding: 0,
 };
 export const ToolBarStyle= {
     paddingLeft: '0px',
@@ -14,14 +15,14 @@ export const ToolBarStyle= {
 export const BoxContainerStyle={
     display:'flex',
     height: 72, 
-    maxWidth: 950,
+    maxWidth: 709,
     width: '100%',
     justifyContent: 'space-between',
 };
 export const FirstGridStyle ={
     direction: 'row',
     justifyContent: 'space-between', 
-    alignItems: 'center'
+    alignItems: 'center',
 };
 export const SecondGridStyle ={
     direction: 'row',
@@ -36,7 +37,7 @@ export const LastBoxStyle={
     display:'flex',
     maxWidth: 'auto',
     width: '100%',
-    justifyContent: 'space-around'
+    justifyContent: 'space-between'
 };
 export const BottomGridStyle={
     direction:'row', 
@@ -46,15 +47,19 @@ export const FieldStyle ={
     maxWidth: 466, 
     width: '100%',
     height: 62, 
-    marginTop:'15px'
+    marginTop:'15px',
 };
 export const PropsFieldStyle ={
-    borderRadius: 30,
+    borderRadius: 20,
     height: 40,
     paddingRight: 0,
 };
 export const FlexBoxStyle={
-    display: 'flex'
+    display: 'flex',
+    width: '100%',
+    maxWidth: '464px',
+    justifyContent: 'space-between',
+    alignItems: 'center'
 };
 export const AddIconStyle={
     height: 18

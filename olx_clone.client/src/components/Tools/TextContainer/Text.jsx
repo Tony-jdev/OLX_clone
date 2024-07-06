@@ -61,7 +61,7 @@ const stylesMap = {
 };
 
 
-const Text = ({children, text, type, sl, sr, color, hoverColor, prew, next}) => {
+const Text = ({children, text, type, sl, sr, color, hoverColor, prew, next, textSt}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
 
@@ -86,7 +86,7 @@ const Text = ({children, text, type, sl, sr, color, hoverColor, prew, next}) => 
     const TextStyle = getStyle();
     
     return(
-        <Typography color={color ?? colors.text.revers} style={{...TextStyle, ...sr}} sx={{...sl, "&:hover": {color: hoverColor ?? '',}}}>
+        <Typography color={color ?? colors.text.revers} style={{...(textSt ?? TextStyle), ...sr}} sx={{...sl, "&:hover": {color: hoverColor ?? '',}}}>
             {prew}{children ?? text}{next}
         </Typography>
     );

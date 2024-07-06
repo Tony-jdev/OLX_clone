@@ -22,8 +22,6 @@ import {
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import {useAlert} from "@/providers/AlertsProvider.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
-import {eVseIcon} from "@/assets/Icons/Icons.jsx";
-import '../../../../public/EVSE.png'
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;

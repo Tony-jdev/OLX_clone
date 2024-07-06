@@ -29,7 +29,7 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 const ColorWrapper = ({ children, color }) => {
     return React.cloneElement(children, { style: { ...children.props.style, color } });
 };
-const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, sr, link, textSL, textSR, Color, prewColor, nextColor, borderInVisible, hoverShadow, hoverColor, hoverBack, textType}) => {
+const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, sr, link, textSL, textSR, Color, prewColor, nextColor, borderInVisible, hoverShadow, hoverColor, hoverBack, textType, textSt}) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const getButtonStyle = () => {
@@ -95,7 +95,7 @@ const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, sr, li
             onMouseLeave={handleMouseLeave}
         >
             {prew && <ColorWrapper color={prewColor ?? (isHovered ? hoverColor ?? Color : Color)}>{prew}</ColorWrapper>}
-            <Text sl={textSL??''} sr={textSR??''} type={textType} color={isHovered ? hoverColor ?? Color : Color}>{text}</Text>
+            <Text sl={textSL??''} sr={textSR??''} type={textType} textSt={textSt} color={isHovered ? hoverColor ?? Color : Color}>{text}</Text>
             {next && <ColorWrapper color={nextColor ?? (isHovered ? hoverColor ?? Color : Color)}>{next}</ColorWrapper>}
         </Button>
     );

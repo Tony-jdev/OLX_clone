@@ -5,7 +5,7 @@ import { AppBarStyle, ContainerStyle, ToolBarStyle, FirstGridStyle, BoxContainer
 import { useTheme } from '@mui/material/styles';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import ColorModeContext from "@/contexts/ColorModeContext.jsx";
-import {AddIcon, ProfileIcon, SearchIcon, SquareIcon} from '@/assets/Icons/Icons.jsx';
+import {AddIcon, LikeIcon, ProfileIcon, SearchIcon, SquareIcon} from '@/assets/Icons/Icons.jsx';
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {changeLocale, changeTheme, selectLocale, selectTheme} from "@/Storage/Redux/Slices/themeAndLocaleSlice.js";
@@ -17,6 +17,9 @@ import {isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import AddPostModal from "@/components/Tools/AddPostModal/AddPostModal.jsx";
 import {useAuth} from "@/providers/AuthProvider.jsx";
 import {useAddPost} from "@/providers/AddPostModalProvider.jsx";
+import Icon from "@/components/Tools/IconContainer/Icon.jsx";
+import {LabelMedium, TitleLarge, TitleMedium, TitleSmall} from "@/components/Tools/TextContainer/Styles.js";
+import {fontSize} from "@mui/system";
 const Header = () => {
     const navigate = useNavigate();
 
@@ -40,12 +43,6 @@ const Header = () => {
     const [open, setOpen] = useState(false);
 
     const { showAddPostModal } = useAddPost();
-    
-    
-    const toggleTheme = () => {
-        const newTheme = mode === 'light' ? 'dark' : 'light';
-        dispatch(changeTheme(newTheme));
-    };
 
     const toggleLocale = () => {
         const newLocale = locale === 'en' ? 'uk' : 'en';
@@ -65,16 +62,6 @@ const Header = () => {
     
     const authHandle = ()=>  {
         navigate('/user/Settings');
-    }
-
-    function getRandomBrightColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 3; i++) {
-            color += letters[Math.floor(Math.random() * 8) + 8];
-            color += letters[Math.floor(Math.random() * 8) + 8];
-        }
-        return color;
     }
 
     useEffect(() => {
@@ -101,17 +88,22 @@ const Header = () => {
                             />
                             <TextField title='non' 
                                        value={text} 
+                                       placeholder={"Пошук"}
                                        onChange={(e)=>setText(e.target.value)}
                                        onKeyDown={handleKeyDown}
+                                       
                                 InputProps={{
                                     startAdornment: (
-                                        <InputAdornment position="start">
+                                        <InputAdornment position="start" sx={{marginLeft: '-8px'}}>
                                             <SButton isIconButton={true} 
-                                                     icon={ <SearchIcon style={{fill: colors.text.orange}}/>}
+                                                     icon={ <SearchIcon style={{fill: colors.text.revers}}/>}
                                                      action={searchThings}
                                             />
                                         </InputAdornment>
                                     ),
+                                    inputProps: {
+                                        style: LabelMedium
+                                    },
                                     style: PropsFieldStyle,
                                     sx: { backgroundColor: colors.background.secondary }
                                 }}
@@ -121,56 +113,78 @@ const Header = () => {
                                         paddingTop: 1,
                                         paddingBottom: 1,
                                         paddingLeft: 7.5,
-                                        marginLeft: -7.5,
+                                        marginLeft: -6.5,
                                     },
                                     '& .MuiInputBase-input.MuiOutlinedInput-input': {
                                         paddingTop: 1,
                                         paddingBottom: 1,
                                         paddingLeft: 7.5,
-                                        marginLeft: -7.5,
+                                        marginLeft: -6.5,
                                     },
                                 }} 
                             >
                             </TextField>
-                            <LocationPickerButton location={location} setLocation={setNewLocation}/>
                         </Box>
                         <Box style={FlexBoxStyle}>
                             <SButton
                               type='orangeRoundButton'
                               textType={'Body'}
                               sl={ {backgroundColor: colors.background.orange}}
-                              Color={colors.text.primary}
+                              Color={colors.text.revers}
                               hoverBack={colors.background.orange}
                               hoverShadow={colors.types.shadows.boxShadowWarning}
-                              sr={{width: '200px', height: '40px'}}
-                              prew={<AddIcon style={AddIconStyle} sx={{ color: colors.text.primary }} />}
+                              sr={{width: '200px', height: '40px', }}
+                              textSR={{marginLeft: '8px', fontWeight: '600', letterSpacing: '0,1px'}}
+                              textSt={TitleSmall}
+                              prew={
+                                <Icon
+                                    icon={AddIcon}
+                                    color={colors.text.primary}
+                                    step={1}
+                                    width={18}
+                                    height={18}
+                                />
+                              }
                               text={<FormattedMessage id="header.addButtonLabel"/>}
                               action={()=>navigate('/create')}
-                            />
-
-                            <SButton isIconButton={true} 
-                                     action={toggleTheme} 
-                                     icon={mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-                                     sl={{...ProfileButtonStyle, color: colors.text.primary}}
                             />
                             
                             <SButton
                                 isIconButton={true}
-                                icon={ <ProfileIcon /> }
+                                icon={ 
+                                <Icon
+                                    icon={ProfileIcon}
+                                    step={1}
+                                    width={36}
+                                    height={36}
+                                />
+                                }
                                 sl={{...ProfileButtonStyle, color: colors.text.primary}}
                                 action={()=>navigate('/user')}
+                            />
+
+                            <SButton isIconButton={true}
+                                     action={()=>{
+                                     }}
+                                     icon={<Icon
+                                         icon={LikeIcon}
+                                         color={colors.text.primary}
+                                         step={2}
+                                         width={30}
+                                         height={30}
+                                     />}
                             />
                             
                             <SButton
                                 type='transparentButton'
                                 action={toggleLocale}
-                                textType={'Body'}
                                 Color={colors.text.primary}
+                                textSt={TitleMedium}
                                 prewColor={locale === 'uk' ? colors.text.orange : colors.text.primary}
                                 nextColor={locale === 'en' ? colors.text.orange : colors.text.primary}
-                                prew={<Box>Ua</Box>}
+                                prew={<Box style={{fontSize: '14', fontWeight: '500', lineHeight: '20px'}}>Ua</Box>}
                                 text={'|'}
-                                next={<Box>En</Box>}
+                                next={<Box style={{fontSize: '14', fontWeight: '500', lineHeight: '20px'}}>En</Box>}
                                 sl={{color: colors.text.primary }}
                             />
                         </Box>
@@ -179,46 +193,53 @@ const Header = () => {
                 <Toolbar style={ToolBarStyle}>
                     <Grid container style={BottomGridStyle}>
                         <Box style={LastBoxStyle} >
+                            <LocationPickerButton location={location} setLocation={setNewLocation} Color={colors.text.orange}/>
+
                             <SButton type='transparentButton'
+                                     textSt={TitleMedium}
                                      Color={colors.text.primary}
                                      text={<FormattedMessage id="category.realEstate"/>}
                                      sl={{ color: colors.text.primary }}
-                                     prewColor={getRandomBrightColor()}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
+                                     prewColor={colors.categories.p}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
                                      action={()=>{
                                          navigate('./search/'+Categories[3]);
                                      }}                            />
                             <SButton type='transparentButton'
+                                     textSt={TitleMedium}
                                      Color={colors.text.primary}
-                                     prewColor={getRandomBrightColor()}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
+                                     prewColor={colors.categories.g}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
                                      text={<FormattedMessage id="category.animals"/>}
                                      sl={{ color: colors.text.primary }}
                                      action={()=>{
                                          navigate('./search/'+Categories[5]);
                                      }}                            />
                             <SButton type='transparentButton'
+                                     textSt={TitleMedium}
                                      Color={colors.text.primary}
-                                     prewColor={getRandomBrightColor()}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
+                                     prewColor={colors.categories.y}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
                                      text={<FormattedMessage id="category.childrensWorld"/>}
                                      sl={{ color: colors.text.primary }}
                                      action={()=>{
                                          navigate('./search/'+Categories[8]);
                                      }}                            />
                             <SButton type='transparentButton'
+                                     textSt={TitleMedium}
                                      Color={colors.text.primary}
-                                     prewColor={getRandomBrightColor()}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
+                                     prewColor={colors.categories.o}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
                                      text={<FormattedMessage id="category.fashion"/>}
                                      sl={{ color: colors.text.primary }}
                                      action={()=>{
                                          navigate('./search/'+Categories[1]);
                                      }}                            />
                             <SButton type='transparentButton'
+                                     textSt={TitleMedium}
                                      Color={colors.text.primary}
-                                     prewColor={getRandomBrightColor()}
-                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '5px'}}/>}
+                                     prewColor={colors.categories.b}
+                                     prew={<SquareIcon sx={{width: '10px', height: '10px', marginRight: '8px'}}/>}
                                      text={<FormattedMessage id="category.electronics"/>}
                                      sl={{ color: colors.text.primary }}
                                      action={()=>{ 
