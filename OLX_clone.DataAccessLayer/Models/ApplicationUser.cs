@@ -9,7 +9,7 @@ public class ApplicationUser: IdentityUser
     public string? Surname { get; set; }
     
     public string? Address { get; set; }
-
+    public string? ProfilePhotoUrl { get; set; }
     public double Balance { get; set; } = 0;
 
     public bool Online { get; set; } = true;

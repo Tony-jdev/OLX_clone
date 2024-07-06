@@ -19,6 +19,13 @@ public class ChatRepository: GenericRepository<Chat>, IChatRepository
             .ToListAsync();
     }
     
+    public async Task<int> GetChatsCountByPostId(int postId)
+    {
+        return _context.Chats
+            .Where(c => c.PostId == postId)
+            .Count();
+    }
+    
     public async Task<Chat> GetChatByUsersAsync(string customerId, string sellerId, int postId)
     {
         return await _context.Chats

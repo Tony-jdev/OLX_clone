@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OLX_clone.BusinessLogicLayer.Middleware.Exceptions;
@@ -14,15 +15,17 @@ public class UserService : IUserService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITransactionService _transactionService;
     private readonly IPostService _postService;
+    private readonly IBlobService _blobService;
     private readonly IMapper _mapper;
 
     public UserService(UserManager<ApplicationUser> userManager, IMapper mapper, ITransactionService transactionService,
-        IPostService postService)
+        IPostService postService, IBlobService blobService)
     {
         _userManager = userManager;
         _mapper = mapper;
         _transactionService = transactionService;
         _postService = postService;
+        _blobService = blobService;
     }
 
     public async Task<ApiResponse<GetApplicationUserDetailsDto>> GetUserProfile(string userId)
@@ -42,7 +45,7 @@ public class UserService : IUserService
             Name = user.Name,
             Surname = user.Surname,
             PhoneNumber = user.PhoneNumber,
-            Posts = userPosts
+            Posts = userPosts,
         };
 
         return new ApiResponse<GetApplicationUserDetailsDto>
@@ -84,28 +87,32 @@ public class UserService : IUserService
             Message = "Error updating user."
         };
     }
-
-    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateLastSeen(string userId)
+    
+    public async Task<ApiResponse<string>> UploadUserPhoto(string userId, IFormFile file)
     {
-        var userFromDb = await _userManager.FindByIdAsync(userId);
-        if (userFromDb == null)
+        ApplicationUser user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
         {
             throw new NotFoundException("User not found.");
         }
-
-        userFromDb.LastSeenOnline = DateTime.Now;
-        var result = await _userManager.UpdateAsync(userFromDb);
-        if (result.Succeeded)
+        
+        if (!string.IsNullOrEmpty(user.ProfilePhotoUrl))
         {
-            return new ApiResponse<IEnumerable<IdentityError>> { Success = true, Message = "User updated successfully." };
+            var existingFileName = user.ProfilePhotoUrl.Split('/').Last();
+            await _blobService.DeleteBlob(existingFileName, SD.SD_Storage_Container);
+        }
+        
+        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        var createdFile = await _blobService.UploadBlob(fileName, SD.SD_Storage_Container, file);
+        
+        user.ProfilePhotoUrl = createdFile;
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+        {
+            throw new InternalServerErrorException("Failed to update user profile with new photo.");
         }
 
-        return new ApiResponse<IEnumerable<IdentityError>>
-        {
-            Data = result.Errors,
-            Success = false,
-            Message = "Error updating user."
-        };
+        return new ApiResponse<string> { Data = createdFile, Success = true, Message = "Photo uploaded successfully" };
     }
 
     public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateOnlineStatus(string userId)
@@ -117,6 +124,7 @@ public class UserService : IUserService
         }
 
         userFromDb.Online = !userFromDb.Online;
+        userFromDb.LastSeenOnline = DateTime.Now;
         var result = await _userManager.UpdateAsync(userFromDb);
         if (result.Succeeded)
         {

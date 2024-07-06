@@ -43,15 +43,17 @@ public class PostService : IPostService
         {
             post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
             post.ViewsCount = await _unitOfWork.PostViewRepository.GetAllPostViewsCountByPostId(post.Id);
+            post.FavoritesCount = await _unitOfWork.FavoriteRepository.GetFavoritesCountByPostId(post.Id);
+            post.ChatsCount = await _unitOfWork.ChatRepository.GetChatsCountByPostId(post.Id);
         }
         
         return getPostDtos;
     }
     
     public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(
-        string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page)
+        string? searchTerm, string? orderBy, string? location, string? type, double? priceFrom, double? priceTo, string? status, int page)
     {
-        var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy, location, priceFrom, priceTo, status);
+        var posts = await _unitOfWork.PostRepository.GetAllAsync(searchTerm, orderBy, location, type, priceFrom, priceTo, status);
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 16);
         
@@ -61,12 +63,12 @@ public class PostService : IPostService
     }
     
     public async Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 
-        string? searchTerm, string? orderBy, string? location, double? priceFrom, double? priceTo, string? status, int page)
+        string? searchTerm, string? orderBy, string? location, string? type, double? priceFrom, double? priceTo, string? status, int page)
     {
         var categoryIds = await _unitOfWork.CategoryRepository.GetCategoryAndChildrenIds(categorySku);
 
         var posts = await _unitOfWork.PostRepository.GetAllByCategoryAsync(
-            categoryIds, searchTerm, orderBy, location, priceFrom, priceTo, status);
+            categoryIds, searchTerm, orderBy, location, type, priceFrom, priceTo, status);
 
         var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
         var pagedPosts = await PagedList<GetPostDto>.CreateAsync(getPostDtos, page, 16);

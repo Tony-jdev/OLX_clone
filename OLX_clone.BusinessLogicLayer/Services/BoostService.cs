@@ -38,7 +38,7 @@ public class BoostService : IBoostService
 
         postToUpdate.IsTop = true;
 
-        if (boostPackage.Type == BoostType.VIP)
+        if (boostPackage.Type == BoostType.Vip)
         {
             postToUpdate.IsVip = true;
             postBoost.VipExpiryDate = DateTime.Now.AddDays(boostPackage.VipDurationInDays);

@@ -30,19 +30,18 @@ public class PostController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(
-        [FromQuery] string? searchTerm, [FromQuery] string? orderBy, [FromQuery] string? location, 
-        [FromQuery] double? priceFrom, [FromQuery] double? priceTo, [FromQuery] string? status, [FromQuery] int page = 1)
+       string? searchTerm, string? orderBy, string? location, string? type, double? priceFrom, double? priceTo, string? status, int page = 1)
     {
-        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, location, priceFrom, priceTo, status, page);
+        var apiResponse = await _postService.GetPosts(searchTerm, orderBy, location, type, priceFrom, priceTo, status, page);
         return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 
     [HttpGet("category/{categorySku}", Name = "GetPostByCategory")]
-    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(string categorySku,
-        [FromQuery] string? searchTerm, [FromQuery] string? orderBy, [FromQuery] string? location, 
-        [FromQuery] double? priceFrom, [FromQuery] double? priceTo, [FromQuery] string? status, [FromQuery] int page = 1)
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByCategory(
+        string categorySku, string? searchTerm, string? orderBy, string? location, string? type, 
+        double? priceFrom, double? priceTo, string? status, int page = 1)
     {
-        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, location, priceFrom, priceTo, status, page);
+        var apiResponse = await _postService.GetPostsByCategory(categorySku, searchTerm, orderBy, location, type, priceFrom, priceTo, status, page);
         return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 

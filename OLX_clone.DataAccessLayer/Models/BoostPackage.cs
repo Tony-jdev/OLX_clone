@@ -34,5 +34,5 @@ public class BoostPackage
 public enum BoostType
 {
     Top,
-    VIP
+    Vip
 }

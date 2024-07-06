@@ -9,6 +9,8 @@ public class GetPostProfileDto
     public string Location { get; set; }
     public string Type { get; set; }
     public string Status { get; set; }
+    public int ChatsCount { get; set; }
+    public int FavoritesCount { get; set; }
     public int ViewsCount { get; set; }
     public bool IsTop { get; set; }
     public string PhotoUrl { get; set; }

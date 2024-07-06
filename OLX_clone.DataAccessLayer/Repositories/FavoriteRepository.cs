@@ -19,4 +19,11 @@ public class FavoriteRepository : GenericRepository<Favorite>, IFavoriteReposito
             .OrderByDescending(f => f.CreatedAt)
             .ToListAsync();
     }
+    
+    public async Task<int> GetFavoritesCountByPostId(int postId)
+    {
+        return _context.Favorites
+            .Where(f => f.PostId == postId)
+            .Count();
+    }
 }
