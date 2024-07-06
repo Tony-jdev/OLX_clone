@@ -22,6 +22,7 @@ import {LabelMedium, TitleLarge, TitleMedium, TitleSmall} from "@/components/Too
 import {fontSize} from "@mui/system";
 import UnderlineWrapper from "@/components/Tools/Button/LineWrapper.jsx";
 import SquareAndTextWrapper from "@/components/Tools/Button/SquareWrapper.jsx";
+import SubCategoriesWrapper from "@/components/Tools/Button/SubCategoriesWrapper.jsx";
 const Header = () => {
     const navigate = useNavigate();
 
@@ -197,22 +198,25 @@ const Header = () => {
                         <Box style={LastBoxStyle} >
                             <LocationPickerButton location={location} setLocation={setNewLocation} Color={colors.text.orange}/>
 
-                            <UnderlineWrapper underlineColor={colors.categories.p}>
-                                <SquareAndTextWrapper
-                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
-                                    squareColor={colors.categories.p}
-                                    textColor={colors.text.primary}
-                                >
-                                    <SButton
-                                        type='transparentButton'
-                                        sr={{padding: "0px 8px 0px 18px"}}
-                                        action={() => navigate('./search/' + Categories[3])}
-                                        text={<FormattedMessage id="category.realEstate" />}
-                                        textType="TitleMedium"
-                                        textSt={TitleMedium}
-                                    />
-                                </SquareAndTextWrapper>
-                            </UnderlineWrapper>
+                            <SubCategoriesWrapper categoryId={3}>
+                                <UnderlineWrapper underlineColor={colors.categories.p}>
+                                    <SquareAndTextWrapper
+                                        squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                        squareColor={colors.categories.p}
+                                        textColor={colors.text.primary}
+                                    >
+                                        <SButton
+                                            type='transparentButton'
+                                            sr={{padding: "0px 8px 0px 18px"}}
+                                            action={() => navigate('./search/' + Categories[3])}
+                                            text={<FormattedMessage id="category.realEstate" />}
+                                            textType="TitleMedium"
+                                            textSt={{}}
+                                        />
+                                    </SquareAndTextWrapper>
+                                </UnderlineWrapper>
+                            </SubCategoriesWrapper>
+                            
                             <UnderlineWrapper underlineColor={colors.categories.g}>
                                 <SquareAndTextWrapper
                                     squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}

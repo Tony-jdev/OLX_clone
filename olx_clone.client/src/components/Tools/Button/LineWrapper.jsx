@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const UnderlineWrapper = ({ children, underlineColor }) => {
+const UnderlineWrapper = ({ children, underlineColor, isHovered: propIsHovered }) => {
     const [isHovered, setIsHovered] = useState(false);
     const wrapperRef = useRef(null);
 
@@ -12,20 +12,33 @@ const UnderlineWrapper = ({ children, underlineColor }) => {
         }
     }, [children]);
 
+    const handleMouseEnter = () => {
+        if (propIsHovered === undefined) {
+            setIsHovered(true);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (propIsHovered === undefined) {
+            setIsHovered(false);
+        }
+    };
+
+    const hovered = propIsHovered !== undefined ? propIsHovered : isHovered;
+
     return (
-        <div style={{ 
-            position: 'relative', 
+        <div style={{
+            position: 'relative',
             display: 'flex',
             alignItems: 'center',
-            overflow: 'hidden', 
+            overflow: 'hidden',
             height: '40px', marginTop: '10px', marginBottom: '10px',
-            
         }}
-             onMouseEnter={() => setIsHovered(true)}
-             onMouseLeave={() => setIsHovered(false)}
+             onMouseEnter={handleMouseEnter}
+             onMouseLeave={handleMouseLeave}
              ref={wrapperRef}
         >
-            {React.cloneElement(children, { isHovered })}
+            {React.cloneElement(children, { isHovered: hovered })}
             <div
                 style={{
                     position: 'absolute',
@@ -33,7 +46,7 @@ const UnderlineWrapper = ({ children, underlineColor }) => {
                     height: '2px',
                     background: underlineColor,
                     transition: 'width 1s',
-                    width: isHovered ? `${childrenWidth - 8}px` : '0',
+                    width: hovered ? `${childrenWidth - 8}px` : '0',
                     top: 36
                 }}
             ></div>
