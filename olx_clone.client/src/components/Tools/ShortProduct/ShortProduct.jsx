@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, Box} from '@mui/material';
 import IndicatorBox from "@/components/Tools/IndicatorBox/IndicatorBox.jsx";
 import {
@@ -15,16 +15,72 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectSelectedPostId, setSelectedPostId} from "@/Storage/Redux/Slices/postSlice.js";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
-import {addFavorite} from "@/Api/favouritesApi.js";
+import {addFavorite, deleteFavorite, getFavoritesByUserId} from "@/Api/favouritesApi.js";
+import {fetchUserDataAsync, isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
 
 const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id, intId }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isUserLogined = useSelector(isUserLoggedIn);
     const selectedId = useSelector(selectSelectedPostId);
     const isVip = vip ?? false;
     const isUsed = type !== 'New';
+    
+    const [ isFavourite, setIsFavourite] = useState(false);
+    
+    const getIsFav = () =>{
+        const checkFav = async () => {
+            const user = await dispatch(fetchUserDataAsync());
+            const favs = await getFavoritesByUserId(user.userId);
+            const posts = favs.data.map(fav => fav.post);
+            const exist = posts.some(post => post.id === intId);
+            console.log(exist);
+            setIsFavourite(exist);
+        }
+        checkFav();
+    }
+    
+    const setFavHandle = () => {
+        if(isUserLogined) {
+            const adFavourite = async ()=>{
+                const user = await dispatch(fetchUserDataAsync());
+                const favoriteData = {
+                    postId: intId,
+                    applicationUserId: user.userId
+                };
+                console.log(favoriteData);
+                const res = await addFavorite(favoriteData);
+                console.log(res);
+                setIsFavourite(true);
+            }
+            adFavourite();
+        }
+    }
+    const findExternalIdByPostId = (posts, postId) => {
+        const post = posts.find(post => post.post.id === postId);
+        return post ? post.id : null;
+    };
+    const delFavHandle = () => {
+        if(isUserLogined) {
+            const delFavourite = async ()=>{
+                const user = await dispatch(fetchUserDataAsync());
+                const favs = await getFavoritesByUserId(user.userId);
+                console.log(favs);
+                const num = findExternalIdByPostId(favs.data, intId);
+                console.log(num);
+                const res = await deleteFavorite(num);
+                console.log(res);
+                setIsFavourite(false);
+            }
+            delFavourite();
+        }
+    }
+
+    useEffect(() => {
+        getIsFav();
+    }, []);
     
     return (
         <Box
@@ -65,22 +121,15 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
                     <Text type={'Title'} sr={{alignSelf: 'center'}}>{price}₴</Text>
                     <SButton
                         isIconButton={true}
-                        icon={<Icon icon={LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
+                        icon={<Icon icon={isFavourite ? LikedIcon : LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
                         action={(e)=>{ 
-                            e.stopPropagation(); 
-                            //if(userId!=="") {
-                            //    console.log('clicked');
-                            //    const adFavourite = async ()=>{
-                            //        const favoriteData = {
-                            //            postId: intId,
-                            //            applicationUserId: userId
-                            //        };
-                            //        console.log(favoriteData);
-                            //        const res = await addFavorite(favoriteData);
-                            //        console.log(res);
-                            //    }
-                            //    adFavourite();
-                            //}
+                            e.stopPropagation();
+                            if(isFavourite) {
+                                delFavHandle();
+                            }
+                            else {
+                                setFavHandle();
+                            }
                         }}
                     />
                 </Box>

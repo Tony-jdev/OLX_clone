@@ -89,7 +89,7 @@ const RecentViewsCard = ({ ad, container }) => {
             }}
             onClick={handleCardClick}
         >
-            <Avatar src={ad?.photos[0]?.photoUrl} variant="rounded" style={AvatarStyle} />
+            <Avatar src={ad?.photoUrl} variant="rounded" style={AvatarStyle} />
             <Grid container style={IndicatorGridStyle}>
                 {vip && <IndicatorBox text="Top" style='d' />}
                 {isUsed && <IndicatorBox text="Б/У" />}
@@ -98,7 +98,9 @@ const RecentViewsCard = ({ ad, container }) => {
                 <Box style={TextContainer}>
                     <Box>
                         <Text type="Title" >{ad.title}</Text>
-                        <Text textSt={TitleMedium} color={colors.text.secondary} ><CategoryChainComponent category={ad.category}/></Text>
+                        <Text textSt={TitleMedium} color={colors.text.secondary} >{
+                           0 //<CategoryChainComponent category={ad.category}/>
+                        }</Text>
                     </Box>
                     <Box style={{display: 'flex', flexDirection: 'row', height: 'max-content', alignItems: 'center'}}>
                         <Text textSt={HeadlineMedium} style={{ ...PriceStyle }} sr={{marginRight: '14px'}} text={`${ad.price}`} />
@@ -107,23 +109,25 @@ const RecentViewsCard = ({ ad, container }) => {
                 </Box>
                 <Grid container alignItems='flex-end' justifyContent='space-between' style={{ maxHeight: 70, height: '100%' }}>
                     <Box style={StatsContainer}>
-                        <Text textSt={TitleMedium}  >{formatLocationAndDate(ad.location,  ad.createdAt)}</Text>
+                        <Text textSt={TitleMedium}  >{
+                            0//formatLocationAndDate(ad.location,  ad.createdAt)
+                        }</Text>
                     </Box>
                     <Box style={StatsContainer}>
                         <SButton
                             isIconButton={true}
                             icon={
-                            <Icon
-                                icon={LikedIcon}
-                                color={colors.text.revers}
-                                step={1}
-                                width={36}
-                                height={36}
-                            />}
+                                <Icon
+                                    icon={LikedIcon}
+                                    color={colors.text.revers}
+                                    step={1}
+                                    width={36}
+                                    height={36}
+                                />}
                         />
                         <SButton
                             isIconButton={true}
-                            
+
                             icon={
                                 <Icon
                                     icon={MessageMailIcon}

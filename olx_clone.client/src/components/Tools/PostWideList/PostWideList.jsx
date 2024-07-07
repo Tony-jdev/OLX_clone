@@ -6,6 +6,7 @@ import PostWideCard from "@/components/Tools/PostWideCard/PostWideCard.jsx";
 import NoDataFound from "@/components/NoDataFound/NoDataFound.jsx";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import RecentViewsCard from "@/components/Tools/PostWideCard/RecentViewsCard.jsx";
+import FavouriteCard from "@/components/Tools/PostWideCard/FavouriteCard.jsx";
 
 const PostWideList = ({ ads, onPostUpdate, t, withoutCount }) => {
     const theme = useTheme();
@@ -54,6 +55,9 @@ const PostWideList = ({ ads, onPostUpdate, t, withoutCount }) => {
                         )}
                         {type === 'view' && (
                             <RecentViewsCard ad={ad} container={containerRef}/>
+                        )}
+                        {type === 'fav' && (
+                            <FavouriteCard ad={ad} container={containerRef}/>
                         )}
                         {type === 'message' && (
                             <Typography variant="body1">{ad.description}</Typography>
