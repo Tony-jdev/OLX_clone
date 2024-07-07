@@ -7,7 +7,7 @@ import NoDataFound from "@/components/NoDataFound/NoDataFound.jsx";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import RecentViewsCard from "@/components/Tools/PostWideCard/RecentViewsCard.jsx";
 
-const PostWideList = ({ ads, onPostUpdate, t, directionRevers }) => {
+const PostWideList = ({ ads, onPostUpdate, t, withoutCount }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const type = t ?? 'sell';
@@ -61,9 +61,11 @@ const PostWideList = ({ ads, onPostUpdate, t, directionRevers }) => {
                     </React.Fragment>
                 ))}
             </Box>
-            <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>
-                Всього оголошень: {ads.length}
-            </Text>
+            {!withoutCount &&
+                <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>
+                    Всього оголошень: {ads.length}
+                </Text>
+            }
         </>
     ) : <NoDataFound />
 };
