@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import React, { useEffect, useRef } from "react";
-import {Box, Typography} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { scrollableBox } from "@/components/Tools/PostWideList/Styles.js";
 import PostWideCard from "@/components/Tools/PostWideCard/PostWideCard.jsx";
 import NoDataFound from "@/components/NoDataFound/NoDataFound.jsx";
@@ -31,7 +31,7 @@ const PostWideList = ({ ads, onPostUpdate, t }) => {
     };
 
     useEffect(() => {
-        if (!(ads === null || ads.length < 1)) {
+        if (ads && ads.length > 0) {
             const container = containerRef.current;
             container.addEventListener('wheel', slowScroll);
 
@@ -41,30 +41,28 @@ const PostWideList = ({ ads, onPostUpdate, t }) => {
         }
     }, [ads]);
 
-    return !(ads === null || ads.length < 1) ? (
+    return ads && ads.length > 0 ? (
         <>
             <Box ref={containerRef} style={{
                 ...scrollableBox, scrollbarColor: `${colors.text.orange} ${colors.background.secondary}`,
-                maxWidth: 1020, maxHeight: 640, height: '100vh', width: '100vw',
-            }} >
-                {ads ? ads.map(ad => (
-                    <React.Fragment key={ad.id}>
+                maxWidth: 980, maxHeight: 640, height: '100vh', width: '100vw',
+            }}>
+                {ads.map((ad, index) => (
+                    <React.Fragment key={index}>
                         {type === 'sell' && (
                             <PostWideCard ad={ad} container={containerRef} onPostUpdate={onPostUpdate} />
                         )}
                         {type === 'view' && (
-                            // Компонент для типу 'view'
                             <RecentViewsCard ad={ad} container={containerRef}/>
                         )}
                         {type === 'message' && (
-                            // Компонент для типу 'message'
-                            <Typography variant="body1">{ad.title}</Typography>
+                            <Typography variant="body1">{ad.description}</Typography>
                         )}
                     </React.Fragment>
-                )) : <NoDataFound />}
+                ))}
             </Box>
             <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>
-                Всього оголошень: {ads ? ads.length : 0}
+                Всього оголошень: {ads.length}
             </Text>
         </>
     ) : <NoDataFound />

@@ -5,7 +5,7 @@ export const CardContainer = {
     boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
     marginBottom: '9px',
     marginTop: '9px',
-    maxWidth: 1000,
+    maxWidth: 956,
     maxHeight: 200,
     width: '100%',
     height: '100vh',
@@ -21,8 +21,8 @@ export const AvatarStyle = {
 export const ContentContainer = {
     marginTop: 15,
     marginBottom: 15,
-    paddingRight: 20,
-    maxWidth: 800, 
+    paddingRight: 8,
+    maxWidth: 693, 
     maxHeight: 170, 
     width: '100%'
 };

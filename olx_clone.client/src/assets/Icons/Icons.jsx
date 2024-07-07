@@ -480,6 +480,7 @@ export function LocationOutlinedIcon(props) {
         </SvgIcon>
     );
 }
+
 export function PenEditIcon(props) {
     return (
         <SvgIcon {...props} width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -491,6 +492,40 @@ export function PenEditIcon(props) {
             <defs>
                 <clipPath id="clip0_2549_17359">
                     <rect width="21" height="21" fill="white"/>
+                </clipPath>
+            </defs>
+        </SvgIcon>
+    );
+}
+
+export function YepIconIcon(props) {
+    return (
+        <SvgIcon {...props} width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_3046_4926)">
+                <path
+                    d="M13.5002 24.2548L7.24523 17.9998L5.11523 20.1148L13.5002 28.4998L31.5002 10.4998L29.3852 8.38477L13.5002 24.2548Z"
+                    fill="#FF9D00"/>
+            </g>
+            <defs>
+                <clipPath id="clip0_3046_4926">
+                    <rect width="36" height="36" fill="white"/>
+                </clipPath>
+            </defs>
+        </SvgIcon>
+    );
+}
+
+export function MessageMailIcon(props) {
+    return (
+        <SvgIcon {...props} width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_3046_2558)">
+                <path
+                    d="M33 9C33 7.35 31.65 6 30 6H6C4.35 6 3 7.35 3 9V27C3 28.65 4.35 30 6 30H30C31.65 30 33 28.65 33 27V9ZM30 9L18 16.5L6 9H30ZM30 27H6V12L18 19.5L30 12V27Z"
+                    fill="#FF9D00"/>
+            </g>
+            <defs>
+                <clipPath id="clip0_3046_2558">
+                    <rect width="36" height="36" fill="white"/>
                 </clipPath>
             </defs>
         </SvgIcon>

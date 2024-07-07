@@ -17,13 +17,17 @@ const RecentViews = () => {
             const recentSkus = getRecentViews();
             const fetchedAds = await Promise.all(recentSkus.map(async (sku) => {
                 const ad = await GetPostById(sku);
-                return { ...ad.data }; // Додаємо унікальний id, якщо його немає
+                return { ...ad.data, id: sku }; // Додаємо унікальний id, якщо його немає
             }));
             setAds(fetchedAds);
         };
 
         fetchAds();
     }, []);
+
+    useEffect(() => {
+        console.log('ads updated', ads);
+    }, [ads]);
 
     return (
         <Box style={{
@@ -32,13 +36,9 @@ const RecentViews = () => {
             boxShadow: colors.boxShadow,
             background: colors.background.secondary
         }}>
-            <Typography variant="h6">Recent Views</Typography>
-            <Box sx={{ marginTop: '20px' }}>
+            <Box sx={{ marginTop: '0px' }}>
                 <PostWideList ads={ads} t={'view'} />
             </Box>
-            <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>
-                Всього переглядів: {ads.length}
-            </Text>
         </Box>
     );
 };

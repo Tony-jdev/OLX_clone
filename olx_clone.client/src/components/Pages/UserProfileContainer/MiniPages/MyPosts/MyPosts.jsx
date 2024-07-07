@@ -34,7 +34,7 @@ const MyPosts = () => {
 
     return (
         <Box style={{
-            maxWidth: 1030, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
+            maxWidth: 980, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '8px',
             borderRadius: '10px',
             boxShadow: colors.boxShadow,
             background: colors.background.secondary
