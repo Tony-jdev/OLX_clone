@@ -14,4 +14,6 @@ public class GetPostProfileDto
     public int ViewsCount { get; set; }
     public bool IsTop { get; set; }
     public string PhotoUrl { get; set; }
+    
+    public DateTime SoldAt { get; set; }
 }

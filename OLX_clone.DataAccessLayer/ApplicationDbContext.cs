@@ -35,6 +35,14 @@ public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
             .Property(p => p.Type)
             .HasConversion<string>();
         
+        modelBuilder.Entity<ApplicationUser>()
+            .Property(u => u.Gender)
+            .HasConversion<string>();
+        
+        modelBuilder.Entity<ApplicationUser>()
+            .Property(u => u.MaritalStatus)
+            .HasConversion<string>();
+        
         modelBuilder.Entity<ChatMessage>()
             .HasOne(cm => cm.Sender)
             .WithMany()

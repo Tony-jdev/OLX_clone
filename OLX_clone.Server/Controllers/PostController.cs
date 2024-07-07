@@ -27,6 +27,13 @@ public class PostController : ControllerBase
         var apiResponse = await _postService.GetVipPosts(number);
         return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
+    
+    [HttpGet("recently-sold")]
+    public async Task<ActionResult<ApiResponse<List<GetRecentlySoldPostDto>>>> GetRecentlySoldProducts([FromQuery] int number = 13)
+    {
+        var apiResponse = await _postService.GetRecentlySoldPosts(number);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
+    }
 
     [HttpGet]
     public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPosts(
@@ -94,7 +101,7 @@ public class PostController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    [Authorize]
+    /*[Authorize]*/
     public async Task<ActionResult<ApiResponse<bool>>> DeletePost(int id)
     {
         if (id == 0)
@@ -107,7 +114,7 @@ public class PostController : ControllerBase
     }
 
     [HttpDelete("photo/{id:int}", Name = "DeletePhoto")]
-    [Authorize]
+    /*[Authorize]*/
     public async Task<ActionResult<ApiResponse<bool>>> DeletePhoto(int id)
     {
         if (id == 0)

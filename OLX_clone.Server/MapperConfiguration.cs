@@ -25,6 +25,7 @@ public class MapperConfiguration : Profile
         CreateMap<Post, GetPostDto>();
         CreateMap<Post, GetPostDetailsDto>();
         CreateMap<Post, GetPostProfileDto>();
+        CreateMap<Post, GetRecentlySoldPostDto>();
         
         CreateMap<RegisterRequestDto, ApplicationUser>()
             .ForMember(dest => dest.UserName,
@@ -39,7 +40,9 @@ public class MapperConfiguration : Profile
         CreateMap<ChatMessage, GetChatMessageDto>();
 
         CreateMap<ApplicationUser, GetApplicationUserDto>();
+        CreateMap<ApplicationUser, GetApplicationUserDetailsDto>();
         CreateMap<UpdateApplicationUserDto, ApplicationUser>();
+        CreateMap<UpdateApplicationUserAdditionalDto, ApplicationUser>();
 
         CreateMap<BoostPackage, GetBoostPackageDto>();
         CreateMap<BoostPackage, GetBoostPackageDetailsDto>();

@@ -6,6 +6,7 @@ public interface IPostRepository: IGenericRepository<Post>
 {
     Task<List<Post>> GetVipPostsAsync(int number);
     Task<List<Post>> GetPostsByUserIdAsync(string userId);
+    Task<List<Post>> GetRecentlySoldPosts(int number);
     Task<Post> GetPostDetailsBySkuAsync(string sku);
     Task<List<Post>> GetAllByCategoryAsync(
         List<int> categoryIds, string? searchTerm, string? orderBy, string? location, string? type,

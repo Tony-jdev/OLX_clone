@@ -10,6 +10,7 @@ public interface IPostService
 {
     Task<ApiResponse<List<GetPostDto>>> GetVipPosts(int number);
     Task<List<GetPostProfileDto>> GetPostsByUser(string userId);
+    Task<ApiResponse<List<GetRecentlySoldPostDto>>> GetRecentlySoldPosts(int number);
     Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(
         string? searchTerm, string? orderBy, string? location, string? type, double? priceFrom, double? priceTo, string? status, int page);
     Task<ApiResponse<PagedList<GetPostDto>>> GetPostsByCategory(string categorySku, 

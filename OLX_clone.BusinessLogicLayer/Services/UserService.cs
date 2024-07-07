@@ -30,35 +30,44 @@ public class UserService : IUserService
 
     public async Task<ApiResponse<GetApplicationUserDetailsDto>> GetUserProfile(string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var userFromDb = await _userManager.FindByIdAsync(userId);
+        if (userFromDb == null)
+        {
+            throw new NotFoundException("User not found.");
+        }
+
+        var userToView = _mapper.Map<ApplicationUser, GetApplicationUserDetailsDto>(userFromDb);
+        userToView.Posts = await _postService.GetPostsByUser(userId);
+
+        return new ApiResponse<GetApplicationUserDetailsDto>
+        {
+            Data = userToView,
+            Success = true,
+            Message = "User profile retrieved successfully."
+        };
+    }
+    
+    public async Task<ApiResponse<bool>> ChangePassword(ChangePasswordDto model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId);
         if (user == null)
         {
             throw new NotFoundException("User not found.");
         }
 
-        var userPosts = await _postService.GetPostsByUser(userId);
-
-        var userProfile = new GetApplicationUserDetailsDto
+        var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+        if (!result.Succeeded)
         {
-            UserId = user.Id,
-            Email = user.Email,
-            Name = user.Name,
-            Surname = user.Surname,
-            PhoneNumber = user.PhoneNumber,
-            Posts = userPosts,
-        };
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new BadRequestException($"Password change failed: {errors}");
+        }
 
-        return new ApiResponse<GetApplicationUserDetailsDto>
-        {
-            Data = userProfile,
-            Success = true,
-            Message = "User profile retrieved successfully."
-        };
+        return new ApiResponse<bool> { Success = true, Message = "Password changed successfully", Data = true };
     }
 
-    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUser(UpdateApplicationUserDto applicationUserUpdateApplicationDto)
+    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUser(UpdateApplicationUserDto applicationUserUpdateDto)
     {
-        var userFromDb = await _userManager.FindByIdAsync(applicationUserUpdateApplicationDto.Id);
+        var userFromDb = await _userManager.FindByIdAsync(applicationUserUpdateDto.Id);
         if (userFromDb == null)
         {
             throw new NotFoundException("User not found.");
@@ -66,18 +75,43 @@ public class UserService : IUserService
     
         // Перевірка унікальності номера телефону
         var phoneNumberUsed = await _userManager.Users
-            .AnyAsync(u => u.PhoneNumber == applicationUserUpdateApplicationDto.PhoneNumber && u.Id != applicationUserUpdateApplicationDto.Id);
+            .AnyAsync(u => u.PhoneNumber == applicationUserUpdateDto.PhoneNumber && u.Id != applicationUserUpdateDto.Id);
         if (phoneNumberUsed)
         {
             throw new BadRequestException("Phone number already in use by another user.");
         }
         
-        userFromDb = _mapper.Map(applicationUserUpdateApplicationDto, userFromDb);
+        userFromDb = _mapper.Map(applicationUserUpdateDto, userFromDb);
 
         var result = await _userManager.UpdateAsync(userFromDb);
         if (result.Succeeded)
         {
             return new ApiResponse<IEnumerable<IdentityError>> { Success = true, Message = "User updated successfully." };
+        }
+
+        return new ApiResponse<IEnumerable<IdentityError>>
+        {
+            Data = result.Errors,
+            Success = false,
+            Message = "Error updating user."
+        };
+    }
+    
+    public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUserAdditional(
+        UpdateApplicationUserAdditionalDto applicationUserUpdateAdditionalDto)
+    {
+        var userFromDb = await _userManager.FindByIdAsync(applicationUserUpdateAdditionalDto.Id);
+        if (userFromDb == null)
+        {
+            throw new NotFoundException("User not found.");
+        }
+        
+        userFromDb = _mapper.Map(applicationUserUpdateAdditionalDto, userFromDb);
+
+        var result = await _userManager.UpdateAsync(userFromDb);
+        if (result.Succeeded)
+        {
+            return new ApiResponse<IEnumerable<IdentityError>> { Success = true, Message = "User(additional info) updated successfully." };
         }
 
         return new ApiResponse<IEnumerable<IdentityError>>
