@@ -77,6 +77,28 @@ public class UserController: ControllerBase
         }
         return Ok(apiResponse);
     }
+    
+    [HttpPut("{userId}/additional-info")]
+    public async Task<ActionResult<ApiResponse<IEnumerable<IdentityError>>>> UpdateUserAdditional(
+        string userId, [FromBody] UpdateApplicationUserAdditionalDto applicationUserUpdateDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "Model is invalid"});
+        }
+
+        if (userId != applicationUserUpdateDto.Id)
+        {
+            return BadRequest(new ApiResponse<IEnumerable<IdentityError>> { Success = false, Message = "Wrong user"});
+        }
+
+        var apiResponse = await _userService.UpdateUserAdditional(applicationUserUpdateDto);
+        if (!apiResponse.Success)
+        {
+            return BadRequest(apiResponse);
+        }
+        return Ok(apiResponse);
+    }
 
     [HttpPost("update-online-status")]
     public async Task<ActionResult<ApiResponse<IEnumerable<IdentityError>>>> UpdateOnlineStatus(string userId)
