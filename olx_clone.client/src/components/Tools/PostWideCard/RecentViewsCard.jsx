@@ -22,7 +22,7 @@ import {LikedIcon, MessageMailIcon} from "@/assets/Icons/Icons.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 import {formatLocationAndDate} from "@/Helpers/DateHelper.js";
 import {CategoryChainComponent} from "@/Helpers/CategoryChain.jsx";
-import {TitleMedium} from "@/components/Tools/TextContainer/Styles.js";
+import {BodyMedium, HeadlineMedium, TitleMedium} from "@/components/Tools/TextContainer/Styles.js";
 
 const RecentViewsCard = ({ ad, container }) => {
     const theme = useTheme();
@@ -100,11 +100,14 @@ const RecentViewsCard = ({ ad, container }) => {
                         <Text type="Title" >{ad.title}</Text>
                         <Text textSt={TitleMedium} color={colors.text.secondary} ><CategoryChainComponent category={ad.category}/></Text>
                     </Box>
-                    <Text type="Title" style={{ ...PriceStyle }} sr={{marginRight: '14px'}} text={`${ad.price} ₴`} />
+                    <Box style={{display: 'flex', flexDirection: 'row', height: 'max-content', alignItems: 'center'}}>
+                        <Text textSt={HeadlineMedium} style={{ ...PriceStyle }} sr={{marginRight: '14px'}} text={`${ad.price}`} />
+                        <Text textSt={BodyMedium} style={{ ...PriceStyle }} sr={{marginRight: '14px'}} text={` ₴`} />
+                    </Box>
                 </Box>
                 <Grid container alignItems='flex-end' justifyContent='space-between' style={{ maxHeight: 70, height: '100%' }}>
                     <Box style={StatsContainer}>
-                        <Text type="Body"  >{formatLocationAndDate(ad.location,  ad.createdAt)}</Text>
+                        <Text textSt={TitleMedium}  >{formatLocationAndDate(ad.location,  ad.createdAt)}</Text>
                     </Box>
                     <Box style={StatsContainer}>
                         <SButton

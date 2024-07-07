@@ -94,8 +94,10 @@ const ProductPage = () => {
         }
         fetchPosts();
         
-        if(isUserLogined && post?.sku)
-        addRecentView(post?.sku);
+        if(isUserLogined && post?.sku && user?.userId)
+        {
+            addRecentView(user?.userId, post?.sku);
+        }
 
         if(post)
         {

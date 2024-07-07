@@ -22,6 +22,8 @@ import {
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import {useAlert} from "@/providers/AlertsProvider.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
+import {fetchUserDataAsync, selectToken, selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {setToken} from "@/Helpers/recentViewsHelper.js";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -99,9 +101,19 @@ const AuthModal = ({ open, handleClose}) => {
 
     const regHandler = async () => {
         const success = await dispatch(fetchRegistrationAsync());
+        if(success)
+        {
+            setIsRegister(false);
+        }
     }
     const logHandler = async () => {
         const success = await dispatch(fetchLogInAsync());
+        if(success)
+        {
+            const user = await dispatch(fetchUserDataAsync());
+            const token = localStorage.getItem('userToken');
+            setToken(user.userId, token);
+        }
     }
 
     useEffect(() => {

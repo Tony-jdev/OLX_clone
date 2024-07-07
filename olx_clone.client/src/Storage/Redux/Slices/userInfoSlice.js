@@ -73,6 +73,7 @@ export const fetchUserDataAsync = () => async (dispatch, getState) => {
         const data = jwtDecode(token);
         const user = await fetchUserById(data.uid);
         dispatch(setUser(user.data));
+        return user.data;
     } catch (error) {
         console.error('Failed to decode token:', error);
         return null;

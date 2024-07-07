@@ -7,7 +7,7 @@ import NoDataFound from "@/components/NoDataFound/NoDataFound.jsx";
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import RecentViewsCard from "@/components/Tools/PostWideCard/RecentViewsCard.jsx";
 
-const PostWideList = ({ ads, onPostUpdate, t }) => {
+const PostWideList = ({ ads, onPostUpdate, t, directionRevers }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const type = t ?? 'sell';
@@ -47,7 +47,7 @@ const PostWideList = ({ ads, onPostUpdate, t }) => {
                 ...scrollableBox, scrollbarColor: `${colors.text.orange} ${colors.background.secondary}`,
                 maxWidth: 980, maxHeight: 640, height: '100vh', width: '100vw',
             }}>
-                {ads.map((ad, index) => (
+                {ads.slice().reverse().map((ad, index) => (
                     <React.Fragment key={index}>
                         {type === 'sell' && (
                             <PostWideCard ad={ad} container={containerRef} onPostUpdate={onPostUpdate} />

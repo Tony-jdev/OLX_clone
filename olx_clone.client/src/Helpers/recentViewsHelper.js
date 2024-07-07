@@ -1,18 +1,55 @@
-const LOCAL_STORAGE_KEY = 'recentViews';
+const LOCAL_STORAGE_KEY = 'user_data';
 
-export const getRecentViews = () => {
-    const storedViews = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return storedViews ? JSON.parse(storedViews) : [];
+// Отримати дані з localStorage для конкретного користувача
+const getUserData = (userId) => {
+    const storedData = localStorage.getItem(`${LOCAL_STORAGE_KEY}_${userId}`);
+    return storedData ? JSON.parse(storedData) : { token: '', recentViews: [] };
 };
 
-export const addRecentView = (sku) => {
-    const recentViews = getRecentViews();
-    if (!recentViews.includes(sku)) {
+// Зберегти дані в localStorage для конкретного користувача
+const setUserData = (userId, data) => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_${userId}`, JSON.stringify(data));
+};
+
+// Отримати останні перегляди для конкретного користувача
+export const getRecentViews = (userId) => {
+    const userData = getUserData(userId);
+    return userData.recentViews;
+};
+
+// Додати новий перегляд для конкретного користувача
+export const addRecentView = (userId, sku) => {
+    const userData = getUserData(userId);
+    const recentViews = userData.recentViews;
+
+    if (recentViews.length === 0 || recentViews[recentViews.length - 1] !== sku) {
         recentViews.push(sku);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(recentViews));
+        if (recentViews.length > 30) {
+            recentViews.shift();
+        }
+        setUserData(userId, { ...userData, recentViews });
     }
 };
 
-export const clearRecentView = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
+// Очистити перегляди для конкретного користувача
+export const clearRecentView = (userId) => {
+    const userData = getUserData(userId);
+    setUserData(userId, { ...userData, recentViews: [] });
+};
+
+// Отримати токен для конкретного користувача
+export const getToken = (userId) => {
+    const userData = getUserData(userId);
+    return userData.token;
+};
+
+// Встановити токен для конкретного користувача
+export const setToken = (userId, token) => {
+    const userData = getUserData(userId);
+    setUserData(userId, { ...userData, token });
+};
+
+// Очистити всі дані користувача
+export const clearUserData = (userId) => {
+    localStorage.removeItem(`${LOCAL_STORAGE_KEY}_${userId}`);
 };
