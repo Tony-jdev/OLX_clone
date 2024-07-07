@@ -12,3 +12,7 @@ export const addRecentView = (sku) => {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(recentViews));
     }
 };
+
+export const clearRecentView = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+};

@@ -467,14 +467,30 @@ export function LocationOutlinedIcon(props) {
             <g clipPath="url(#clip0_2986_9868)">
                 <path
                     d="M18 3C12.195 3 7.5 7.695 7.5 13.5C7.5 21.375 18 33 18 33C18 33 28.5 21.375 28.5 13.5C28.5 7.695 23.805 3 18 3ZM10.5 13.5C10.5 9.36 13.86 6 18 6C22.14 6 25.5 9.36 25.5 13.5C25.5 17.82 21.18 24.285 18 28.32C14.88 24.315 10.5 17.775 10.5 13.5Z"
-                    />
+                />
                 <path
                     d="M18 17.25C20.0711 17.25 21.75 15.5711 21.75 13.5C21.75 11.4289 20.0711 9.75 18 9.75C15.9289 9.75 14.25 11.4289 14.25 13.5C14.25 15.5711 15.9289 17.25 18 17.25Z"
-                    />
+                />
             </g>
             <defs>
                 <clipPath id="clip0_2986_9868">
                     <rect width="36" height="36" fill="white"/>
+                </clipPath>
+            </defs>
+        </SvgIcon>
+    );
+}
+export function PenEditIcon(props) {
+    return (
+        <SvgIcon {...props} width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_2549_17359)">
+                <path
+                    d="M2.625 15.094V18.3752H5.90625L15.5837 8.69773L12.3025 5.41648L2.625 15.094ZM18.1212 6.16023C18.4625 5.81898 18.4625 5.26773 18.1212 4.92648L16.0738 2.87898C15.7325 2.53773 15.1812 2.53773 14.84 2.87898L13.2388 4.48023L16.52 7.76148L18.1212 6.16023Z"
+                    fill="#FF9D00"/>
+            </g>
+            <defs>
+                <clipPath id="clip0_2549_17359">
+                    <rect width="21" height="21" fill="white"/>
                 </clipPath>
             </defs>
         </SvgIcon>
