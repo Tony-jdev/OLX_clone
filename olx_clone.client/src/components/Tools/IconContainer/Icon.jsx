@@ -2,7 +2,7 @@ import React from 'react';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-const Icon = ({ color, icon: IconComponent, step = 1, width = 10, height = 10, }) => {
+const Icon = ({ color, icon: IconComponent, step = 1, width = 10, height = 10, hoverColor, sr}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
 
@@ -32,9 +32,12 @@ const Icon = ({ color, icon: IconComponent, step = 1, width = 10, height = 10, }
         width: `${iconSize[0]}px`,
         height: `${iconSize[1]}px`,
         color: colors[color] || color,
+        '&:hover':{
+            color: hoverColor ?? "",
+        }
     };
 
-    return <IconComponent style={iconStyle} />;
+    return <IconComponent sx={iconStyle} style={sr} />;
 };
 
 export default Icon;

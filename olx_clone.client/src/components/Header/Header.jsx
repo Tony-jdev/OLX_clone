@@ -157,6 +157,8 @@ const Header = () => {
                                 icon={ 
                                 <Icon
                                     icon={ProfileIcon}
+                                    color={colors.text.primary}
+                                    hoverColor={colors.text.secondary}
                                     step={1}
                                     width={36}
                                     height={36}
@@ -168,10 +170,12 @@ const Header = () => {
 
                             <SButton isIconButton={true}
                                      action={()=>{
+                                         navigate('user/Favorites');
                                      }}
                                      icon={<Icon
                                          icon={LikeIcon}
                                          color={colors.text.primary}
+                                         hoverColor={colors.text.secondary}
                                          step={2}
                                          width={30}
                                          height={30}
