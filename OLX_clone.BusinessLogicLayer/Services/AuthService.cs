@@ -41,6 +41,7 @@ public class AuthService: IAuthService
         }
 
         var user = _mapper.Map<ApplicationUser>(registerRequestDto);
+        user.Name = "Анонім";
         
         var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
         if (result.Succeeded)   

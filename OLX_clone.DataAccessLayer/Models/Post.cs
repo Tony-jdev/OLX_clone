@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using OLX_clone.DataAccessLayer.Helpers;
 using OLX_clone.DataAccessLayer.Models.Enums;
 
 namespace OLX_clone.DataAccessLayer.Models;
@@ -43,6 +42,7 @@ public class Post
     public bool IsVip { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? SoldAt { get; set; }
     
 
     public ICollection<PostView> PostViews { get; set; }

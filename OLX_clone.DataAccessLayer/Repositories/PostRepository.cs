@@ -43,6 +43,15 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
         return await ExecuteQueryAsync(query, orderBy);
     }
 
+    public async Task<List<Post>> GetRecentlySoldPosts(int number)
+    {
+        return await _context.Posts
+            .Where(p => p.Status == PostStatus.Sold)
+            .OrderByDescending(p => p.SoldAt)
+            .Take(number)
+            .ToListAsync();
+    }
+
     public async Task<Post> GetPostDetailsBySkuAsync(string sku)
     {
         return await _context.Posts

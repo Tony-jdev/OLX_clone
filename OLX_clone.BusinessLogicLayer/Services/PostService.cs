@@ -50,6 +50,19 @@ public class PostService : IPostService
         return getPostDtos;
     }
     
+    public async Task<ApiResponse<List<GetRecentlySoldPostDto>>> GetRecentlySoldPosts(int number)
+    {
+        var posts = await _unitOfWork.PostRepository.GetRecentlySoldPosts(number);
+
+        var getPostDtos = _mapper.Map<List<GetRecentlySoldPostDto>>(posts);
+        foreach (var post in getPostDtos)
+        {
+            post.PhotoUrl = await _unitOfWork.PostPhotoRepository.GetFirstPostPhotoByPostId(post.Id);
+        }
+        
+        return new ApiResponse<List<GetRecentlySoldPostDto>> { Data = getPostDtos, Message = "Recently sold posts retrieved successfully." };
+    }
+    
     public async Task<ApiResponse<PagedList<GetPostDto>>> GetPosts(
         string? searchTerm, string? orderBy, string? location, string? type, double? priceFrom, double? priceTo, string? status, int page)
     {
@@ -144,6 +157,9 @@ public class PostService : IPostService
         }
 
         postFromDb.Status = newStatus;
+        if(newStatus == PostStatus.Sold)
+            postFromDb.SoldAt = DateTime.Now;
+        
         var updatedPost = await _unitOfWork.PostRepository.UpdateAsync(postFromDb);
         if (updatedPost == null)
         {
