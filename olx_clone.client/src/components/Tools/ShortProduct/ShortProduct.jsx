@@ -17,6 +17,7 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 import {addFavorite, deleteFavorite, getFavoritesByUserId} from "@/Api/favouritesApi.js";
 import {fetchUserDataAsync, isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {useAuth} from "@/providers/AuthProvider.jsx";
 
 const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id, intId }) => {
     const theme = useTheme();
@@ -27,7 +28,9 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
     const selectedId = useSelector(selectSelectedPostId);
     const isVip = vip ?? false;
     const isUsed = type !== 'New';
-    
+
+    const {openAuth} = useAuth();
+
     const [ isFavourite, setIsFavourite] = useState(false);
     
     const getIsFav = () =>{
@@ -80,7 +83,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
 
     useEffect(() => {
         getIsFav();
-    }, []);
+    }, [isUserLogined]);
     
     return (
         <Box
@@ -124,11 +127,16 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
                         icon={<Icon icon={isFavourite ? LikedIcon : LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
                         action={(e)=>{ 
                             e.stopPropagation();
-                            if(isFavourite) {
-                                delFavHandle();
+                            if(isUserLogined) {
+                                if(isFavourite) {
+                                    delFavHandle();
+                                }
+                                else {
+                                    setFavHandle();
+                                }
                             }
                             else {
-                                setFavHandle();
+                                openAuth();
                             }
                         }}
                     />
