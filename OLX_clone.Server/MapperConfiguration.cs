@@ -39,6 +39,7 @@ public class MapperConfiguration : Profile
         CreateMap<ChatMessage, GetChatMessageDto>();
 
         CreateMap<ApplicationUser, GetApplicationUserDto>();
+        CreateMap<ApplicationUser, GetApplicationUserDetailsDto>();
         CreateMap<UpdateApplicationUserDto, ApplicationUser>();
 
         CreateMap<BoostPackage, GetBoostPackageDto>();

@@ -30,27 +30,18 @@ public class UserService : IUserService
 
     public async Task<ApiResponse<GetApplicationUserDetailsDto>> GetUserProfile(string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-        if (user == null)
+        var userFromDb = await _userManager.FindByIdAsync(userId);
+        if (userFromDb == null)
         {
             throw new NotFoundException("User not found.");
         }
 
-        var userPosts = await _postService.GetPostsByUser(userId);
-
-        var userProfile = new GetApplicationUserDetailsDto
-        {
-            UserId = user.Id,
-            Email = user.Email,
-            Name = user.Name,
-            Surname = user.Surname,
-            PhoneNumber = user.PhoneNumber,
-            Posts = userPosts,
-        };
+        var userToView = _mapper.Map<ApplicationUser, GetApplicationUserDetailsDto>(userFromDb);
+        userToView.Posts = await _postService.GetPostsByUser(userId);
 
         return new ApiResponse<GetApplicationUserDetailsDto>
         {
-            Data = userProfile,
+            Data = userToView,
             Success = true,
             Message = "User profile retrieved successfully."
         };
