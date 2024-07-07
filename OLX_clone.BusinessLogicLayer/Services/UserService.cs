@@ -55,6 +55,24 @@ public class UserService : IUserService
             Message = "User profile retrieved successfully."
         };
     }
+    
+    public async Task<ApiResponse<bool>> ChangePassword(ChangePasswordDto model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            throw new NotFoundException("User not found.");
+        }
+
+        var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new BadRequestException($"Password change failed: {errors}");
+        }
+
+        return new ApiResponse<bool> { Success = true, Message = "Password changed successfully", Data = true };
+    }
 
     public async Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUser(UpdateApplicationUserDto applicationUserUpdateApplicationDto)
     {
