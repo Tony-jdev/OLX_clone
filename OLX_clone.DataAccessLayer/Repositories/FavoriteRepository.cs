@@ -11,11 +11,17 @@ public class FavoriteRepository : GenericRepository<Favorite>, IFavoriteReposito
       
     }
     
+    public async Task<bool> ExistsAsync(string userId, int postId)
+    {
+        return await _context.Favorites.AnyAsync(f => f.ApplicationUserId == userId && f.PostId == postId);
+    }
+    
     public async Task<List<Favorite>> GetFavoritesByUserIdAsync(string userId)
     {
         return await _context.Favorites
             .Where(f => f.ApplicationUserId == userId)
             .Include(f => f.Post)
+            .ThenInclude(p => p.Category)
             .OrderByDescending(f => f.CreatedAt)
             .ToListAsync();
     }
