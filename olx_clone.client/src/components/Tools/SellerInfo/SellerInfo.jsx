@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Box, Grid, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Icon from '@/components/Tools/IconContainer/Icon.jsx';
@@ -6,6 +6,10 @@ import SButton from '@/components/Tools/Button/SButton.jsx';
 import Text from '@/components/Tools/TextContainer/Text.jsx';
 import { useTheme } from "@mui/material/styles";
 import { CardContainer } from "@/components/Tools/SellerInfo/Styles.js";
+import {useAuth} from "@/providers/AuthProvider.jsx";
+import {fetchUserDataAsync, isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {addFavorite, deleteFavorite, getFavoritesByUserId} from "@/Api/favouritesApi.js";
+import {useDispatch, useSelector} from "react-redux";
 
 const SellerInfo = ({ seller, OpenChat, onShowSellerProds }) => {
     const theme = useTheme();

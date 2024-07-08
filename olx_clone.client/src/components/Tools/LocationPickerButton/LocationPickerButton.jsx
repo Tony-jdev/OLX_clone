@@ -6,6 +6,8 @@ import LocationIcon from '@mui/icons-material/LocationOn';
 import LocationPickerMap from './Map/LocationPickerMap.jsx';
 import { useTheme } from "@mui/material/styles";
 import { formatLocationText, parseLocationToString } from "@/Helpers/locationHelper.js";
+import {LocationOutlinedIcon} from "@/assets/Icons/Icons.jsx";
+import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 
 const modalStyle = {
     position: 'absolute',
@@ -57,7 +59,13 @@ const LocationPickerButton = ({ Color, setLocation, location, withoutDefoult }) 
                 textType={'Body'}
                 Color={Color ?? colors.text.primary}
                 text={ locationText || <FormattedMessage id="header.locationLabel" />}
-                prew={<LocationIcon />}
+                prew={<Icon
+                    icon={LocationOutlinedIcon}
+                    color={colors.text.orange}
+                    step={1}
+                    width={36}
+                    height={36}
+                /> }
                 prewColor={colors.background.orange}
                 action={toggleMapVisibility}
             />

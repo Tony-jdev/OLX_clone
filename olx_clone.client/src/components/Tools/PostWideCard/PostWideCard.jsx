@@ -149,7 +149,22 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                             {ad.status === 'Active' ? (
                                 <>
                                     <SButton
-                                        prew={<Edit sx={{ marginRight: '5px', height: '16px', }} />}
+                                        textType={'Body'}
+                                        text={"Продано"}
+                                        Color={colors.text.primary}
+                                        borderInVisible={true}
+                                        sl={{ background: colors.types.success }}
+                                        sr={{ width: '150px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
+                                        hoverColor={colors.types.success}
+                                        hoverBack={colors.background.secondary}
+                                        hoverShadow={colors.types.shadows.boxShadowSuccess}
+                                        action={(e) => {
+                                            e.stopPropagation();
+                                            setSellConfirmOpen(true);
+                                        }}
+                                    />
+                                    
+                                    <SButton
                                         textType={'Body'}
                                         Color={colors.text.primary}
                                         text={"Редагувати"}
@@ -165,7 +180,6 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         }}
                                     />
                                     <SButton
-                                        prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
                                         textType={'Body'}
                                         text={"Деактивувати"}
                                         borderInVisible={true}
@@ -181,7 +195,6 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         }}
                                     />
                                     <SButton
-                                        prew={<Visibility sx={{ marginRight: '5px', height: '16px' }} />}
                                         textType={'Body'}
                                         text={"Рекламувати"}
                                         Color={colors.text.primary}
@@ -196,26 +209,10 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                             // Your advertise action here
                                         }}
                                     />
-                                    <SButton
-                                        textType={'Body'}
-                                        text={"Продано"}
-                                        Color={colors.text.primary}
-                                        borderInVisible={true}
-                                        sl={{ background: colors.types.success }}
-                                        sr={{ width: '150px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
-                                        hoverColor={colors.types.success}
-                                        hoverBack={colors.background.secondary}
-                                        hoverShadow={colors.types.shadows.boxShadowSuccess}
-                                        action={(e) => {
-                                            e.stopPropagation();
-                                            setSellConfirmOpen(true);
-                                        }}
-                                    />
                                 </>
                             ) : (
                                 <>
                                     <SButton
-                                        prew={<Edit sx={{ marginRight: '5px', height: '16px', }} />}
                                         textType={'Body'}
                                         Color={colors.text.primary}
                                         text={"Редагувати"}
@@ -231,7 +228,6 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         }}
                                     />
                                     <SButton
-                                        prew={<Delete sx={{ marginRight: '5px', height: '16px', }} />}
                                         textType={'Body'}
                                         text={"Видалити"}
                                         borderInVisible={true}
@@ -247,7 +243,6 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         }}
                                     />
                                     <SButton
-                                        prew={<Visibility sx={{ marginRight: '5px', height: '16px' }} />}
                                         textType={'Body'}
                                         text={"Активувати"}
                                         Color={colors.text.primary}

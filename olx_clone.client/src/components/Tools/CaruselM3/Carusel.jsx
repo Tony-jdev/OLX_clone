@@ -5,9 +5,13 @@ import ContainerHeader from "@/components/Tools/ContainerHeader/ContainerHeader.
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
-import {LikeIcon} from "@/assets/Icons/Icons.jsx";
+import {LikedIcon, LikeIcon} from "@/assets/Icons/Icons.jsx";
 import {useNavigate} from "react-router-dom";
 import NoDataFound from "@/components/NoDataFound/NoDataFound.jsx";
+import {useAuth} from "@/providers/AuthProvider.jsx";
+import {fetchUserDataAsync, isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {addFavorite, deleteFavorite, getFavoritesByUserId} from "@/Api/favouritesApi.js";
+import {useDispatch, useSelector} from "react-redux";
 
 const CarouselContainer = styled(Box)(({ theme }) => ({
     position: 'relative',
@@ -86,6 +90,72 @@ const Carousel = ({headerBtn, headerText, loading, error, items = [] }) => {
         0
     );
 
+    const dispatch = useDispatch();
+    const isUserLogined = useSelector(isUserLoggedIn);
+
+    const {openAuth} = useAuth();
+
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [ isFavourite, setIsFavourite] = useState(false);
+
+    const getIsFav = (intId) =>{
+        const checkFav = async () => {
+            const user = await dispatch(fetchUserDataAsync());
+            const favs = await getFavoritesByUserId(user.userId);
+            const posts = favs.data.map(fav => fav.post);
+            const exist = posts.some(post => post.id === intId);
+            console.log(exist);
+            setIsFavourite(exist);
+        }
+        checkFav();
+    }
+
+    const setFavHandle = (intId) => {
+        if(isUserLogined) {
+            setIsProcessing(true);
+            const adFavourite = async ()=>{
+                const user = await dispatch(fetchUserDataAsync());
+                const favoriteData = {
+                    postId: intId,
+                    applicationUserId: user.userId
+                };
+                console.log(favoriteData);
+                const res = await addFavorite(favoriteData);
+                console.log(res);
+                setIsFavourite(true);
+                setIsProcessing(false);
+            }
+            adFavourite();
+        }
+    }
+    const findExternalIdByPostId = (posts, postId) => {
+        const post = posts.find(post => post.post.id === postId);
+        return post ? post.id : null;
+    };
+    const delFavHandle = (intId) => {
+        if(isUserLogined) {
+            setIsProcessing(true);
+            const delFavourite = async ()=>{
+                const user = await dispatch(fetchUserDataAsync());
+                const favs = await getFavoritesByUserId(user.userId);
+                console.log(favs);
+                const num = findExternalIdByPostId(favs.data, intId);
+                console.log(num);
+                const res = await deleteFavorite(num);
+                console.log(res);
+                setIsFavourite(false);
+                setIsProcessing(false);
+            }
+            delFavourite();
+        }
+    }
+    
+    useEffect(() => {
+        if( isUserLogined && items[selectedIndex]?.id)
+        getIsFav(items[selectedIndex]?.id);
+    }, [items, isUserLogined, selectedIndex, selectedIndex]);
+    
+    
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -125,8 +195,22 @@ const Carousel = ({headerBtn, headerText, loading, error, items = [] }) => {
                                                 <Text type={'Title'} color={colors.text.primary} sr={{alignSelf: 'center'}}>{item.price}₴</Text>
                                                 <SButton
                                                     isIconButton={true}
-                                                    icon={<Icon icon={LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
-                                                    action={(e)=>{ e.stopPropagation(); console.log('clicked')}}
+                                                    icon={<Icon icon={ isFavourite ? LikedIcon : LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
+                                                    disabled={isProcessing}
+                                                    action={(e)=>{ 
+                                                        e.stopPropagation(); 
+                                                        if(isUserLogined) {
+                                                            if(isFavourite) {
+                                                                delFavHandle(item.id);
+                                                            }
+                                                            else {
+                                                                setFavHandle(item.id);
+                                                            }
+                                                        }
+                                                        else {
+                                                           openAuth();
+                                                        }
+                                                    }}
                                                 />
                                             </Box>
                                         </Box>

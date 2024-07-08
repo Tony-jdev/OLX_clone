@@ -6,37 +6,49 @@ import { useTheme } from "@mui/material/styles";
 import PostWideList from "@/components/Tools/PostWideList/PostWideList.jsx";
 import { getRecentViews } from "@/Helpers/recentViewsHelper.js";
 import { GetPostById } from "@/Api/postApi.js";
+import SButton from "@/components/Tools/Button/SButton.jsx";
+import {fetchUserDataAsync} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {useDispatch} from "react-redux";
+import {getFavoritesByUserId} from "@/Api/favouritesApi.js";
 
 const MyFavourites = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
+    
+    const dispatch = useDispatch();
 
     const [ads, setAds] = useState([]);
 
     useEffect(() => {
-        const fetchAds = async () => {
-            const recentSkus = getRecentViews();
-            const fetchedAds = await Promise.all(recentSkus.map(sku => GetPostById(sku)));
-            setAds(fetchedAds);
-        };
+        const fetchFav = async () => {
+            const user = await dispatch(fetchUserDataAsync());
+            const favs = await getFavoritesByUserId(user.userId);
 
-        fetchAds();
-    }, []);
+            const posts = favs.data.map(fav => fav.post);
 
+            console.log(posts);
+            setAds(posts);
+        }
+        fetchFav();
+    }, [dispatch]);
+
+    const handleFavoriteRemoved = (postId) => {
+        setAds(prevAds => prevAds.filter(ad => ad.id !== postId));
+    };
+    
     return (
         <Box style={{
-            maxWidth: 980, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
+            maxWidth: 985, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
             borderRadius: '10px',
             boxShadow: colors.boxShadow,
-            background: colors.background.secondary
+            background: colors.background.secondary,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
         }}>
-            <Typography variant="h6">Favourites</Typography>
-            <Box sx={{ marginTop: '20px' }}>
-                <PostWideList ads={ads} />
+            <Box sx={{ marginTop: '0px' }}>
+                <PostWideList ads={ads} t={'fav'} onFavoriteRemoved={handleFavoriteRemoved} />
             </Box>
-            <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>
-                Всього переглядів: {ads ? ads.length : 0}
-            </Text>
         </Box>
     );
 };

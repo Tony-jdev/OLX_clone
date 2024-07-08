@@ -33,9 +33,17 @@ const getDesignTokens = (mode) => ({
                         revers: '#313030',
                         unrevers: '#fffcf8',
                     },
+                    categories:{
+                        p: '#7b58c3',
+                        g: '#4abda0',
+                        y: '#f5cc37',
+                        o: '#ff5839',
+                        b: '#5482be',
+                    },
                     boxShadow: '0px 26px 11px rgba(49, 48, 48, 0.01), 0px 15px 9px rgba(49, 48, 48, 0.05), 0px 7px 7px rgba(49, 48, 48, 0.09), 0px 2px 4px rgba(49, 48, 48, 0.1)',
                     white: '#fff',
                     black: '#000',
+                    transparent: 'rgba(255, 255, 255, 1)',
                 },
             }
             : {
@@ -69,9 +77,17 @@ const getDesignTokens = (mode) => ({
                         revers: '#fffcf8',
                         unrevers: '#313030',
                     },
+                    categories:{
+                        p: '#7b58c3',
+                        g: '#4abda0',
+                        y: '#f5cc37',
+                        o: '#ff5839',
+                        b: '#5482be',
+                    },
                     boxShadow: '0px 26px 11px rgba(255, 200, 10, 0.05), 0px 15px 9px rgba(255, 200, 10, 0.1), 0px 7px 7px rgba(255, 200, 10, 0.15), 0px 2px 4px rgba(255, 200, 10, 0.25)',
                     white: '#fff',
                     black: '#000',
+                    transparent: 'rgba(255, 255, 255, 0.1)',
                 },
             }),
     },
@@ -88,19 +104,19 @@ const getDesignTokens = (mode) => ({
                     background: none !important;
                 }
                 input:-webkit-autofill {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.revers} inset !important;
-                  -webkit-text-fill-color: ${theme.palette.colors.text.primary} !important;
-                  background-color: ${theme.palette.colors.background.input} !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.transparent} inset !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
+                  background-color: ${theme.palette.colors.transparent} !important;
                 }
                 input:-webkit-autofill:focus {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.input} inset !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.transparent} inset !important;
                   -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
-                  background-color: ${theme.palette.colors.background.input} !important;
+                  background-color: ${theme.palette.colors.transparent} !important;
                 }
                 input:-webkit-autofill:hover {
-                  box-shadow: 0 0 0 1000px ${theme.palette.colors.background.input} inset !important;
+                  box-shadow: 0 0 0 1000px ${theme.palette.colors.transparent} inset !important;
                   -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
-                  background-color: ${theme.palette.colors.background.input} !important;
+                  background-color: ${theme.palette.colors.transparent} !important;
                 }
             `,
         },
