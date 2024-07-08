@@ -39,6 +39,12 @@ public class FavoriteService : IFavoriteService
     {
         var favoriteToCreate = _mapper.Map<AddFavoriteDto, Favorite>(favoriteAddDto);
 
+        bool exists = await _unitOfWork.FavoriteRepository.ExistsAsync(favoriteToCreate.ApplicationUserId, favoriteToCreate.PostId);
+        if (exists)
+        {
+            throw new BadRequestException("Favorite already exists.");
+        }
+        
         var createdFavorite = await _unitOfWork.FavoriteRepository.AddAsync(favoriteToCreate);
         if (createdFavorite == null)
         {
