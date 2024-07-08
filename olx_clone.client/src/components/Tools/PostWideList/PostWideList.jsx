@@ -8,7 +8,7 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 import RecentViewsCard from "@/components/Tools/PostWideCard/RecentViewsCard.jsx";
 import FavouriteCard from "@/components/Tools/PostWideCard/FavouriteCard.jsx";
 
-const PostWideList = ({ ads, onPostUpdate, onFavoriteRemoved, t, withoutCount }) => {
+const PostWideList = ({ ads, onPostUpdate, onFavoriteRemoved, t, withoutCount, onFavoriteChange}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const type = t ?? 'sell';
@@ -54,7 +54,7 @@ const PostWideList = ({ ads, onPostUpdate, onFavoriteRemoved, t, withoutCount })
                             <PostWideCard ad={ad} container={containerRef} onPostUpdate={onPostUpdate} />
                         )}
                         {type === 'view' && (
-                            <RecentViewsCard ad={ad} container={containerRef}/>
+                            <RecentViewsCard ad={ad} container={containerRef} onFavoriteChange={onFavoriteChange}/>
                         )}
                         {type === 'fav' && (
                             <FavouriteCard ad={ad} container={containerRef} onFavoriteRemoved={onFavoriteRemoved}/>

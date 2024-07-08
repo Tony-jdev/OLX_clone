@@ -23,7 +23,7 @@ const RecentViews = () => {
             const recentSkus = getRecentViews(user.userId);
             const fetchedAds = await Promise.all(recentSkus.map(async (sku) => {
                 const ad = await GetPostById(sku);
-                return { ...ad.data, id: sku }; 
+                return { ...ad.data, uid: sku }; 
             }));
             setAds(fetchedAds);
         };
@@ -53,6 +53,17 @@ const RecentViews = () => {
         clear();
         fetchAds();
     }
+
+    const handleFavoriteChange = (adId, isFavorite) => {
+        setAds(prevAds => {
+            return prevAds.map(ad => {
+                if (ad.id === adId) {
+                    return { ...ad, isFavorite };
+                }
+                return ad;
+            });
+        });
+    };
     
     return (
         <Box style={{
@@ -65,7 +76,7 @@ const RecentViews = () => {
             justifyContent: 'space-between'
         }}>
             <Box sx={{ marginTop: '0px' }}>
-                <PostWideList ads={ads} t={'view'} withoutCount={true}/>
+                <PostWideList ads={ads} t={'view'} withoutCount={true} onFavoriteChange={handleFavoriteChange}/>
             </Box>
             <Box style={{display: 'flex', width: '100%', justifyContent: 'end', paddingRight: 8, paddingBottom: 28}}>
                 <SButton
