@@ -32,6 +32,10 @@ const MyFavourites = () => {
         fetchFav();
     }, [dispatch]);
 
+    const handleFavoriteRemoved = (postId) => {
+        setAds(prevAds => prevAds.filter(ad => ad.id !== postId));
+    };
+    
     return (
         <Box style={{
             maxWidth: 985, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
@@ -43,7 +47,7 @@ const MyFavourites = () => {
             justifyContent: 'space-between'
         }}>
             <Box sx={{ marginTop: '0px' }}>
-                <PostWideList ads={ads} t={'fav'} />
+                <PostWideList ads={ads} t={'fav'} onFavoriteRemoved={handleFavoriteRemoved} />
             </Box>
         </Box>
     );

@@ -15,16 +15,18 @@ import { IndicatorGridStyle } from "@/components/Tools/ShortProduct/Styles.js";
 import IndicatorBox from "@/components/Tools/IndicatorBox/IndicatorBox.jsx";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectToken } from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchUserDataAsync, isUserLoggedIn, selectToken} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import SButton from "@/components/Tools/Button/SButton.jsx";
-import {LikedIcon, MessageMailIcon} from "@/assets/Icons/Icons.jsx";
+import {LikedIcon, LikeIcon, MessageMailIcon} from "@/assets/Icons/Icons.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 import {formatLocationAndDate} from "@/Helpers/DateHelper.js";
 import {CategoryChainComponent} from "@/Helpers/CategoryChain.jsx";
 import {BodyMedium, HeadlineMedium, TitleMedium} from "@/components/Tools/TextContainer/Styles.js";
+import {useAuth} from "@/providers/AuthProvider.jsx";
+import {addFavorite, deleteFavorite, getFavoritesByUserId} from "@/Api/favouritesApi.js";
 
-const RecentViewsCard = ({ ad, container }) => {
+const RecentViewsCard = ({ ad, container, onFavoriteRemoved}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
 
@@ -73,6 +75,49 @@ const RecentViewsCard = ({ ad, container }) => {
         console.log(ad);
     }, [ad]);
 
+
+    const dispatch = useDispatch();
+    const isUserLogined = useSelector(isUserLoggedIn);
+    const {openAuth} = useAuth();
+
+    const [ isFavourite, setIsFavourite] = useState(false);
+
+    const getIsFav = () =>{
+        const checkFav = async () => {
+            const user = await dispatch(fetchUserDataAsync());
+            const favs = await getFavoritesByUserId(user.userId);
+            const posts = favs.data.map(fav => fav.post);
+            const exist = posts.some(post => post.id === ad.id);
+            console.log(exist);
+            setIsFavourite(exist);
+        }
+        checkFav();
+    }
+    const findExternalIdByPostId = (posts, postId) => {
+        const post = posts.find(post => post.post.id === postId);
+        return post ? post.id : null;
+    };
+    const delFavHandle = () => {
+        if(isUserLogined) {
+            const delFavourite = async ()=>{
+                const user = await dispatch(fetchUserDataAsync());
+                const favs = await getFavoritesByUserId(user.userId);
+                console.log(favs);
+                const num = findExternalIdByPostId(favs.data, ad.id);
+                console.log(num);
+                const res = await deleteFavorite(num);
+                console.log(res);
+                onFavoriteRemoved(ad.id);
+                setIsFavourite(false);
+            }
+            delFavourite();
+        }
+    }
+
+    useEffect(() => {
+        getIsFav();
+    }, [isUserLogined]);
+    
     const handleCardClick = () => {
         navigate(`/post/${ad.sku}`);
     };
@@ -124,6 +169,15 @@ const RecentViewsCard = ({ ad, container }) => {
                                     width={36}
                                     height={36}
                                 />}
+                            action={(e)=>{
+                                e.stopPropagation();
+                                if(isUserLogined) {
+                                    delFavHandle();
+                                }
+                                else {
+                                    openAuth();
+                                }
+                            }}
                         />
                         <SButton
                             isIconButton={true}
