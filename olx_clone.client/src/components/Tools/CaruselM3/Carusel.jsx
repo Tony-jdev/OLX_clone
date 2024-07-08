@@ -95,6 +95,7 @@ const Carousel = ({headerBtn, headerText, loading, error, items = [] }) => {
 
     const {openAuth} = useAuth();
 
+    const [isProcessing, setIsProcessing] = useState(false);
     const [ isFavourite, setIsFavourite] = useState(false);
 
     const getIsFav = (intId) =>{
@@ -111,6 +112,7 @@ const Carousel = ({headerBtn, headerText, loading, error, items = [] }) => {
 
     const setFavHandle = (intId) => {
         if(isUserLogined) {
+            setIsProcessing(true);
             const adFavourite = async ()=>{
                 const user = await dispatch(fetchUserDataAsync());
                 const favoriteData = {
@@ -121,6 +123,7 @@ const Carousel = ({headerBtn, headerText, loading, error, items = [] }) => {
                 const res = await addFavorite(favoriteData);
                 console.log(res);
                 setIsFavourite(true);
+                setIsProcessing(false);
             }
             adFavourite();
         }
@@ -131,6 +134,7 @@ const Carousel = ({headerBtn, headerText, loading, error, items = [] }) => {
     };
     const delFavHandle = (intId) => {
         if(isUserLogined) {
+            setIsProcessing(true);
             const delFavourite = async ()=>{
                 const user = await dispatch(fetchUserDataAsync());
                 const favs = await getFavoritesByUserId(user.userId);
@@ -140,6 +144,7 @@ const Carousel = ({headerBtn, headerText, loading, error, items = [] }) => {
                 const res = await deleteFavorite(num);
                 console.log(res);
                 setIsFavourite(false);
+                setIsProcessing(false);
             }
             delFavourite();
         }
@@ -191,6 +196,7 @@ const Carousel = ({headerBtn, headerText, loading, error, items = [] }) => {
                                                 <SButton
                                                     isIconButton={true}
                                                     icon={<Icon icon={ isFavourite ? LikedIcon : LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
+                                                    disabled={isProcessing}
                                                     action={(e)=>{ 
                                                         e.stopPropagation(); 
                                                         if(isUserLogined) {

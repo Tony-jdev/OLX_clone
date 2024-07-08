@@ -31,6 +31,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
 
     const {openAuth} = useAuth();
 
+    const [isProcessing, setIsProcessing] = useState(false);
     const [ isFavourite, setIsFavourite] = useState(false);
     
     const getIsFav = () =>{
@@ -47,6 +48,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
     
     const setFavHandle = () => {
         if(isUserLogined) {
+            setIsProcessing(true);
             const adFavourite = async ()=>{
                 const user = await dispatch(fetchUserDataAsync());
                 const favoriteData = {
@@ -57,6 +59,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
                 const res = await addFavorite(favoriteData);
                 console.log(res);
                 setIsFavourite(true);
+                setIsProcessing(false);
             }
             adFavourite();
         }
@@ -67,6 +70,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
     };
     const delFavHandle = () => {
         if(isUserLogined) {
+            setIsProcessing(true);
             const delFavourite = async ()=>{
                 const user = await dispatch(fetchUserDataAsync());
                 const favs = await getFavoritesByUserId(user.userId);
@@ -76,6 +80,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
                 const res = await deleteFavorite(num);
                 console.log(res);
                 setIsFavourite(false);
+                setIsProcessing(false);
             }
             delFavourite();
         }
@@ -125,6 +130,7 @@ const ShortProduct = ({vip, type, photo, name, price, publicationDate, city, id,
                     <SButton
                         isIconButton={true}
                         icon={<Icon icon={isFavourite ? LikedIcon : LikeIcon} color={colors.text.orange} step={3} height={28} width={28}/>}
+                        disabled={isProcessing}
                         action={(e)=>{ 
                             e.stopPropagation();
                             if(isUserLogined) {

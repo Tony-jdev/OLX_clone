@@ -80,6 +80,7 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
     const isUserLogined = useSelector(isUserLoggedIn);
     const {openAuth} = useAuth();
 
+    const [isProcessing, setIsProcessing] = useState(false);
     const [ isFavourite, setIsFavourite] = useState(false);
 
     const getIsFav = () =>{
@@ -98,6 +99,7 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
     }
     const setFavHandle = () => {
         if(isUserLogined) {
+            setIsProcessing(true);
             const adFavourite = async ()=>{
                 const user = await dispatch(fetchUserDataAsync());
                 const favoriteData = {
@@ -109,6 +111,7 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
                 console.log(res);
                 setIsFavourite(true);
                 onFavoriteChange(ad.id, true);
+                setIsProcessing(false);
             }
             adFavourite();
         }
@@ -119,6 +122,7 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
     };
     const delFavHandle = () => {
         if(isUserLogined) {
+            setIsProcessing(true);
             const delFavourite = async ()=>{
                 const user = await dispatch(fetchUserDataAsync());
                 const favs = await getFavoritesByUserId(user.userId);
@@ -129,6 +133,7 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
                 console.log(res);
                 setIsFavourite(false);
                 onFavoriteChange(ad.id, false);
+                setIsProcessing(false);
             }
             delFavourite();
         }
@@ -178,6 +183,7 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
                     <Box style={StatsContainer}>
                         <SButton
                             isIconButton={true}
+                            disabled={isProcessing}
                             icon={
                             <Icon
                                 icon={isFavourite ? LikedIcon : LikeIcon}

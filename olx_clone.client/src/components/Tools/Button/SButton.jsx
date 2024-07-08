@@ -29,7 +29,7 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 const ColorWrapper = ({ children, color }) => {
     return React.cloneElement(children, { style: { ...children.props.style, color } });
 };
-const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, sr, link, textSL, textSR, Color, prewColor, nextColor, borderInVisible, hoverShadow, hoverColor, hoverBack, textType, textSt}) => {
+const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, sr, link, textSL, textSR, Color, prewColor, nextColor, borderInVisible, hoverShadow, hoverColor, hoverBack, textType, textSt, disabled}) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const getButtonStyle = () => {
@@ -91,6 +91,7 @@ const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, sr, li
                         color: hoverColor ?? '', 
                         background: hoverBack ?? ''
                     } }}
+            disabled={disabled}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
@@ -105,6 +106,7 @@ const SButton = ({type, action, text, prew, next, isIconButton, icon, sl, sr, li
             onClick={action}
             style={sl}
             sx={DefoultStyle}
+            disabled={disabled}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
