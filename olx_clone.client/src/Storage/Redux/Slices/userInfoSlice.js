@@ -71,7 +71,9 @@ export const fetchUserDataAsync = () => async (dispatch, getState) => {
     const token = state.userInfo.token; 
     try {
         const data = jwtDecode(token);
+        console.log(data);
         const user = await fetchUserById(data.uid);
+        console.log(user);
         dispatch(setUser(user.data));
         return user.data;
     } catch (error) {

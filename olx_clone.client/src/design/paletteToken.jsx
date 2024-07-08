@@ -105,18 +105,23 @@ const getDesignTokens = (mode) => ({
                 }
                 input:-webkit-autofill {
                   box-shadow: 0 0 0 1000px ${theme.palette.colors.transparent} inset !important;
-                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.revers} !important;
                   background-color: ${theme.palette.colors.transparent} !important;
+                  caret-color: ${theme.palette.colors.text.revers} !important; /* Колір каретки */
+
                 }
                 input:-webkit-autofill:focus {
                   box-shadow: 0 0 0 1000px ${theme.palette.colors.transparent} inset !important;
-                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.revers} !important;
                   background-color: ${theme.palette.colors.transparent} !important;
+                  caret-color: ${theme.palette.colors.text.revers} !important; /* Колір каретки */
+
                 }
                 input:-webkit-autofill:hover {
                   box-shadow: 0 0 0 1000px ${theme.palette.colors.transparent} inset !important;
-                  -webkit-text-fill-color: ${theme.palette.colors.text.secondary} !important;
+                  -webkit-text-fill-color: ${theme.palette.colors.text.revers} !important;
                   background-color: ${theme.palette.colors.transparent} !important;
+                  caret-color: ${theme.palette.colors.text.revers} !important; /* Колір каретки */
                 }
             `,
         },

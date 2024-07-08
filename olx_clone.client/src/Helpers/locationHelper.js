@@ -33,7 +33,7 @@ export const validateLocation = (location) => {
 export const formatLocationText = (location) => {
     
     console.log(location);
-    if (!location || location === 'null' || !location.region) {
+    if (!location || location === 'null' || (!location.region && location?.city !== 'Київ')) {
         return '';
     }
 

@@ -108,7 +108,7 @@ const Header = () => {
                                         style: LabelMedium
                                     },
                                     style: PropsFieldStyle,
-                                    sx: { backgroundColor: colors.background.secondary }
+                                    sx: { backgroundColor: colors.transparent }
                                 }}
                                 style={FieldStyle}
                                 sx={{ color: colors.text.input,
