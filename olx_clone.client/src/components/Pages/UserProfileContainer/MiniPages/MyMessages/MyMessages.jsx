@@ -26,6 +26,11 @@ const Messages = () => {
         setSelectedChatId(chatId);
         localStorage.setItem('selectedChatId', chatId);
     };
+
+    const handleChatRemove = () => {
+        setSelectedChatId(null);
+        localStorage.removeItem('selectedChatId');
+    };
     
     const handleChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -59,7 +64,7 @@ const Messages = () => {
     }, []);
 
     if (selectedChatId) {
-        return <ChatPage chat={selectedChatId} />;
+        return <ChatPage chatId={selectedChatId}  onClose={handleChatRemove} />;
     }
 
     return (

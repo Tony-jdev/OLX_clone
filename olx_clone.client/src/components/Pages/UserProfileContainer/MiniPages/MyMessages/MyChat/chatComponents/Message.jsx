@@ -1,19 +1,39 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import {Box, Typography} from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import {CheckIcon} from "@/assets/Icons/Icons.jsx";
+import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 
-const Message = ({ message }) => {
+const Message = ({ message, isSentByUser}) => {
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: message.isSentByUser ? 'flex-end' : 'flex-start', marginBottom: '16px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: isSentByUser ? 'flex-end' : 'flex-start', marginBottom: '16px' }}>
             <Box sx={{
-                backgroundColor: message.isSentByUser ? 'orange' : '#f5e5d5',
-                color: message.isSentByUser ? '#fff' : '#000',
+                backgroundColor: isSentByUser ? 'orange' : '#f5e5d5',
+                color: isSentByUser ? '#fff' : '#000',
                 padding: '12px',
-                borderRadius: '10px',
-                maxWidth: '60%'
+                borderRadius: '16px',
+                maxWidth: '867px',
+                position: 'relative',
+                wordWrap: 'break-word',
+                display: 'flex',
+                flexDirection: 'column',
             }}>
-                <Typography variant="body1">{message.text}</Typography>
+                <Box style={{display: 'flex'}}>
+                    <Typography variant="body1" sx={{ wordWrap: 'break-word' }}>{message.text}</Typography>
+                    {isSentByUser &&
+                        <Icon
+                            icon={CheckIcon}
+                            sr={{marginLeft: '10px'}}
+                            step={1}
+                            width={24}
+                            height={24}
+                        />
+                    }
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center', }}>
+                    <Typography variant="body2" sx={{ color: '#fff', fontSize: '0.75rem' }}>{message.createdAt}</Typography>
+                </Box>
             </Box>
-            <Typography variant="body2" sx={{ marginTop: '4px', color: '#888' }}>{message.time}</Typography>
         </Box>
     );
 };
