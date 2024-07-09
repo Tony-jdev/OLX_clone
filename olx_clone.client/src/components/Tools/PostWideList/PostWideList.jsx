@@ -9,7 +9,7 @@ import RecentViewsCard from "@/components/Tools/PostWideCard/RecentViewsCard.jsx
 import FavouriteCard from "@/components/Tools/PostWideCard/FavouriteCard.jsx";
 import MessageCard from "@/components/Tools/PostWideCard/MessageCard.jsx";
 
-const PostWideList = ({ unr, r, ads, onPostUpdate, onFavoriteRemoved, t, withoutCount, onFavoriteChange}) => {
+const PostWideList = ({ unr, r, w, ads, onPostUpdate, onFavoriteRemoved, t, withoutCount, onFavoriteChange, onChatSelect }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const type = t ?? 'sell';
@@ -45,7 +45,7 @@ const PostWideList = ({ unr, r, ads, onPostUpdate, onFavoriteRemoved, t, without
                             unr.map((ad, index) => (
                                 <React.Fragment key={index}>
                                     {type === 'message' && (
-                                        <MessageCard ad={ad} />
+                                        <MessageCard ad={ad} w={w} onChatSelect={onChatSelect}/>
                                     )}
                                 </React.Fragment>))
                         }
@@ -57,7 +57,7 @@ const PostWideList = ({ unr, r, ads, onPostUpdate, onFavoriteRemoved, t, without
                             r.map((ad, index) => (
                                 <React.Fragment key={index}>
                                     {type === 'message' && (
-                                        <MessageCard ad={ad} />
+                                        <MessageCard ad={ad} w={w} onChatSelect={onChatSelect}/>
                                     )}
                                 </React.Fragment>
                             ))

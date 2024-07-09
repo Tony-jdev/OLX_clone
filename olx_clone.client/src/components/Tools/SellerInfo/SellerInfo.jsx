@@ -6,10 +6,6 @@ import SButton from '@/components/Tools/Button/SButton.jsx';
 import Text from '@/components/Tools/TextContainer/Text.jsx';
 import { useTheme } from "@mui/material/styles";
 import { CardContainer } from "@/components/Tools/SellerInfo/Styles.js";
-import {useAuth} from "@/providers/AuthProvider.jsx";
-import {fetchUserDataAsync, isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
-import {addFavorite, deleteFavorite, getFavoritesByUserId} from "@/Api/favouritesApi.js";
-import {useDispatch, useSelector} from "react-redux";
 import {formatDateFromISOV2} from "@/Helpers/DateHelper.js";
 
 const SellerInfo = ({ seller, OpenChat, onShowSellerProds }) => {

@@ -5,7 +5,8 @@ import PostWideList from '@/components/Tools/PostWideList/PostWideList';
 import {TabsContainerStyles} from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/Styles.js";
 import {useDispatch} from "react-redux";
 import {fetchUserDataAsync} from "@/Storage/Redux/Slices/userInfoSlice.js";
-import {getChatsByUserId} from "@/Api/chatApi.js"; 
+import {getChatsByUserId} from "@/Api/chatApi.js";
+import ChatPage from "@/components/Pages/UserProfileContainer/MiniPages/MyMessages/MyChat/ChatPage.jsx"; 
 
 const Messages = () => {
     const theme = useTheme();
@@ -20,6 +21,12 @@ const Messages = () => {
     
     const dispatch = useDispatch();
 
+    const [selectedChatId, setSelectedChatId] = useState(localStorage.getItem('selectedChatId') || null);
+    const handleChatSelect = (chatId) => {
+        setSelectedChatId(chatId);
+        localStorage.setItem('selectedChatId', chatId);
+    };
+    
     const handleChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
@@ -51,6 +58,10 @@ const Messages = () => {
         getChats();
     }, []);
 
+    if (selectedChatId) {
+        return <ChatPage chat={selectedChatId} />;
+    }
+
     return (
         <Box sx={{ maxWidth: 985, maxHeight: 804, height: '100vh', width: '100vw', padding: '28px 8px', borderRadius: '10px', boxShadow: colors.boxShadow, background: colors.background.secondary }}>
             <Tabs value={selectedTab} onChange={handleChange} aria-label="profile tabs"
@@ -65,12 +76,12 @@ const Messages = () => {
             <Box sx={{ marginTop: '30px',}}>
                 {selectedTab === 0 && (
                     <>
-                        <PostWideList unr={unReadChatsSell} r={ReadChatsSell} t="message" />
+                        <PostWideList unr={unReadChatsSell} r={ReadChatsSell} w={'s'} t="message" onChatSelect={handleChatSelect}/>
                     </>
                 )}
                 {selectedTab === 1 && (
                     <>
-                        <PostWideList unr={unReadChatsBuy} r={ReadChatsBuy} t="message" />
+                        <PostWideList unr={unReadChatsBuy} r={ReadChatsBuy} w={'b'} t="message" onChatSelect={handleChatSelect}/>
                     </>
                 )}
             </Box>
