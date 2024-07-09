@@ -26,6 +26,7 @@ public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new BoostPackageConfiguration());
         
         modelBuilder.Entity<Post>()
             .Property(p => p.Status)
