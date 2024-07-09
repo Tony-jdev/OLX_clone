@@ -45,7 +45,7 @@ const LocationCard = ({ location }) => {
                                 width={56}
                                 height={80}
                                 step={3}
-                                color={colors.text.orange}
+                                color={colors.text.revers}
                                 sx={{marginRight: '8px'}}
                             />
                             <Grid>

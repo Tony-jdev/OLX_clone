@@ -17,7 +17,7 @@ const MessageCard = ({ ad }) => {
     
     useEffect(()=>{
         
-    },[]);
+    },[]); 
     
     
     return (

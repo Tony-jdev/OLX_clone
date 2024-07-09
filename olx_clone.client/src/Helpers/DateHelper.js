@@ -26,3 +26,15 @@ export function formatTimeFromISO(isoString) {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
 }
+
+export const formatDateFromISOV2 = (isoString) => {
+    const date = new Date(isoString);
+    const monthNames = [
+        "січня", "лютого", "березня", "квітня", "травня", "червня",
+        "липня", "серпня", "вересня", "жовтня", "листопада", "грудня"
+    ];
+    const year = date.getFullYear();
+    const month = monthNames[date.getMonth()];
+
+    return `з ${month} ${year} р.`;
+};

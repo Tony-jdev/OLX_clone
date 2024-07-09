@@ -132,7 +132,7 @@ const ProductInfo = ({post}) => {
                     />
                 </Box>
                <Box>
-                   <Text type={'Body'}>
+                   <Text type={'Body'} sr={{whiteSpace: 'pre-wrap'}}>
                        {description}
                    </Text>
                </Box>
