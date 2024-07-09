@@ -47,6 +47,24 @@ public class UserService : IUserService
         };
     }
     
+    public async Task<ApiResponse<GetApplicationUserChatDto>> GetUserById(string userId)
+    {
+        var userFromDb = await _userManager.FindByIdAsync(userId);
+        if (userFromDb == null)
+        {
+            throw new NotFoundException("User not found.");
+        }
+
+        var userToView = _mapper.Map<ApplicationUser, GetApplicationUserChatDto>(userFromDb);
+
+        return new ApiResponse<GetApplicationUserChatDto>
+        {
+            Data = userToView,
+            Success = true,
+            Message = "User's info retrieved successfully."
+        };
+    }
+    
     public async Task<ApiResponse<bool>> ChangePassword(ChangePasswordDto model)
     {
         var user = await _userManager.FindByIdAsync(model.UserId);

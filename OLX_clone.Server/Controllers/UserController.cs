@@ -29,6 +29,17 @@ public class UserController: ControllerBase
         return Ok(apiResponse);
     }
     
+    [HttpGet("short-info/{userId}")]
+    public async Task<ActionResult<ApiResponse<GetApplicationUserChatDto>>> GetUserById(string userId)
+    {
+        var apiResponse = await _userService.GetUserById(userId);
+        if (!apiResponse.Success)
+        {
+            return NotFound(apiResponse);
+        }
+        return Ok(apiResponse);
+    }
+    
     [HttpPost("change-password")]
     public async Task<ActionResult<ApiResponse<bool>>> ChangePassword([FromBody] ChangePasswordDto model)
     {
