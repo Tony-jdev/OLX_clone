@@ -9,6 +9,7 @@ namespace OLX_clone.BusinessLogicLayer.Services.Contracts;
 public interface IUserService
 {
     Task<ApiResponse<GetApplicationUserDetailsDto>> GetUserProfile(string userId);
+    Task<ApiResponse<GetApplicationUserChatDto>> GetUserById(string userId);
     Task<ApiResponse<bool>> ChangePassword(ChangePasswordDto model);
     Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUser(UpdateApplicationUserDto applicationUserUpdateDto);
     Task<ApiResponse<IEnumerable<IdentityError>>> UpdateUserAdditional(

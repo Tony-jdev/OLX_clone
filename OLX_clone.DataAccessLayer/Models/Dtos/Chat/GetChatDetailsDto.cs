@@ -8,6 +8,7 @@ public class GetChatDetailsDto
     
     public string Name { get; set; }
     public string PhotoUrl { get; set; }
+    public string PostPrice { get; set; }
     
     public int PostId { get; set; }
     public string CustomerId { get; set; }

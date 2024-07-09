@@ -35,13 +35,17 @@ public class MapperConfiguration : Profile
         CreateMap<CreateChatDto, Chat>();
         CreateMap<CreateChatMessageDto, ChatMessage>();
         CreateMap<Chat, GetChatDetailsDto>()
-            .ForMember(dto => dto.Name, conf => conf.MapFrom(chat => chat.Post.Title));
+            .ForMember(dto => dto.Name, conf => conf.MapFrom(chat => chat.Post.Title))
+            .ForMember(dto => dto.PostPrice, conf => conf.MapFrom(chat => chat.Post.Price));
         CreateMap<Chat, GetChatDto>()
             .ForMember(dto => dto.Name, conf => conf.MapFrom(chat => chat.Post.Title));
         CreateMap<ChatMessage, GetChatMessageDto>();
 
         CreateMap<ApplicationUser, GetApplicationUserDto>();
-        CreateMap<ApplicationUser, GetApplicationUserDetailsDto>();
+        CreateMap<ApplicationUser, GetApplicationUserChatDto>();
+        CreateMap<ApplicationUser, GetApplicationUserDetailsDto>()
+            .ForMember(dest => dest.UserId,
+                opt => opt.MapFrom(src => src.Id));
         CreateMap<UpdateApplicationUserDto, ApplicationUser>();
         CreateMap<UpdateApplicationUserAdditionalDto, ApplicationUser>();
 
