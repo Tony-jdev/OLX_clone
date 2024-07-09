@@ -71,8 +71,8 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
 
     const handleDeactivate = async () => {
         try {
-            await updatePostStatus(ad.id, 1); // 'Inactive' represents deactivated status
-            onPostUpdate(); // Refresh posts
+            await updatePostStatus(ad.id, 1); 
+            onPostUpdate(); 
         } catch (error) {
             console.error('Failed to deactivate post:', error);
         }
@@ -80,17 +80,18 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
 
     const handleActivate = async () => {
         try {
-            await updatePostStatus(ad.id, 0); // 'Active' represents activated status
-            onPostUpdate(); // Refresh posts
+            await updatePostStatus(ad.id, 0); 
+            onPostUpdate(); 
         } catch (error) {
             console.error('Failed to activate post:', error);
         }
     };
 
-    const handleDelete = async () => {
+    const handleDelete = async (e) => {
+        e.stopPropagation();
         try {
             await DeletePost(ad.id, token);
-            onPostUpdate(); // Refresh posts
+            onPostUpdate(); 
         } catch (error) {
             console.error('Failed to delete post:', error);
         } finally {
@@ -101,8 +102,8 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
     const handleSell = async (e) => {
         e.stopPropagation();
         try {
-            await updatePostStatus(ad.id, 2); // 'Sold' represents sold status
-            onPostUpdate(); // Refresh posts
+            await updatePostStatus(ad.id, 2); 
+            onPostUpdate(); 
         } catch (error) {
             console.error('Failed to mark as sold:', error);
         } finally {

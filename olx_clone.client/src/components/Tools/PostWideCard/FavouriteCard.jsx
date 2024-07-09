@@ -86,7 +86,11 @@ const RecentViewsCard = ({ ad, container, onFavoriteRemoved}) => {
         const checkFav = async () => {
             const user = await dispatch(fetchUserDataAsync());
             const favs = await getFavoritesByUserId(user.userId);
-            const posts = favs.data.map(fav => fav.post);
+            console.log(favs);
+            const posts = favs.data.map(fav => ({
+                ...fav.post,
+                createdAt: fav.createdAt
+            }));
             const exist = posts.some(post => post.id === ad.id);
             console.log(exist);
             setIsFavourite(exist);
@@ -144,7 +148,7 @@ const RecentViewsCard = ({ ad, container, onFavoriteRemoved}) => {
                     <Box>
                         <Text type="Title" >{ad.title}</Text>
                         <Text textSt={TitleMedium} color={colors.text.secondary} >{
-                           0 //<CategoryChainComponent category={ad.category}/>
+                           <CategoryChainComponent category={ad.category}/>
                         }</Text>
                     </Box>
                     <Box style={{display: 'flex', flexDirection: 'row', height: 'max-content', alignItems: 'center'}}>
@@ -155,7 +159,7 @@ const RecentViewsCard = ({ ad, container, onFavoriteRemoved}) => {
                 <Grid container alignItems='flex-end' justifyContent='space-between' style={{ maxHeight: 70, height: '100%' }}>
                     <Box style={StatsContainer}>
                         <Text textSt={TitleMedium}  >{
-                            0//formatLocationAndDate(ad.location,  ad.createdAt)
+                            formatLocationAndDate(ad.location,  ad.createdAt)
                         }</Text>
                     </Box>
                     <Box style={StatsContainer}>

@@ -165,7 +165,8 @@ const CreatePostPage = () => {
                     applicationUserId: user.userId,
                     files: images
                 };
-                console.log(post);
+                console.log(UpdatePost); //null
+                console.log(user); //null
 
                 edit ? await EditPost(post.id, UpdatePost) : await CreatePost(UpdatePost);
                 dispatch(fetchUserPostsAsync());

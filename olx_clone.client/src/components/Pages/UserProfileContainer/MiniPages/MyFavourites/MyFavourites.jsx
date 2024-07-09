@@ -23,8 +23,11 @@ const MyFavourites = () => {
         const fetchFav = async () => {
             const user = await dispatch(fetchUserDataAsync());
             const favs = await getFavoritesByUserId(user.userId);
-
-            const posts = favs.data.map(fav => fav.post);
+            console.log(favs);
+            const posts = favs.data.map(fav => ({
+                ...fav.post,
+                createdAt: fav.createdAt
+            }));
 
             console.log(posts);
             setAds(posts);

@@ -6,10 +6,7 @@ import SButton from '@/components/Tools/Button/SButton.jsx';
 import Text from '@/components/Tools/TextContainer/Text.jsx';
 import { useTheme } from "@mui/material/styles";
 import { CardContainer } from "@/components/Tools/SellerInfo/Styles.js";
-import {useAuth} from "@/providers/AuthProvider.jsx";
-import {fetchUserDataAsync, isUserLoggedIn} from "@/Storage/Redux/Slices/userInfoSlice.js";
-import {addFavorite, deleteFavorite, getFavoritesByUserId} from "@/Api/favouritesApi.js";
-import {useDispatch, useSelector} from "react-redux";
+import {formatDateFromISOV2} from "@/Helpers/DateHelper.js";
 
 const SellerInfo = ({ seller, OpenChat, onShowSellerProds }) => {
     const theme = useTheme();
@@ -27,7 +24,7 @@ const SellerInfo = ({ seller, OpenChat, onShowSellerProds }) => {
 
     const name = seller?.name ?? 'Noname';
     const phone = seller?.phoneNumber ?? 'No phone number';
-    const createdAt = seller?.createdAt ?? 'грудень 2023 р.';
+    const createdAt = formatDateFromISOV2(seller?.createdAt);
     const lastOnline = seller?.lastOnline ?? '24:00';
 
     return (
@@ -39,7 +36,7 @@ const SellerInfo = ({ seller, OpenChat, onShowSellerProds }) => {
                     </Box>
                     <Box>
                         <Text type={'Title'} mt={2}>{name}</Text>
-                        <Text type={'Title'} color={colors.text.secondary}>На eVSE з {createdAt}</Text>
+                        <Text type={'Title'} color={colors.text.secondary}>На eVSE {createdAt}</Text>
                         <Text type={'Title'} color={colors.text.secondary}>Онлайн в {lastOnline}</Text>
                     </Box>
                     <Box>
