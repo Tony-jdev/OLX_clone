@@ -1,38 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
-import Text from "@/components/Tools/TextContainer/Text.jsx";
-import { TabsContainerStyles } from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/Styles.js";
-import { useTheme } from "@mui/material/styles";
-import PostWideList from "@/components/Tools/PostWideList/PostWideList.jsx";
-import { getRecentViews } from "@/Helpers/recentViewsHelper.js";
-import { GetPostById } from "@/Api/postApi.js";
+import React, {useEffect, useState} from 'react';
+import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import PostWideList from '@/components/Tools/PostWideList/PostWideList';
+import {TabsContainerStyles} from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/Styles.js";
+import {useDispatch} from "react-redux";
+import {fetchUserDataAsync} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {getChatsByUserId} from "@/Api/chatApi.js"; 
 
-const MyMessages = () => {
+const Messages = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
 
-    const [ads, setAds] = useState([]);
+    const [selectedTab, setSelectedTab] = useState(0);
+    const [chats, setChats] = useState([]);
+    const [unReadChatsSell, setUnReadChatsSell] = useState([]);
+    const [ReadChatsSell, setReadChatsSell] = useState([]);
+    const [unReadChatsBuy, setUnReadChatsBuy] = useState([]);
+    const [ReadChatsBuy, setReadChatsBuy] = useState([]);
+    
+    const dispatch = useDispatch();
+
+    const handleChange = (event, newValue) => {
+        setSelectedTab(newValue);
+    };
+    
+    const getChats = async ()=> {
+        const user = await dispatch(fetchUserDataAsync());
+        const chats = await getChatsByUserId(user.userId);
+        
+        const unReadChatsSell = chats.data.filter(chat => chat.latestMessage && !chat.latestMessage.isRead && chat.sellerId === user.userId);
+        const readChatsSell = chats.data.filter(chat => chat.latestMessage && chat.latestMessage.isRead && chat.sellerId === user.userId);
+        const unReadChatsBuy = chats.data.filter(chat => chat.latestMessage && !chat.latestMessage.isRead && chat.customerId === user.userId);
+        const readChatsBuy = chats.data.filter(chat => chat.latestMessage && chat.latestMessage.isRead && chat.customerId === user.userId);
+
+        setUnReadChatsSell(unReadChatsSell);
+        setReadChatsSell(readChatsSell);
+        setUnReadChatsBuy(unReadChatsBuy);
+        setReadChatsBuy(readChatsBuy);
+        
+        console.log(chats);
+        console.log(unReadChatsSell);
+        console.log(readChatsSell);
+        console.log(unReadChatsBuy);
+        console.log(readChatsBuy);
+
+        setChats(chats.data);
+    }
 
     useEffect(() => {
-       
+        getChats();
     }, []);
 
     return (
-        <Box style={{
-            maxWidth: 980, maxHeight: 804, height: '100vh', width: '100vw', paddingTop: '20px', paddingLeft: '5px',
-            borderRadius: '10px',
-            boxShadow: colors.boxShadow,
-            background: colors.background.secondary
-        }}>
-            <Typography variant="h6">My messages</Typography>
-            <Box sx={{ marginTop: '20px' }}>
-                <PostWideList ads={ads} />
+        <Box sx={{ maxWidth: 985, maxHeight: 804, height: '100vh', width: '100vw', padding: '28px 8px', borderRadius: '10px', boxShadow: colors.boxShadow, background: colors.background.secondary }}>
+            <Tabs value={selectedTab} onChange={handleChange} aria-label="profile tabs"
+            sx={{ ...TabsContainerStyles,
+                '& .MuiTabs-indicator': {
+                    backgroundColor: colors.text.revers,
+                },}}
+            >
+                <Tab label="Продаю" />
+                <Tab label="Купую" />
+            </Tabs>
+            <Box sx={{ marginTop: '30px',}}>
+                {selectedTab === 0 && (
+                    <>
+                        <PostWideList unr={unReadChatsSell} r={ReadChatsSell} t="message" />
+                    </>
+                )}
+                {selectedTab === 1 && (
+                    <>
+                        <PostWideList unr={unReadChatsBuy} r={ReadChatsBuy} t="message" />
+                    </>
+                )}
             </Box>
-            <Text type={'Body'} sl={{ textAlign: 'right', marginTop: '20px', marginBottom: '20px', marginRight: '20px' }}>
-                Всього переглядів: {ads ? ads.length : 0}
-            </Text>
         </Box>
     );
 };
 
-export default MyMessages;
+export default Messages;

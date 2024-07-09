@@ -54,8 +54,6 @@ export const InactiveToggleOption = {
 export const TabsContainerStyles = {
     minHeight: '24px',
     height: '24px',
-    marginTop: '0px',
-    marginBottom: '20px',
     
     '& .MuiTab-root': {
         minHeight: '24px',
