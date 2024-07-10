@@ -118,7 +118,17 @@ const ProductPage = () => {
         {
             if(user.userId !== post.user.id)
             {
-                openChat();
+                
+                navigate('/user/Messages', { state:
+                        {
+                            additionalData: {
+                                senderId: post.user.id,
+                                userId: user.userId,
+                                postId: post.id,
+                            }
+                        } 
+                });
+                //openChat();
             }
         }
         else openAuth();

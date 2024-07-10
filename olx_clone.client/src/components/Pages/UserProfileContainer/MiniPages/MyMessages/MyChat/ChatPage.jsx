@@ -14,10 +14,11 @@ import { LabelMedium } from "@/components/Tools/TextContainer/Styles.js";
 import { useSignalR } from "@/Helpers/signalRServices.js";
 import {scrollableBox} from "@/components/Tools/PostWideList/Styles.js";
 
-const ChatPage = ({ chatId, onClose }) => {
+const ChatPage = ({ chat, alternative, onClose }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const dispatch = useDispatch();
+    const [chatId, setChatId] = useState(chat ?? null);
     const [sender, setSender] = useState(null);
     const [user, setUser] = useState(null);
     const [chatData, setChatData] = useState(null);
@@ -36,16 +37,26 @@ const ChatPage = ({ chatId, onClose }) => {
 
     const getChat = async (id) => {
         console.log('Fetching chat data for chatId:', id);
+       
         const user = await dispatch(fetchUserDataShortAsync());
-        const chatD = await getChatById(id);
-        const senderId = chatD.data.sellerId === user.id ? chatD.data.customerId : chatD.data.sellerId;
-        const sender = await fetchUserByIdShort(senderId);
         setUser(user);
-        setSender(sender.data);
-        setChatData(chatD.data);
-        setMessages(chatD.data.messages); 
-        console.log('Chat data:', chatD.data);
-        console.log('Sender data:', sender.data);
+        
+        if(alternative)
+        {
+            const sender = await fetchUserByIdShort(alternative.senderId);
+            setSender(sender.data);
+        }
+        else
+        {
+            const chatD = await getChatById(id);
+            const senderId = chatD.data.sellerId === user.id ? chatD.data.customerId : chatD.data.sellerId;
+            const sender = await fetchUserByIdShort(senderId);
+            setSender(sender.data);
+            setChatData(chatD.data);
+            setMessages(chatD.data.messages);
+            console.log('Chat data:', chatD.data);
+            console.log('Sender data:', sender.data);
+        }
     };
 
     useEffect(() => {
@@ -54,7 +65,9 @@ const ChatPage = ({ chatId, onClose }) => {
     
     useEffect(()=>{
         const updateStatus = async ()=>{
-            await updateOnlineStatus(user.id)
+            if(user?.id){
+                await updateOnlineStatus(user?.id);
+            }
         }
         updateStatus();
     }, [user]);
@@ -66,9 +79,12 @@ const ChatPage = ({ chatId, onClose }) => {
                 .map(message => message.id);
         };
         const updateMessageStatus = async ()=>{
-            const arr = getMessagesByReceiverId(chatData.messages, user?.id);
-            console.log(arr);
-            await markChatAsRead(arr);
+            if(chatData?.messages && user?.id)
+            {
+                const arr = getMessagesByReceiverId(chatData.messages, user?.id);
+                console.log(arr);
+                await markChatAsRead(arr);
+            }
         }
         updateMessageStatus();
     }, [chatData]);
@@ -103,7 +119,7 @@ const ChatPage = ({ chatId, onClose }) => {
                             overflowX: 'hidden',
                             scrollBehavior: 'smooth',
                             position: 'relative', scrollbarColor: `${colors.text.orange} ${colors.background.secondary}`, maxHeight: '357px', overflow: 'auto'}}>
-                        {messages && messages.map((message, index) => (
+                        {messages && messages.length > 0 && messages.map((message, index) => (
                             <MessageWithDate key={index} message={message} showDate={shouldShowDate(index, messages)} isSentByUser={message.senderId === user.id} />
                         ))}
                         <Box ref={messagesEndRef}></Box>
