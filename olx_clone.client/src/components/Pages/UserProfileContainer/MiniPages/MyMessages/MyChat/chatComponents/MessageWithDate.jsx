@@ -12,7 +12,7 @@ const MessageWithDate = ({ message, showDate, isSentByUser }) => {
     return (
         <>
             {showDate && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '10px', margin: '10px 0' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '10px', margin: '10px 0px' }}>
                     <Text textSt={LabelMedium} color={colors.text.orange}>
                         {formatDate(message.createdAt)}
                     </Text>

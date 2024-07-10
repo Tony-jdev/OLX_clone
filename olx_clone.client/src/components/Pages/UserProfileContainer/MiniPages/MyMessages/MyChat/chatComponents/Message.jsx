@@ -12,7 +12,7 @@ const Message = ({ message, isSentByUser}) => {
     const { colors } = theme.palette;
     
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: isSentByUser ? 'flex-end' : 'flex-start', marginBottom: '16px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: isSentByUser ? 'flex-end' : 'flex-start', marginBottom: '16px', marginRight: '8px' }}>
             <Box sx={{
                 backgroundColor: isSentByUser ? colors.background.orange : '#f5e5d5',
                 padding: '12px',
@@ -27,7 +27,7 @@ const Message = ({ message, isSentByUser}) => {
                     <Text type={'Body'}>
                         {message.text}
                     </Text>
-                    {isSentByUser &&
+                    {isSentByUser && message.isRead &&
                         <Icon
                             icon={CheckIcon}
                             sr={{marginLeft: '10px'}}

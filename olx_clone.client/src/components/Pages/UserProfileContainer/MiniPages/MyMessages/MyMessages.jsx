@@ -21,15 +21,13 @@ const Messages = () => {
     
     const dispatch = useDispatch();
 
-    const [selectedChatId, setSelectedChatId] = useState(localStorage.getItem('selectedChatId') || null);
+    const [selectedChatId, setSelectedChatId] = useState(null);
     const handleChatSelect = (chatId) => {
         setSelectedChatId(chatId);
-        localStorage.setItem('selectedChatId', chatId);
     };
 
     const handleChatRemove = () => {
         setSelectedChatId(null);
-        localStorage.removeItem('selectedChatId');
     };
     
     const handleChange = (event, newValue) => {

@@ -41,3 +41,17 @@ export const updateUserById = async (userId, userData) => {
         throw new Error('Failed to update user');
     }
 };
+
+export const updateOnlineStatus = async (userId) => {
+    try {
+        const response = await axios.post(`${baseUrl}/api/users/update-online-status`, null, {
+            params: {
+                userId: userId
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating online status:', error);
+        throw new Error('Failed to update online status');
+    }
+};
