@@ -1,5 +1,5 @@
 import React, {Suspense, useMemo} from 'react';
-import {Box, CircularProgress, Stack} from "@mui/material";
+import {Box, Stack} from "@mui/material";
 import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
 import { IntlProvider } from 'react-intl';
@@ -16,6 +16,7 @@ import {ChatProvider} from "@/providers/ChatProvider.jsx";
 import {AuthProvider} from "@/providers/AuthProvider.jsx";
 import {AddPostProvider} from "@/providers/AddPostModalProvider.jsx";
 import {AlertProvider} from "@/providers/AlertsProvider.jsx";
+import {useLocation} from "react-router-dom";
 
 
 const messages = {
@@ -23,6 +24,8 @@ const messages = {
     uk: messagesUa,
 };
 const Layout = (props) => {
+    const location = useLocation();
+    const isAdminPage = location.pathname.startsWith('/admin');
     const dispatch = useDispatch();
     const locale = useSelector(selectLocale) ?? 'uk';
     const themeMode = useSelector(selectTheme) ?? 'light';
@@ -49,11 +52,11 @@ const Layout = (props) => {
                             <AddPostProvider>
                                 <ChatProvider>
                                         <Stack>
-                                            <Header/>
+                                            {!isAdminPage && <Header/>}
                                             <div style={{minHeight: '62.5vh'}}>
                                                 {props.children}
                                             </div>
-                                            <Footer/>
+                                            {!isAdminPage && <Footer/>}
                                         </Stack>
                                 </ChatProvider>
                             </AddPostProvider>

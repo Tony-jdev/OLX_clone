@@ -1,5 +1,7 @@
 import React from 'react';
 import ProtectedRoute from "@/Helpers/ProtectedRoute.jsx";
+import AdminPage from "@/components/Pages/AdminPage/Admin.jsx";
+import RestrictAdminRoute from "@/Helpers/RestrictedAdminRoute.jsx";
 
 const Home = React.lazy(() => import('./components/Pages/Home/Home'));
 const SearchPage = React.lazy(() => import('@/components/Pages/SearchPage/SearchPage.jsx'));
@@ -8,24 +10,23 @@ const About = React.lazy(() => import('@/components/Pages/About/About.jsx'));
 const UserProfileContainer = React.lazy(() => import('@/components/Pages/UserProfileContainer/UserProfileContainer.jsx'));
 const CreatePost = React.lazy(() => import('@/components/Pages/CreatePost/CreatePost.jsx'));
 
-
 const AppRoutes = [
     {
         index: true,
         path: '/',
-        element: <Home/>
+        element: <RestrictAdminRoute component={Home}/>
     },
     {
         path: '/about',
-        element: <About/>
+        element: <RestrictAdminRoute component={About}/>
     },
     {
         path: '/search/:category?/:subCategory?',
-        element: <SearchPage/>
+        element: <RestrictAdminRoute component={SearchPage}/>
     },
     {
         path: 'post/:id',
-        element: <Product/>
+        element: <RestrictAdminRoute component={Product}/>
     },
     {
         path: 'user/:miniPage?',
@@ -34,6 +35,10 @@ const AppRoutes = [
     {
         path: '/create/:id?',
         element: <ProtectedRoute component={CreatePost}/>
+    },
+    {
+        path: '/admin',
+        element: <AdminPage/>
     },
 ];
 

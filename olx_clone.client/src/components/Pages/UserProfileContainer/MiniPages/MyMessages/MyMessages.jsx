@@ -6,11 +6,17 @@ import {TabsContainerStyles} from "@/components/Pages/UserProfileContainer/MiniP
 import {useDispatch} from "react-redux";
 import {fetchUserDataAsync} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import {getChatsByUserId} from "@/Api/chatApi.js";
-import ChatPage from "@/components/Pages/UserProfileContainer/MiniPages/MyMessages/MyChat/ChatPage.jsx"; 
+import ChatPage from "@/components/Pages/UserProfileContainer/MiniPages/MyMessages/MyChat/ChatPage.jsx";
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const Messages = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
+
+    const navigate = useNavigate();
+    
+    const location = useLocation();
+    const [additionalData, setAdditionalData] = useState(location.state?.additionalData || null);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [chats, setChats] = useState([]);
@@ -21,15 +27,13 @@ const Messages = () => {
     
     const dispatch = useDispatch();
 
-    const [selectedChatId, setSelectedChatId] = useState(localStorage.getItem('selectedChatId') || null);
+    const [selectedChatId, setSelectedChatId] = useState(null);
     const handleChatSelect = (chatId) => {
         setSelectedChatId(chatId);
-        localStorage.setItem('selectedChatId', chatId);
     };
 
     const handleChatRemove = () => {
         setSelectedChatId(null);
-        localStorage.removeItem('selectedChatId');
     };
     
     const handleChange = (event, newValue) => {
@@ -59,12 +63,19 @@ const Messages = () => {
         setChats(chats.data);
     }
 
+    
     useEffect(() => {
-        getChats();
+        if(additionalData === null)
+        {
+            getChats();
+        }
+        if (additionalData) {
+            navigate(location.pathname, { replace: true });
+        }
     }, []);
-
-    if (selectedChatId) {
-        return <ChatPage chatId={selectedChatId}  onClose={handleChatRemove} />;
+    
+    if (selectedChatId || additionalData) {
+        return <ChatPage chat={selectedChatId} setAdditionData={setAdditionalData} setSelectedChatId={setSelectedChatId} alternative={additionalData}  onClose={handleChatRemove} />;
     }
 
     return (

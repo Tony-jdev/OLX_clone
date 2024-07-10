@@ -16,7 +16,12 @@ import IndicatorBox from "@/components/Tools/IndicatorBox/IndicatorBox.jsx";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUserDataAsync, isUserLoggedIn, selectToken} from "@/Storage/Redux/Slices/userInfoSlice.js";
+import {
+    fetchUserDataAsync,
+    fetchUserDataShortAsync,
+    isUserLoggedIn,
+    selectToken
+} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import SButton from "@/components/Tools/Button/SButton.jsx";
 import {LikedIcon, LikeIcon, MessageMailIcon} from "@/assets/Icons/Icons.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
@@ -148,6 +153,20 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
         navigate(`/post/${ad.sku}`);
     };
 
+    const goToMail = async () => {
+        const user = dispatch(fetchUserDataShortAsync());
+        navigate('/user/Messages', { state:
+                {
+                    additionalData: {
+                        senderId: ad.user.id,
+                        userId: user.id,
+                        postId: ad.id,
+                        postSku: ad.sku,
+                    }
+                }
+        });
+    }
+    
     return (
         <Box
             ref={cardRef}
@@ -209,7 +228,6 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
                         />
                         <SButton
                             isIconButton={true}
-                            
                             icon={
                                 <Icon
                                     icon={MessageMailIcon}
@@ -218,6 +236,12 @@ const RecentViewsCard = ({ ad, container, onFavoriteChange }) => {
                                     width={36}
                                     height={36}
                                 />
+                            }
+                            action={
+                                (e)=> {
+                                    e.stopPropagation();
+                                    goToMail();
+                                }
                             }
                         />
                     </Box>

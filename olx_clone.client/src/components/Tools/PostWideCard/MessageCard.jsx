@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Avatar, Box, Typography } from '@mui/material';
+import { Avatar, Box, } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import {formatTimeFromISO} from "@/Helpers/DateHelper.js";

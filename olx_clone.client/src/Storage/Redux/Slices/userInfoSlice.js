@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 import { createSelector } from 'reselect';
-import {fetchUserById} from "@/Api/userApi.js";
+import {fetchUserById, fetchUserByIdShort} from "@/Api/userApi.js";
 
 const initialState = {
     token: localStorage.getItem('userToken') ?? '',
@@ -81,10 +81,40 @@ export const fetchUserDataAsync = () => async (dispatch, getState) => {
         return null;
     }
 };
+export const fetchUserDataShortAsync = () => async (dispatch, getState) => {
+    const state = await getState();
+    const token = state.userInfo.token;
+    try {
+        const data = jwtDecode(token);
+        console.log(data);
+        const user = await fetchUserByIdShort(data.uid);
+        console.log(user);
+        return user.data;
+    } catch (error) {
+        console.error('Failed to decode token:', error);
+        return null;
+    }
+};
 
 export const isUserLoggedIn = createSelector(
     [selectToken],
     (token) => !!token
+);
+
+export const isAdmin = createSelector(
+    [selectToken],
+    (token) => {
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                return decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin';
+            } catch (error) {
+                console.error('Failed to decode token:', error);
+                return false;
+            }
+        }
+        return false;
+    }
 );
 
 export default userInfoSlice.reducer;

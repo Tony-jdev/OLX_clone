@@ -14,6 +14,19 @@ export const fetchUserById = async (userId) => {
         throw new Error('Failed to fetch');
     }
 };
+export const fetchUserByIdShort = async (userId) => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/users/short-info/${userId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch');
+    }
+};
 
 export const updateUserById = async (userId, userData) => {
     try {
@@ -26,5 +39,19 @@ export const updateUserById = async (userId, userData) => {
         return response.data;
     } catch (error) {
         throw new Error('Failed to update user');
+    }
+};
+
+export const updateOnlineStatus = async (userId) => {
+    try {
+        const response = await axios.post(`${baseUrl}/api/users/update-online-status`, null, {
+            params: {
+                userId: userId
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating online status:', error);
+        throw new Error('Failed to update online status');
     }
 };

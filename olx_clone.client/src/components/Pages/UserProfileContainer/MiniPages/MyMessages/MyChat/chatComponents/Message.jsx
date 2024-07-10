@@ -3,15 +3,20 @@ import {Box, Typography} from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {CheckIcon} from "@/assets/Icons/Icons.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
+import {formatTimeFromISO} from "@/Helpers/DateHelper.js";
+import {useTheme} from "@mui/material/styles";
+import Text from "@/components/Tools/TextContainer/Text.jsx";
 
 const Message = ({ message, isSentByUser}) => {
+    const theme = useTheme();
+    const { colors } = theme.palette;
+    
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: isSentByUser ? 'flex-end' : 'flex-start', marginBottom: '16px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: isSentByUser ? 'flex-end' : 'flex-start', marginBottom: '16px', marginRight: '8px' }}>
             <Box sx={{
-                backgroundColor: isSentByUser ? 'orange' : '#f5e5d5',
-                color: isSentByUser ? '#fff' : '#000',
+                backgroundColor: isSentByUser ? colors.background.orange : '#f5e5d5',
                 padding: '12px',
-                borderRadius: '16px',
+                borderRadius: isSentByUser ? '20px 20px 0px 20px' : '20px 20px 20px 0px',
                 maxWidth: '867px',
                 position: 'relative',
                 wordWrap: 'break-word',
@@ -19,8 +24,10 @@ const Message = ({ message, isSentByUser}) => {
                 flexDirection: 'column',
             }}>
                 <Box style={{display: 'flex'}}>
-                    <Typography variant="body1" sx={{ wordWrap: 'break-word' }}>{message.text}</Typography>
-                    {isSentByUser &&
+                    <Text type={'Body'}>
+                        {message.text}
+                    </Text>
+                    {isSentByUser && message.isRead &&
                         <Icon
                             icon={CheckIcon}
                             sr={{marginLeft: '10px'}}
@@ -30,8 +37,10 @@ const Message = ({ message, isSentByUser}) => {
                         />
                     }
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center', }}>
-                    <Typography variant="body2" sx={{ color: '#fff', fontSize: '0.75rem' }}>{message.createdAt}</Typography>
+                <Box sx={{ display: 'flex', justifyContent: isSentByUser ? 'end' : 'start', alignItems: 'center', }}>
+                    <Text type={'Body'} color={'#838383'}>
+                        {formatTimeFromISO(message.createdAt)}
+                    </Text>
                 </Box>
             </Box>
         </Box>

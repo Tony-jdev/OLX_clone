@@ -1,9 +1,13 @@
 import React, {useEffect} from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {isAdmin} from "@/Storage/Redux/Slices/userInfoSlice.js";
 
 const ProtectedRoute = ({ component: Component }) => {
     const { isAuthenticated, requireAuth } = useAuth();
+    const admin = useSelector(isAdmin);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,7 +17,7 @@ const ProtectedRoute = ({ component: Component }) => {
         }
     }, [isAuthenticated, requireAuth, navigate]);
 
-    if (isAuthenticated === false) {
+    if (isAuthenticated === false || admin === true) {
         return null; 
     }
 
