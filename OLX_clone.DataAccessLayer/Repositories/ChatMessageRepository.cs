@@ -26,4 +26,12 @@ public class ChatMessageRepository: GenericRepository<ChatMessage>, IChatMessage
             .ToListAsync();
     }
 
+    public async Task<int> CountUnreadChatsAsync(string userId)
+    {
+        return await _context.ChatMessages
+            .Where(m => m.ReceiverId == userId && !m.IsRead)
+            .Select(m => m.ChatId)
+            .Distinct()
+            .CountAsync();
+    }
 }

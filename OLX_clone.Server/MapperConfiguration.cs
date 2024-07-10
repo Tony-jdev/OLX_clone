@@ -26,7 +26,9 @@ public class MapperConfiguration : Profile
         CreateMap<Post, GetPostDetailsDto>();
         CreateMap<Post, GetPostProfileDto>();
         CreateMap<Post, GetRecentlySoldPostDto>();
-        CreateMap<Post, GetFavoritePostDto>();
+        CreateMap<Post, GetFavoritePostDto>()
+            .ForMember(dest => dest.UserId,
+                opt => opt.MapFrom(src => src.ApplicationUserId));
         
         CreateMap<RegisterRequestDto, ApplicationUser>()
             .ForMember(dest => dest.UserName,

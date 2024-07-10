@@ -98,6 +98,18 @@ public class ChatService : IChatService
 
         return new ApiResponse<GetChatDetailsDto> { Data = chatToView, Message = "Chat retrieved successfully." };
     }
+    
+    public async Task<ApiResponse<int>> GetUnreadChatCountAsync(string userId)
+    {
+        int unreadChatCount = await _unitOfWork.ChatMessageRepository.CountUnreadChatsAsync(userId);
+        
+        return new ApiResponse<int>
+        {
+            Data = unreadChatCount,
+            Success = true,
+            Message = "Number of unread messages retrieved successfully."
+        };
+    }
 
     public async Task<ApiResponse<bool>> MarkMessagesAsRead(List<int> messageIds)
     {
