@@ -16,6 +16,7 @@ import {ChatProvider} from "@/providers/ChatProvider.jsx";
 import {AuthProvider} from "@/providers/AuthProvider.jsx";
 import {AddPostProvider} from "@/providers/AddPostModalProvider.jsx";
 import {AlertProvider} from "@/providers/AlertsProvider.jsx";
+import {useLocation} from "react-router-dom";
 
 
 const messages = {

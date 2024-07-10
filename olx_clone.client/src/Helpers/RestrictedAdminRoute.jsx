@@ -1,24 +1,24 @@
-import React from 'react';
-import {Route, Navigate, useNavigate} from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { isAdmin } from '@/Storage/Redux/Slices/userInfoSlice.js';
+import React, { useEffect } from 'react';
+import { useAuth } from '@/providers/AuthProvider';
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { isAdmin } from "@/Storage/Redux/Slices/userInfoSlice.js";
 
-const RestrictAdminRoute = ({ component: Component, ...rest }) => {
+const RestrictedAdminRoute = ({ component: Component }) => {
     const admin = useSelector(isAdmin);
     const navigate = useNavigate();
 
-    return (
-        <Route
-            {...rest}
-            render={props =>
-                !admin ? (
-                    <Component {...props} />
-                ) : (
-                    <Navigate to="/admin" />
-                )
-            }
-        />
-    );
+    useEffect(() => {
+        if (admin === true) {
+            navigate('/admin');
+        }
+    }, [navigate, admin]);
+
+    if (admin === true) {
+        return null;
+    }
+
+    return <Component />;
 };
 
-export default RestrictAdminRoute;
+export default RestrictedAdminRoute;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
-import { GetPosts, updatePostStatus } from '@/api/postApi';
+//import { GetPosts, updatePostStatus } from '@/api/postApi';
 import { selectPosts, setPosts } from '@/Storage/Redux/Slices/postSlice.js';
 import { isAdmin } from '@/Storage/Redux/Slices/userInfoSlice.js';
 

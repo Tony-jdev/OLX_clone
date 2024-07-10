@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import * as signalR from '@microsoft/signalr';
+import {getChats} from "@/Api/chatApi.js";
 
 export const useSignalR = (initialChatId, createChat) => {
     const [messages, setMessages] = useState([]);
@@ -83,13 +84,35 @@ export const useSignalR = (initialChatId, createChat) => {
                 customerId: messageDto.senderId,
                 sellerId: messageDto.receiverId
             };
-            const newChatId = await createChat(newChatDto);
-
-            currentChatId = newChatId.data.id;
-            messageDto.chatId = currentChatId;
-            setChatId(currentChatId);
-            setChatIdCallback(currentChatId);
-
+            
+            let existChat = null;
+            try{
+                const params={
+                    customerId: messageDto.senderId,
+                    sellerId: messageDto.receiverId,
+                    postId: messageDto.postId,
+                }
+                existChat = await getChats(params);
+            }
+            catch (e)
+            {
+                existChat = null;
+            }
+            if(existChat)
+            {
+                currentChatId = existChat.data.id;
+                messageDto.chatId = currentChatId;
+                setChatId(currentChatId);
+                setChatIdCallback(currentChatId);
+            }
+            else {
+                const newChatId = await createChat(newChatDto);
+                currentChatId = newChatId.data.id;
+                messageDto.chatId = currentChatId;
+                setChatId(currentChatId);
+                setChatIdCallback(currentChatId);
+            }
+            
             await startConnection();
             await joinGroup(currentChatId);
         } else {
