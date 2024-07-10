@@ -4,7 +4,7 @@ import ChatHeader from './chatComponents/ChatHeader';
 import MessageWithDate from './chatComponents/MessageWithDate';
 import MessageInput from './chatComponents/MessageInput';
 import { fetchUserDataShortAsync } from "@/Storage/Redux/Slices/userInfoSlice.js";
-import {getChatById, createChat, markChatAsRead} from "@/Api/chatApi.js";
+import {getChatById, createChat, markChatAsRead, getChats} from "@/Api/chatApi.js";
 import { useTheme } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import {fetchUserByIdShort, updateOnlineStatus} from "@/Api/userApi.js";
@@ -31,7 +31,7 @@ const ChatPage = ({ chat, setAdditionData, setSelectedChatId, alternative, onClo
     const shouldShowDate = (index, messages) => {
         if (!messages || messages.length === 0) return false;
         if (index === 0) return true;
-        if (index >= messages.length) return false; // Перевірка на коректність індексу
+        if (index >= messages.length) return false; 
         const currentMessage = messages[index];
         const previousMessage = messages[index - 1];
         return formatDate(currentMessage.createdAt) !== formatDate(previousMessage.createdAt);
@@ -50,6 +50,21 @@ const ChatPage = ({ chat, setAdditionData, setSelectedChatId, alternative, onClo
             const post = await GetPostById(alternative.postSku);
             console.log(post);
             setPostData(post.data);
+            try{
+                const params = {
+                    customerId: user.id,
+                    sellerId: sender.data.id,
+                    postId: post.data.id
+                }
+                console.log(params)
+                const chatD = await getChats(params);
+                setChatData(chatD.data);
+                setMessages(chatD.data.messages);
+            }
+            catch (e)
+            {
+                
+            }
         }
         else
         {
