@@ -61,4 +61,26 @@ public class AuthController : ControllerBase
         }
         return Ok(apiResponse);
     }
+    
+    [HttpPost("forgot-password")]
+    public async Task<ActionResult<ApiResponse<string>>> ForgotPassword(ForgotPasswordDto model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(new ApiResponse<string> { Success = false, Message = "Invalid data provided" });
+
+        var apiResponse = await _authService.ForgotPassword(model.Email);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<ActionResult<ApiResponse<string>>> ResetPassword(ResetPasswordDto model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<string> { Success = false, Message = "Invalid data provided" });
+        }
+
+        var apiResponse = await _authService.ResetPassword(model.UserId, model.Token, model.NewPassword);
+        return apiResponse.Success ? Ok(apiResponse) : StatusCode(500, apiResponse);
+    }
 }
