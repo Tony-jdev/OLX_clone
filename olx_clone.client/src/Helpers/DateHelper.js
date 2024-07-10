@@ -38,3 +38,35 @@ export const formatDateFromISOV2 = (isoString) => {
 
     return `з ${month} ${year} р.`;
 };
+
+export function formatDate(dateString) {
+    const months = [
+        'січ.', 'лют.', 'бер.', 'квіт.', 'трав.', 'черв.', 'лип.', 'серп.', 'вер.', 'жовт.', 'лист.', 'груд.'
+    ];
+
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+
+    return `${day} ${month}`;
+}
+
+export function formatDateWithTime(dateString) {
+    const months = [
+        'січ.', 'лют.', 'бер.', 'квіт.', 'трав.', 'черв.', 'лип.', 'серп.', 'вер.', 'жовт.', 'лист.', 'груд.'
+    ];
+
+    const date = new Date(dateString);
+    const today = new Date();
+    const isToday = date.toDateString() === today.toDateString();
+
+    if (isToday) {
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `в ${hours}:${minutes}`;
+    } else {
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        return `${day} ${month}`;
+    }
+}

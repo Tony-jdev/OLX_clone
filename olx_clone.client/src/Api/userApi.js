@@ -14,6 +14,19 @@ export const fetchUserById = async (userId) => {
         throw new Error('Failed to fetch');
     }
 };
+export const fetchUserByIdShort = async (userId) => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/users/short-info/${userId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch');
+    }
+};
 
 export const updateUserById = async (userId, userData) => {
     try {

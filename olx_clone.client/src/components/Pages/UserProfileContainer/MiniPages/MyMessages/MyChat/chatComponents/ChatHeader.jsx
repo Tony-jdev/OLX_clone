@@ -5,6 +5,7 @@ import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 import {DeleteIcon, SaveMarkIcon} from "@/assets/Icons/Icons.jsx";
 import {useTheme} from "@mui/material/styles";
 import Text from "@/components/Tools/TextContainer/Text.jsx"
+import {formatDateWithTime} from "@/Helpers/DateHelper.js";
 
 const ChatHeader = ({ user }) => {
     const theme = useTheme();
@@ -16,7 +17,7 @@ const ChatHeader = ({ user }) => {
                 <Avatar src={user?.profilePhotoUrl} sx={{width: '60px', height: '60px'}}/>
                 <Box sx={{ marginLeft: '20px' }}>
                     <Text type={'Title'} color={colors.text.orange} >{user?.name}</Text>
-                    <Text type={'Body'} color={colors.text.secondary} >{`Онлайн в ${user?.onlineTime}`}</Text>
+                    <Text type={'Body'} color={colors.text.secondary} >{`Онлайн ${formatDateWithTime(user?.lastSeenOnline)}`}</Text>
                 </Box>
             </Box>
             <Box>

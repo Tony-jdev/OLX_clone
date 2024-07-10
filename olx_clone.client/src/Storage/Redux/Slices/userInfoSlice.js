@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 import { createSelector } from 'reselect';
-import {fetchUserById} from "@/Api/userApi.js";
+import {fetchUserById, fetchUserByIdShort} from "@/Api/userApi.js";
 
 const initialState = {
     token: localStorage.getItem('userToken') ?? '',
@@ -75,6 +75,20 @@ export const fetchUserDataAsync = () => async (dispatch, getState) => {
         const user = await fetchUserById(data.uid);
         console.log(user);
         dispatch(setUser(user.data));
+        return user.data;
+    } catch (error) {
+        console.error('Failed to decode token:', error);
+        return null;
+    }
+};
+export const fetchUserDataShortAsync = () => async (dispatch, getState) => {
+    const state = await getState();
+    const token = state.userInfo.token;
+    try {
+        const data = jwtDecode(token);
+        console.log(data);
+        const user = await fetchUserByIdShort(data.uid);
+        console.log(user);
         return user.data;
     } catch (error) {
         console.error('Failed to decode token:', error);

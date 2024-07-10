@@ -52,6 +52,10 @@ const databaseRoutes = {
         target,
         secure: false
     },
+    '^/api/users/short-info': {
+        target,
+        secure: false
+    },
     '^/api/users/update-last-seen': {
         target,
         secure: false
