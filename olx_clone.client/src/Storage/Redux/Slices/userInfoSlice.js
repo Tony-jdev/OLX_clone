@@ -101,4 +101,20 @@ export const isUserLoggedIn = createSelector(
     (token) => !!token
 );
 
+export const isAdmin = createSelector(
+    [selectToken],
+    (token) => {
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                return decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin';
+            } catch (error) {
+                console.error('Failed to decode token:', error);
+                return false;
+            }
+        }
+        return false;
+    }
+);
+
 export default userInfoSlice.reducer;

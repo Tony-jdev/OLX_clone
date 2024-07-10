@@ -24,6 +24,8 @@ import {useAlert} from "@/providers/AlertsProvider.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 import {fetchUserDataAsync, selectToken, selectUser} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import {setToken} from "@/Helpers/recentViewsHelper.js";
+import {jwtDecode} from "jwt-decode";
+import {useNavigate} from "react-router-dom";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -31,6 +33,8 @@ const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*])[A-Za-z
 const AuthModal = ({ open, handleClose}) => {
     const theme = useTheme();
     const { colors } = theme.palette;
+    
+    const navigate = useNavigate();
     
     const [isRegister, setIsRegister] = useState(false);
 
@@ -112,7 +116,11 @@ const AuthModal = ({ open, handleClose}) => {
         {
             const user = await dispatch(fetchUserDataAsync());
             const token = localStorage.getItem('userToken');
+            const decodedToken = jwtDecode(token);
+            const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
             setToken(user.userId, token);
+            if(role === 'Admin')
+                navigate('/admin');
         }
     }
 
