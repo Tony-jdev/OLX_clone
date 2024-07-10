@@ -81,7 +81,6 @@ const ChatPage = ({ chatId, onClose }) => {
 
     useEffect(() => {
         scrollToBottom();
-        //scrollToTop();
     }, [messages]);
 
     return (
