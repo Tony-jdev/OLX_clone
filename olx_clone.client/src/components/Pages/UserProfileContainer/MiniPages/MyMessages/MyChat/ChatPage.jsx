@@ -23,7 +23,7 @@ const ChatPage = ({ chatId, onClose }) => {
     const [chatData, setChatData] = useState(null);
     const { connection, messages, setMessages, sendMessage } = useSignalR(chatId, createChat);
     const messagesEndRef = useRef(null);
-    const messagesStartRef = useRef(null);
+    const messagesContainerRef = useRef(null);
 
     const shouldShowDate = (index, messages) => {
         if (!messages || messages.length === 0) return false;
@@ -74,20 +74,19 @@ const ChatPage = ({ chatId, onClose }) => {
     }, [chatData]);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-    const scrollToTop = () => {
-        messagesStartRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
     };
 
     useEffect(() => {
-       // scrollToBottom();
+        scrollToBottom();
         //scrollToTop();
     }, [messages]);
 
     return (
         <Box sx={{ maxWidth: '982px', margin: '0 auto', padding: '0px', backgroundColor: 'inherit' }}>
-            <ChatHeader ref={messagesStartRef} user={sender} />
+            <ChatHeader user={sender} />
             <Box style={{boxShadow: colors.boxShadow, borderRadius: '10px 10px 0px 0px',}}>
                 <Box sx={{ padding: '8px', backgroundColor: colors.transparent,  marginTop: '16px', borderRadius: '10px 10px 0px 0px', }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', padding: '28px 8px 10px 8px' }}>
@@ -100,7 +99,11 @@ const ChatPage = ({ chatId, onClose }) => {
                         </Box>
                     </Box>
                     <Box
-                        sx={{...scrollableBox, scrollbarColor: `${colors.text.orange} ${colors.background.secondary}`, maxHeight: '357px', overflow: 'auto'}}>
+                        ref={messagesContainerRef}
+                        sx={{overflowY: 'auto',
+                            overflowX: 'hidden',
+                            scrollBehavior: 'smooth',
+                            position: 'relative', scrollbarColor: `${colors.text.orange} ${colors.background.secondary}`, maxHeight: '357px', overflow: 'auto'}}>
                         {messages && messages.map((message, index) => (
                             <MessageWithDate key={index} message={message} showDate={shouldShowDate(index, messages)} isSentByUser={message.senderId === user.id} />
                         ))}
