@@ -71,12 +71,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
-}).AddEntityFrameworkStores<ApplicationDbContext>();
+}).AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 // Service registration
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSingleton(u => new BlobServiceClient(
     builder.Configuration.GetConnectionString("StorageAccount")));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<IBlobService, BlobService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();

@@ -11,6 +11,7 @@ public class GetFavoritePostDto
     public double Price { get; set; }
     public string Location { get; set; }
     public string Type { get; set; }
+    public string UserId { get; set; }
     public bool IsTop { get; set; }
     public string PhotoUrl { get; set; }
 }

@@ -8,4 +8,6 @@ public interface IAuthService
 {
     Task<ApiResponse<IEnumerable<IdentityError>>> Register(RegisterRequestDto registerRequestDto);
     Task<ApiResponse<LoginResponseDto>> Login(LoginRequestDto loginRequestDto);
+    Task<ApiResponse<string>> ForgotPassword(string email);
+    Task<ApiResponse<string>> ResetPassword(string userId, string token, string newPassword);
 }

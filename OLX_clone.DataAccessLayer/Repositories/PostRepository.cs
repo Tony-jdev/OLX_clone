@@ -27,6 +27,13 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
             .Where(p => p.ApplicationUserId == userId)
             .ToListAsync();
     }
+    
+    public async Task<List<Post>> GetPostsByStatusAsync(string status)
+    {
+        return await _context.Posts
+                .Where(p => p.Status == Enum.Parse<PostStatus>(status, true))
+                .ToListAsync();
+    }
 
     public async Task<List<Post>> GetAllAsync(string? searchTerm, string? orderBy, string? location, string? type, double? priceFrom, double? priceTo,
         string? status)

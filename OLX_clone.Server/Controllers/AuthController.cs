@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using OLX_clone.BusinessLogicLayer.Services.Contracts;
 using OLX_clone.DataAccessLayer.Helpers;
+using OLX_clone.DataAccessLayer.Models;
 using OLX_clone.DataAccessLayer.Models.Dtos.Auth;
 
 namespace OLX_clone.Server.Controllers;
@@ -10,10 +12,14 @@ namespace OLX_clone.Server.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly IEmailService _emailService;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, IEmailService emailService, UserManager<ApplicationUser> userManager)
     {
         _authService = authService;
+        _userManager = userManager;
+        _emailService = emailService;
     }
 
     [HttpPost("register")]
@@ -54,5 +60,27 @@ public class AuthController : ControllerBase
             return BadRequest(apiResponse);
         }
         return Ok(apiResponse);
+    }
+    
+    [HttpPost("forgot-password")]
+    public async Task<ActionResult<ApiResponse<string>>> ForgotPassword(ForgotPasswordDto model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(new ApiResponse<string> { Success = false, Message = "Invalid data provided" });
+
+        var apiResponse = await _authService.ForgotPassword(model.Email);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<ActionResult<ApiResponse<string>>> ResetPassword(ResetPasswordDto model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<string> { Success = false, Message = "Invalid data provided" });
+        }
+
+        var apiResponse = await _authService.ResetPassword(model.UserId, model.Token, model.NewPassword);
+        return apiResponse.Success ? Ok(apiResponse) : StatusCode(500, apiResponse);
     }
 }

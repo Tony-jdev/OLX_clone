@@ -19,15 +19,17 @@ public class AuthService: IAuthService
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IEmailService _emailService;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
     
     public AuthService(ApplicationDbContext context, IConfiguration configuration,
-        UserManager<ApplicationUser> userManager, IMapper mapper)
+        UserManager<ApplicationUser> userManager, IEmailService emailService, IMapper mapper)
     {
         _context = context;
         _configuration = configuration;
         _userManager = userManager;
+        _emailService = emailService;
         _mapper = mapper;
     }
     
@@ -75,6 +77,41 @@ public class AuthService: IAuthService
         apiResponse.Message = "User logged in successfully";
 
         return apiResponse;
+    }
+    
+    public async Task<ApiResponse<string>> ForgotPassword(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return new ApiResponse<string> { Success = true, Message = "If the email is correct, we've sent a password reset link." };
+
+        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var callbackUrl = $"https://localhost:7051/reset-password?userId={user.Id}&token={Uri.EscapeDataString(code)}";
+
+        // Відправка електронного листа з посиланням для скидання пароля
+        await _emailService.SendEmailAsync(email, "Ваш запит на відновлення паролю eVSE",
+            $"Будь ласка, перейдіть за посиланням для відновлення паролю <a href='{callbackUrl}'>link</a>.");
+
+        return new ApiResponse<string> { Success = true, Message = "If the email is correct, we've sent a password reset link." };
+    }
+
+    public async Task<ApiResponse<string>> ResetPassword(string userId, string token, string newPassword)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return new ApiResponse<string> { Success = false, Message = "User not found." };
+
+        var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+        if (!result.Succeeded)
+        {
+            return new ApiResponse<string>
+            {
+                Success = false,
+                Message = string.Join("; ", result.Errors.Select(e => e.Description))
+            };
+        }
+
+        return new ApiResponse<string> { Success = true, Message = "Password has been reset successfully." };
     }
 
     private async Task<string> GenerateToken(ApplicationUser user)
