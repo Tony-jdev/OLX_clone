@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OLX_clone.BusinessLogicLayer.Services.Contracts;
 using OLX_clone.DataAccessLayer.Helpers;
 using OLX_clone.DataAccessLayer.Models;
 using OLX_clone.DataAccessLayer.Models.Dtos;
 using OLX_clone.DataAccessLayer.Models.Dtos.Post;
+using OLX_clone.DataAccessLayer.Models.Enums;
 
 namespace OLX_clone.Server.Controllers;
 
@@ -32,6 +32,13 @@ public class PostController : ControllerBase
     public async Task<ActionResult<ApiResponse<List<GetRecentlySoldPostDto>>>> GetRecentlySoldProducts([FromQuery] int number = 13)
     {
         var apiResponse = await _postService.GetRecentlySoldPosts(number);
+        return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
+    }
+    
+    [HttpGet("by-status")]
+    public async Task<ActionResult<ApiResponse<PagedList<GetPostDto>>>> GetPostsByStatus([FromQuery] string status)
+    {
+        var apiResponse = await _postService.GetPostsByStatus(status);
         return apiResponse.Success ? Ok(apiResponse) : BadRequest(apiResponse);
     }
 
@@ -101,7 +108,6 @@ public class PostController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    /*[Authorize]*/
     public async Task<ActionResult<ApiResponse<bool>>> DeletePost(int id)
     {
         if (id == 0)
@@ -114,7 +120,6 @@ public class PostController : ControllerBase
     }
 
     [HttpDelete("photo/{id:int}", Name = "DeletePhoto")]
-    /*[Authorize]*/
     public async Task<ActionResult<ApiResponse<bool>>> DeletePhoto(int id)
     {
         if (id == 0)

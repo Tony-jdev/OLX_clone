@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OLX_clone.BusinessLogicLayer.Services.Contracts;
 using OLX_clone.DataAccessLayer.Helpers;
 using OLX_clone.DataAccessLayer.Models;
@@ -9,7 +8,6 @@ namespace OLX_clone.Server.Controllers;
 
 [ApiController]
 [Route("api/chats")]
-//[Authorize]
 public class ChatController : ControllerBase
 {
     private readonly IChatService _chatService;

@@ -50,6 +50,16 @@ public class PostService : IPostService
         return getPostDtos;
     }
     
+    public async Task<ApiResponse<List<GetPostDto>>> GetPostsByStatus(string status)
+    {
+        var posts = await _unitOfWork.PostRepository.GetPostsByStatusAsync(status);
+
+        var getPostDtos = _mapper.Map<List<GetPostDto>>(posts);
+        await SetPhotoUrls(getPostDtos);
+        
+        return new ApiResponse<List<GetPostDto>> { Data = getPostDtos, Message = "Posts retrieved successfully." };
+    }
+    
     public async Task<ApiResponse<List<GetRecentlySoldPostDto>>> GetRecentlySoldPosts(int number)
     {
         var posts = await _unitOfWork.PostRepository.GetRecentlySoldPosts(number);

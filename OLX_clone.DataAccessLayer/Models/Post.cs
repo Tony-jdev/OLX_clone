@@ -30,7 +30,7 @@ public class Post
     [Required]
     public PostType Type { get; set; }
     
-    [Required] public PostStatus Status { get; set; } = PostStatus.Active;
+    [Required] public PostStatus Status { get; set; } = PostStatus.PendingApproval;
 
     [Required]
     public string ApplicationUserId { get; set; }
