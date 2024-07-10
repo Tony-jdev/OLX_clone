@@ -7,6 +7,7 @@
     <SpaRoot>..\olx_clone.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <UserSecretsId>5215601b-5519-4166-bf7b-acfa08cf3284</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
