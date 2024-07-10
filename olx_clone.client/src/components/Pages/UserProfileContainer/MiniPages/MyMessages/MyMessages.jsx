@@ -7,14 +7,16 @@ import {useDispatch} from "react-redux";
 import {fetchUserDataAsync} from "@/Storage/Redux/Slices/userInfoSlice.js";
 import {getChatsByUserId} from "@/Api/chatApi.js";
 import ChatPage from "@/components/Pages/UserProfileContainer/MiniPages/MyMessages/MyChat/ChatPage.jsx";
-import { useLocation } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const Messages = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
 
+    const navigate = useNavigate();
+    
     const location = useLocation();
-    const { additionalData } = location.state || {};
+    const [additionalData, setAdditionalData] = useState(location.state?.additionalData || null);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [chats, setChats] = useState([]);
@@ -61,15 +63,19 @@ const Messages = () => {
         setChats(chats.data);
     }
 
+    
     useEffect(() => {
         if(additionalData === null)
         {
             getChats();
         }
+        if (additionalData) {
+            navigate(location.pathname, { replace: true });
+        }
     }, []);
-
+    
     if (selectedChatId || additionalData) {
-        return <ChatPage chat={selectedChatId} alternative={additionalData}  onClose={handleChatRemove} />;
+        return <ChatPage chat={selectedChatId} setAdditionData={setAdditionalData} setSelectedChatId={setSelectedChatId} alternative={additionalData}  onClose={handleChatRemove} />;
     }
 
     return (

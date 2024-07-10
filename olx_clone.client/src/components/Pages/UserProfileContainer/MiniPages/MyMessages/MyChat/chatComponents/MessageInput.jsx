@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Box, TextField, IconButton } from '@mui/material';
-import { Send, InsertEmoticon, Gif } from '@mui/icons-material';
-import {useTheme} from "@mui/material/styles";
+import { Box, TextField } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
 import SButton from "@/components/Tools/Button/SButton.jsx";
-import {AddFileIcon, LikeCollectionIcon, SendIcon, SmileIcon, SVGIcon} from "@/assets/Icons/Icons.jsx";
+import { SendIcon, AddFileIcon, SVGIcon, LikeCollectionIcon, SmileIcon } from "@/assets/Icons/Icons.jsx";
 import Icon from "@/components/Tools/IconContainer/Icon.jsx";
 
-const MessageInput = ({ sendMessage, chatId, sender, receiver }) => {
+const MessageInput = ({ sendMessage, setChatId, chatId, postId, sender, receiver }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
-    
+
     const [message, setMessage] = useState('');
 
     const handleSendMessage = async () => {
@@ -19,14 +18,16 @@ const MessageInput = ({ sendMessage, chatId, sender, receiver }) => {
                 senderId: sender.id,
                 receiverId: receiver.id,
                 text: message,
+                postId,
             };
-            await sendMessage(messageDto);
+            console.log(messageDto);
+            await sendMessage(messageDto, setChatId);
             setMessage('');
         }
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column',  background: colors.background.secondary, alignItems: 'center', padding: '0px 0px 16px 16px', borderTop: '0.5px solid #ddd' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', background: colors.background.secondary, alignItems: 'center', padding: '0px 0px 16px 16px', borderTop: '0.5px solid #ddd' }}>
             <Box sx={{ display: 'flex', width: '100%', flexDirection: 'row', alignItems: 'center', }}>
                 <TextField
                     variant="outlined"
@@ -71,13 +72,13 @@ const MessageInput = ({ sendMessage, chatId, sender, receiver }) => {
                     isIconButton={true}
                     sl={{padding: 0, marginRight: 8, alignSelf: 'center'}}
                     icon={
-                    <Icon
-                        icon={AddFileIcon}
-                        color={colors.text.orange}
-                        step={1}
-                        width={16}
-                        height={16}
-                    />
+                        <Icon
+                            icon={AddFileIcon}
+                            color={colors.text.orange}
+                            step={1}
+                            width={16}
+                            height={16}
+                        />
                     }
                 />
                 <SButton

@@ -13,16 +13,18 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 import { LabelMedium } from "@/components/Tools/TextContainer/Styles.js";
 import { useSignalR } from "@/Helpers/signalRServices.js";
 import {scrollableBox} from "@/components/Tools/PostWideList/Styles.js";
+import {GetPostById} from "@/Api/postApi.js";
 
-const ChatPage = ({ chat, alternative, onClose }) => {
+const ChatPage = ({ chat, setAdditionData, setSelectedChatId, alternative, onClose }) => {
     const theme = useTheme();
     const { colors } = theme.palette;
     const dispatch = useDispatch();
     const [chatId, setChatId] = useState(chat ?? null);
     const [sender, setSender] = useState(null);
     const [user, setUser] = useState(null);
+    const [postData, setPostData] = useState(null);
     const [chatData, setChatData] = useState(null);
-    const { connection, messages, setMessages, sendMessage } = useSignalR(chatId, createChat);
+    const { connection, messages, setMessages, sendMessage } = useSignalR(chatId, createChat, setAdditionData);
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
 
@@ -45,6 +47,9 @@ const ChatPage = ({ chat, alternative, onClose }) => {
         {
             const sender = await fetchUserByIdShort(alternative.senderId);
             setSender(sender.data);
+            const post = await GetPostById(alternative.postSku);
+            console.log(post);
+            setPostData(post.data);
         }
         else
         {
@@ -106,10 +111,10 @@ const ChatPage = ({ chat, alternative, onClose }) => {
                 <Box sx={{ padding: '8px', backgroundColor: colors.transparent,  marginTop: '16px', borderRadius: '10px 10px 0px 0px', }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', padding: '28px 8px 10px 8px' }}>
                         <Box sx={{ display: 'flex', cursor: 'pointer' }} onClick={onClose}>
-                            <Avatar src={chatData?.photoUrl} variant="rounded" sx={{ width: '60px', height: '60px', marginRight: '16px' }} />
+                            <Avatar src={chatData?.photoUrl ?? postData?.photos[0].photoUrl} variant="rounded" sx={{ width: '60px', height: '60px', marginRight: '16px' }} />
                             <Box>
-                                <Text type={'Title'}>{chatData?.name}</Text>
-                                <Text textSt={LabelMedium} sr={{ marginTop: '10px' }}>{chatData?.postPrice} грн</Text>
+                                <Text type={'Title'}>{chatData?.name ?? postData?.title}</Text>
+                                <Text textSt={LabelMedium} sr={{ marginTop: '10px' }}>{chatData?.postPrice ?? postData?.price} грн</Text>
                             </Box>
                         </Box>
                     </Box>
@@ -125,7 +130,7 @@ const ChatPage = ({ chat, alternative, onClose }) => {
                         <Box ref={messagesEndRef}></Box>
                     </Box>
                 </Box>
-                <MessageInput sendMessage={sendMessage} chatId={chatId} sender={user} receiver={sender} />
+                <MessageInput sendMessage={sendMessage} setChatId={setSelectedChatId} chatId={chatId} sender={user} receiver={sender} postId={postData?.id} />
             </Box>
         </Box>
     );

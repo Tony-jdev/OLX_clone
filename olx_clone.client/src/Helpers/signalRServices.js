@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import * as signalR from '@microsoft/signalr';
 
-export const useSignalR = (chatId, createChat) => {
+export const useSignalR = (initialChatId, createChat) => {
     const [messages, setMessages] = useState([]);
+    const [chatId, setChatId] = useState(initialChatId);
     const connectionRef = useRef(null);
     const [isConnected, setIsConnected] = useState(false);
+    const [hasJoinedGroup, setHasJoinedGroup] = useState(false);
 
     const startConnection = useCallback(async () => {
         if (connectionRef.current) {
@@ -24,6 +26,7 @@ export const useSignalR = (chatId, createChat) => {
 
         newConnection.onclose(() => {
             setIsConnected(false);
+            setHasJoinedGroup(false);
             console.log('Disconnected');
             connectionRef.current = null; // Очищення з'єднання при закритті
         });
@@ -37,16 +40,17 @@ export const useSignalR = (chatId, createChat) => {
         }
     }, []);
 
-    const joinGroup = useCallback(async () => {
-        if (connectionRef.current && isConnected && chatId) {
+    const joinGroup = useCallback(async (newChatId) => {
+        if (connectionRef.current && isConnected && newChatId && !hasJoinedGroup) {
             try {
-                await connectionRef.current.invoke('JoinChatGroup', chatId);
-                console.log('Joined group');
+                await connectionRef.current.invoke('JoinChatGroup', newChatId);
+                console.log('Joined group:', newChatId);
+                setHasJoinedGroup(true);
             } catch (e) {
                 console.log('Failed to join group', e);
             }
         }
-    }, [chatId, isConnected]);
+    }, [isConnected, hasJoinedGroup]);
 
     useEffect(() => {
         if (chatId) {
@@ -59,23 +63,51 @@ export const useSignalR = (chatId, createChat) => {
                 connectionRef.current = null;
                 console.log('Disconnected');
                 setIsConnected(false);
+                setHasJoinedGroup(false);
             }
         };
     }, [chatId, startConnection]);
 
     useEffect(() => {
-        joinGroup();
-    }, [joinGroup]);
-
-    const sendMessage = async (messageDto) => {
-        if (!chatId) {
-            // Створення нового чату, якщо chatId не існує
-            const newChatId = await createChat(messageDto);
-            messageDto.chatId = newChatId;
-            chatId = newChatId;
-            await startConnection();
-            await joinGroup();
+        if (chatId && isConnected && !hasJoinedGroup) {
+            joinGroup(chatId);
         }
+    }, [chatId, isConnected, joinGroup, hasJoinedGroup]);
+
+    const sendMessage = async (messageDto, setChatIdCallback) => {
+        let currentChatId = chatId;
+
+        if (!currentChatId) {
+            const newChatDto = {
+                postId: messageDto.postId,
+                customerId: messageDto.senderId,
+                sellerId: messageDto.receiverId
+            };
+            const newChatId = await createChat(newChatDto);
+
+            currentChatId = newChatId.data.id;
+            messageDto.chatId = currentChatId;
+            setChatId(currentChatId);
+            setChatIdCallback(currentChatId);
+
+            await startConnection();
+            await joinGroup(currentChatId);
+        } else {
+            messageDto.chatId = currentChatId;
+        }
+
+        // Встановлюємо затримку для забезпечення завершення з'єднання перед приєднанням до групи
+        const waitForConnection = new Promise((resolve) => {
+            const interval = setInterval(() => {
+                if (connectionRef.current && connectionRef.current.state === signalR.HubConnectionState.Connected) {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 100);
+        });
+
+        await waitForConnection;
+        await joinGroup(currentChatId);
 
         if (connectionRef.current && connectionRef.current.state === 'Connected') {
             try {

@@ -125,10 +125,10 @@ const ProductPage = () => {
                                 senderId: post.user.id,
                                 userId: user.userId,
                                 postId: post.id,
+                                postSku: post.sku,
                             }
                         } 
                 });
-                //openChat();
             }
         }
         else openAuth();
