@@ -2,16 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import {Box, Container, Typography} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import {GetCategories, getCategoryById} from "@/Api/categoryApi.js";
+import SButton from "@/components/Tools/Button/SButton.jsx";
+import Icon from "@/components/Tools/IconContainer/Icon.jsx";
+import {ArrowRight} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
 
-const SubCategoriesWrapper = ({ children, categoryId }) => {
+const SubCategoriesWrapper = ({ children, categoryId, Color }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [subCategories, setSubCategories] = useState([]);
     const theme = useTheme();
     const { colors } = theme.palette;
     const wrapperRef = useRef(null);
+    const [pcat, setpcat] = useState(null);
+    const navigate = useNavigate();
 
     const getChildCategoriesByParentId = (data, parentId) => {
         const parentCategory = data.find(category => category.id === parentId);
+        setpcat(parentCategory);
+        console.log(parentCategory);
         if (parentCategory && parentCategory.childCategories) {
             return parentCategory.childCategories;
         } else {
@@ -67,7 +75,7 @@ const SubCategoriesWrapper = ({ children, categoryId }) => {
                     display: 'flex',
                     justifyContent: 'center',
                     transition: 'height 0.5s ease-in-out, padding 0.5s ease-in-out',
-                    height: isHovered ? '300px' : '0',
+                    height: isHovered ? 'fit-content' : '0',
                     overflow: 'hidden',
                     pointerEvents: isHovered ? 'auto' : 'none'
                 }}
@@ -79,9 +87,21 @@ const SubCategoriesWrapper = ({ children, categoryId }) => {
                     }}
                 >
                     {subCategories.map(subCategory => (
-                        <Typography key={subCategory.id} sx={{ padding: '5px 0', color: colors.text.primary }}>
-                            {subCategory.title}
-                        </Typography>
+                        <SButton
+                            key = {subCategory.id}
+                            type={'transparentButton'}
+                            text={subCategory.title}
+                            Color={colors.text.primary}
+                            sr={{maxWidth: '174px', width: '100%', justifyContent: 'space-between'}}
+                            next={<Icon
+                                icon={ArrowRight}
+                                color={Color}
+                                step={1}
+                                width={18}
+                                height={18}
+                            />}
+                            action={()=>{ navigate(`/search/${pcat.sku}/${subCategory.sku}`)}}
+                        />
                     ))}
                 </Container>
             </Box>

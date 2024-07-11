@@ -1,6 +1,6 @@
 const Categories = [
     "electronics",
-    "fashion",
+    "clothes_and_shoes",
     "home",
     "real_estate",
     "cars",
