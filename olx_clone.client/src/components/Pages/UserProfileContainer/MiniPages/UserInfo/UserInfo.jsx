@@ -20,7 +20,7 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 import { PenEditIcon } from "@/assets/Icons/Icons.jsx";
 import { updateUserById } from "@/Api/userApi.js";
 import { InfoBlock, ButtonGroup } from "@/components/Pages/UserProfileContainer/MiniPages/UserInfo/Styles.js";
-import { uploadUserPhoto } from '@/Api/userApi.js'; 
+import { uploadUserPhoto } from '@/Api/userApi.js';
 
 const EditableField = ({ label, value, onSave }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -49,20 +49,20 @@ const EditableField = ({ label, value, onSave }) => {
                 ) : (
                     <>
                         <TextField value={editValue} onChange={(e) => setEditValue(e.target.value)} variant="outlined" />
-                        <Button onClick={() => setIsConfirmOpen(true)}>Save</Button>
-                        <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+                        <Button onClick={() => setIsConfirmOpen(true)}><FormattedMessage id="profile.save" /></Button>
+                        <Button onClick={() => setIsEditing(false)}><FormattedMessage id="profile.cancel" /></Button>
                     </>
                 )}
             </Box>
 
             <Dialog open={isConfirmOpen} onClose={() => setIsConfirmOpen(false)}>
-                <DialogTitle>Confirm Update</DialogTitle>
+                <DialogTitle><FormattedMessage id="profile.confirmUpdate" /></DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Are you sure you want to save the changes?</DialogContentText>
+                    <DialogContentText><FormattedMessage id="profile.confirmUpdateText" /></DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setIsConfirmOpen(false)} color="primary">Cancel</Button>
-                    <Button onClick={handleSave} color="primary">Confirm</Button>
+                    <Button onClick={() => setIsConfirmOpen(false)} color="primary"><FormattedMessage id="profile.cancel" /></Button>
+                    <Button onClick={handleSave} color="primary"><FormattedMessage id="profile.confirm" /></Button>
                 </DialogActions>
             </Dialog>
         </>
@@ -83,7 +83,6 @@ const UserProfile = () => {
         if (token) {
             const getUser = async () => {
                 const userD = await dispatch(fetchUserDataAsync());
-                console.log(userD);
                 const photoD = userD.profilePhotoUrl;
                 setPhoto(photoD);
             }
@@ -103,11 +102,9 @@ const UserProfile = () => {
             phoneNumber: field === 'phone' ? value : user.phoneNumber ?? "",
             address: user.address ?? '',
         };
-        console.log(user);
-        console.log(updatedUser);
         try {
             await updateUserById(user.userId, updatedUser);
-            dispatch(fetchUserDataAsync()); // Re-fetch user data to reflect changes
+            dispatch(fetchUserDataAsync());
         } catch (error) {
             console.error('Failed to update user:', error);
         }
@@ -117,8 +114,8 @@ const UserProfile = () => {
         const file = event.target.files[0];
         if (file) {
             try {
-                await uploadUserPhoto(user.userId, file); // Використовуйте метод завантаження фото
-                dispatch(fetchUserDataAsync()); // Re-fetch user data to reflect changes
+                await uploadUserPhoto(user.userId, file);
+                dispatch(fetchUserDataAsync());
             } catch (error) {
                 console.error('Failed to upload avatar:', error);
             }
@@ -140,7 +137,7 @@ const UserProfile = () => {
             <Box sx={{ ...InfoBlock, background: colors.background.secondary, boxShadow: colors.boxShadow }}>
                 <Text type={'Title'}><FormattedMessage id="profile.contactInfo" /></Text>
                 <Box sx={{ display: 'flex', flexDirection: 'row', padding: '20px 20px 20px 0px' }}>
-                    <Text type={'Body'} sr={{ alignSelf: 'center', width: '150px' }}>Фото профіля: </Text>
+                    <Text type={'Body'} sr={{ alignSelf: 'center', width: '150px' }}><FormattedMessage id="profile.profilePhoto" />: </Text>
                     <Box>
                         <label htmlFor="avatar-upload">
                             <input
@@ -169,10 +166,10 @@ const UserProfile = () => {
             </Box>
 
             <Dialog open={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)}>
-                <DialogTitle>Change Password</DialogTitle>
+                <DialogTitle><FormattedMessage id="profile.changePasswordTitle" /></DialogTitle>
                 <DialogContent>
                     <TextField
-                        label="New Password"
+                        label={<FormattedMessage id="profile.newPassword" />}
                         type="password"
                         fullWidth
                         value={newPassword}
@@ -181,8 +178,8 @@ const UserProfile = () => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setIsPasswordModalOpen(false)} color="primary">Cancel</Button>
-                    <Button onClick={handlePasswordChange} color="primary">Save</Button>
+                    <Button onClick={() => setIsPasswordModalOpen(false)} color="primary"><FormattedMessage id="profile.cancel" /></Button>
+                    <Button onClick={handlePasswordChange} color="primary"><FormattedMessage id="profile.save" /></Button>
                 </DialogActions>
             </Dialog>
         </>

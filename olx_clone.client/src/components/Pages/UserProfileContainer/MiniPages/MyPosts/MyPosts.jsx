@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { Box, Typography, Tab, Tabs } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 import Text from "@/components/Tools/TextContainer/Text.jsx";
 import { TabsContainerStyles } from "@/components/Pages/UserProfileContainer/MiniPages/MyPosts/Styles.js";
 import { useTheme } from "@mui/material/styles";
 import PostWideList from "@/components/Tools/PostWideList/PostWideList.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserPostsAsync, selectUserPosts } from "@/Storage/Redux/Slices/userDataSlice.js";
+import { FormattedMessage } from "react-intl";
 
 const MyPosts = () => {
     const theme = useTheme();
@@ -30,7 +31,6 @@ const MyPosts = () => {
     const pendingApproval = ads.filter(ad => ad.status === 'PendingApproval');
     const rejected = ads.filter(ad => ad.status === 'Rejected');
 
-
     const refreshPosts = () => {
         dispatch(fetchUserPostsAsync());
     };
@@ -53,11 +53,11 @@ const MyPosts = () => {
                     },
                 }}
             >
-                <Tab label={<Text type={'Body'}>Активні</Text>} />
-                <Tab label={<Text type={'Body'}>Неактивні</Text>} />
-                <Tab label={<Text type={'Body'}>Продані</Text>} />
-                <Tab label={<Text type={'Body'}>Очікують підтвердження</Text>} />
-                <Tab label={<Text type={'Body'}>Відхилені</Text>} />
+                <Tab label={<Text type={'Body'}><FormattedMessage id="myPosts.active" /></Text>} />
+                <Tab label={<Text type={'Body'}><FormattedMessage id="myPosts.inactive" /></Text>} />
+                <Tab label={<Text type={'Body'}><FormattedMessage id="myPosts.sold" /></Text>} />
+                <Tab label={<Text type={'Body'}><FormattedMessage id="myPosts.pendingApproval" /></Text>} />
+                <Tab label={<Text type={'Body'}><FormattedMessage id="myPosts.rejected" /></Text>} />
             </Tabs>
             <Box sx={{ marginTop: '20px' }}>
                 {selectedTab === 0 && <PostWideList ads={activeAds} onPostUpdate={refreshPosts} />}

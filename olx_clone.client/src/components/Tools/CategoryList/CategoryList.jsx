@@ -2,7 +2,7 @@ import React from 'react';
 import {Container, Grid, Typography} from '@mui/material';
 import Category from '../Category/Category.jsx'; 
 
-const categoriesData = [ // Дані для категорій
+const categoriesData = [ 
     {
         id: 1,
         imageUrl: '../../../public/category.jpeg',

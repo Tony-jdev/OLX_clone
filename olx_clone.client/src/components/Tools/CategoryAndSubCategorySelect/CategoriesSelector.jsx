@@ -3,6 +3,7 @@ import { Box, Chip, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Text from '@/components/Tools/TextContainer/Text.jsx';
 import { GetCategories } from "@/Api/categoryApi.js";
+import { FormattedMessage } from 'react-intl';
 
 const CategoriesSelector = ({ onCategorySelect, onSubCategorySelect, subCategory, category }) => {
     const theme = useTheme();
@@ -65,7 +66,9 @@ const CategoriesSelector = ({ onCategorySelect, onSubCategorySelect, subCategory
 
     return (
         <Box display="flex" flexDirection="column" alignItems="start">
-            <Text type={'Body'} sr={{ margin: 1 }}>Категорія:</Text>
+            <Text type={'Body'} sr={{ margin: 1 }}>
+                <FormattedMessage id="categoriesSelector.category" />:
+            </Text>
             <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
                 {categories.length > 0 && categories.map((cat) => (
                     <Chip
@@ -88,7 +91,9 @@ const CategoriesSelector = ({ onCategorySelect, onSubCategorySelect, subCategory
             </Box>
             {selectedCategory && subCategories.length > 0 && (
                 <>
-                    <Text type={'Body'} sr={{ margin: 1 }}>Підкатегорія:</Text>
+                    <Text type={'Body'} sr={{ margin: 1 }}>
+                        <FormattedMessage id="categoriesSelector.subCategory" />:
+                    </Text>
                     <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
                         {subCategories.length > 0 && subCategories.map((subCat) => (
                             <Chip

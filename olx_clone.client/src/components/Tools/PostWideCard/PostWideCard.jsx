@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { updatePostStatus, DeletePost } from "@/Api/postApi.js";
 import { useSelector } from "react-redux";
 import { selectToken } from "@/Storage/Redux/Slices/userInfoSlice.js";
+import { FormattedMessage } from "react-intl";
 
 const PostWideCard = ({ ad, container, onPostUpdate }) => {
     const theme = useTheme();
@@ -71,8 +72,8 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
 
     const handleDeactivate = async () => {
         try {
-            await updatePostStatus(ad.id, 1); 
-            onPostUpdate(); 
+            await updatePostStatus(ad.id, 1);
+            onPostUpdate();
         } catch (error) {
             console.error('Failed to deactivate post:', error);
         }
@@ -80,8 +81,8 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
 
     const handleActivate = async () => {
         try {
-            await updatePostStatus(ad.id, 0); 
-            onPostUpdate(); 
+            await updatePostStatus(ad.id, 0);
+            onPostUpdate();
         } catch (error) {
             console.error('Failed to activate post:', error);
         }
@@ -91,7 +92,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
         e.stopPropagation();
         try {
             await DeletePost(ad.id, token);
-            onPostUpdate(); 
+            onPostUpdate();
         } catch (error) {
             console.error('Failed to delete post:', error);
         } finally {
@@ -102,8 +103,8 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
     const handleSell = async (e) => {
         e.stopPropagation();
         try {
-            await updatePostStatus(ad.id, 2); 
-            onPostUpdate(); 
+            await updatePostStatus(ad.id, 2);
+            onPostUpdate();
         } catch (error) {
             console.error('Failed to mark as sold:', error);
         } finally {
@@ -129,8 +130,8 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
         >
             <Avatar src={ad.photoUrl} variant="rounded" style={AvatarStyle} />
             <Grid container style={IndicatorGridStyle}>
-                {vip && <IndicatorBox text="Top" style='d' />}
-                {isUsed && <IndicatorBox text="Б/У" />}
+                {vip && <IndicatorBox text={<FormattedMessage id="postWideCard.top" />} style='d' />}
+                {isUsed && <IndicatorBox text={<FormattedMessage id="postWideCard.used" />} />}
             </Grid>
             <Box style={{ ...ContentContainer }}>
                 <Box style={TextContainer}>
@@ -151,7 +152,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                 <>
                                     <SButton
                                         textType={'Body'}
-                                        text={"Продано"}
+                                        text={<FormattedMessage id="postWideCard.sold" />}
                                         Color={colors.text.primary}
                                         borderInVisible={true}
                                         sl={{ background: colors.types.success }}
@@ -164,11 +165,11 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                             setSellConfirmOpen(true);
                                         }}
                                     />
-                                    
+
                                     <SButton
                                         textType={'Body'}
                                         Color={colors.text.primary}
-                                        text={"Редагувати"}
+                                        text={<FormattedMessage id="postWideCard.edit" />}
                                         borderInVisible={true}
                                         sl={{ background: colors.types.warning }}
                                         sr={{ width: '150px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
@@ -182,7 +183,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                     />
                                     <SButton
                                         textType={'Body'}
-                                        text={"Деактивувати"}
+                                        text={<FormattedMessage id="postWideCard.deactivate" />}
                                         borderInVisible={true}
                                         Color={colors.text.primary}
                                         sl={{ background: colors.types.error }}
@@ -197,7 +198,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                     />
                                     <SButton
                                         textType={'Body'}
-                                        text={"Рекламувати"}
+                                        text={<FormattedMessage id="postWideCard.advertise" />}
                                         Color={colors.text.primary}
                                         borderInVisible={true}
                                         sl={{ background: colors.types.default }}
@@ -211,13 +212,13 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         }}
                                     />
                                 </>
-                            ) } 
+                            ) }
                             {ad.status === 'Inactive' && (
                                 <>
                                     <SButton
                                         textType={'Body'}
                                         Color={colors.text.primary}
-                                        text={"Редагувати"}
+                                        text={<FormattedMessage id="postWideCard.edit" />}
                                         borderInVisible={true}
                                         sl={{ background: colors.types.warning }}
                                         sr={{ width: '160px', height: '30px', fontSize: '16px', fontWeight: '500', textTransform: 'none', }}
@@ -231,7 +232,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                     />
                                     <SButton
                                         textType={'Body'}
-                                        text={"Видалити"}
+                                        text={<FormattedMessage id="postWideCard.delete" />}
                                         borderInVisible={true}
                                         Color={colors.text.primary}
                                         sl={{ background: colors.types.error }}
@@ -246,7 +247,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                     />
                                     <SButton
                                         textType={'Body'}
-                                        text={"Активувати"}
+                                        text={<FormattedMessage id="postWideCard.activate" />}
                                         Color={colors.text.primary}
                                         borderInVisible={true}
                                         sl={{ background: colors.types.default }}
@@ -272,18 +273,18 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title"><FormattedMessage id="postWideCard.confirmDelete" /></DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure you want to delete this post?
+                        <FormattedMessage id="postWideCard.confirmDeleteText" />
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setDeleteConfirmOpen(false)} color="primary">
-                        Cancel
+                        <FormattedMessage id="postWideCard.cancel" />
                     </Button>
                     <Button onClick={handleDelete} color="primary" autoFocus>
-                        Confirm
+                        <FormattedMessage id="postWideCard.confirm" />
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -294,18 +295,18 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                 aria-labelledby="alert-sell-title"
                 aria-describedby="alert-sell-description"
             >
-                <DialogTitle id="alert-sell-title">{"Confirm Sale"}</DialogTitle>
+                <DialogTitle id="alert-sell-title"><FormattedMessage id="postWideCard.confirmSell" /></DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-sell-description">
-                        Are you sure you want to mark this post as sold? Confirm only if the product has been sold and you have received payment.
+                        <FormattedMessage id="postWideCard.confirmSellText" />
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setSellConfirmOpen(false)} color="primary">
-                        Cancel
+                        <FormattedMessage id="postWideCard.cancel" />
                     </Button>
                     <Button onClick={handleSell} color="primary" autoFocus>
-                        Confirm
+                        <FormattedMessage id="postWideCard.confirm" />
                     </Button>
                 </DialogActions>
             </Dialog>
