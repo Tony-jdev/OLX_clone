@@ -214,8 +214,7 @@ const Header = () => {
                                             sr={{padding: "0px 8px 0px 18px"}}
                                             action={() => navigate('./search/' + Categories[3])}
                                             text={<FormattedMessage id="category.realEstate" />}
-                                            textType="TitleMedium"
-                                            textSt={{}}
+                                            textSt={TitleMedium}
                                         />
                                     </SquareAndTextWrapper>
                                 </UnderlineWrapper>
@@ -233,8 +232,7 @@ const Header = () => {
                                             sr={{padding: "0px 8px 0px 18px"}}
                                             action={() => navigate('./search/' + Categories[5])}
                                             text={<FormattedMessage id="category.animals"/>}
-                                            textType="TitleMedium"
-                                            textSt={{}}
+                                            textSt={TitleMedium}
                                         />
                                     </SquareAndTextWrapper>
                                 </UnderlineWrapper>
@@ -252,8 +250,7 @@ const Header = () => {
                                             sr={{padding: "0px 8px 0px 18px"}}
                                             action={() => navigate('./search/' + Categories[8])}
                                             text={<FormattedMessage id="category.childrensWorld"/>}
-                                            textType="TitleMedium"
-                                            textSt={{}}
+                                            textSt={TitleMedium}
                                         />
                                     </SquareAndTextWrapper>
                                 </UnderlineWrapper>
@@ -289,8 +286,7 @@ const Header = () => {
                                             sr={{padding: "0px 8px 0px 18px"}}
                                             action={() => navigate('./search/' + Categories[0])}
                                             text={<FormattedMessage id="category.electronics"/>}
-                                            textType="TitleMedium"
-                                            textSt={{}}
+                                            textSt={TitleMedium}
                                         />
                                     </SquareAndTextWrapper>
                                 </UnderlineWrapper>
