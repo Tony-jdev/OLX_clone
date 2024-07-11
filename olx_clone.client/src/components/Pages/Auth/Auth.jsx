@@ -63,7 +63,6 @@ const AuthModal = ({ open, handleClose}) => {
         {
             showAlert('error', error.message);
         }
-        //dispatch(clearInfo());
     }
     
     const handleSubmit = () => {
@@ -90,7 +89,6 @@ const AuthModal = ({ open, handleClose}) => {
             }, 2000);
         } else {
             dispatch(setSuccess(false));
-            //dispatch(setMessage('Input error data'));
         }
     };
     const handleOpenSnackbarRegIn = async (success) => {
@@ -191,15 +189,12 @@ const AuthModal = ({ open, handleClose}) => {
                                 width: '370px',
                                 '& fieldset': {
                                     border: 'none',
-                                    //borderColor: colors.text.orange,
                                 },
                                 '&:hover fieldset': {
                                     border: 'none',
-                                    //borderColor: colors.text.orange,
                                 },
                                 '&.Mui-focused fieldset': {
                                     border: 'none',
-                                    //borderColor: colors.text.orange,
                                 },
                             },
                         }}
@@ -220,15 +215,12 @@ const AuthModal = ({ open, handleClose}) => {
                                 width: '370px',
                                 '& fieldset': {
                                     border: 'none',
-                                    //borderColor: colors.text.orange,
                                 },
                                 '&:hover fieldset': {
                                     border: 'none',
-                                    //borderColor: colors.text.orange,
                                 },
                                 '&.Mui-focused fieldset': {
                                     border: 'none',
-                                    //borderColor: colors.text.orange,
                                 },
                             },
                         }}

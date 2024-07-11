@@ -33,6 +33,7 @@ import {
 import CategoriesSelector from "@/components/Tools/CategoryAndSubCategorySelect/CategoriesSelector.jsx";
 import LocationPickerButton from "@/components/Tools/LocationPickerButton/LocationPickerButton.jsx";
 import SButton from "@/components/Tools/Button/SButton.jsx";
+import { useIntl, FormattedMessage } from 'react-intl';
 
 const Container = styled(Box)({
     padding: '10px',
@@ -50,9 +51,10 @@ const Section = styled(Box)({
 const CreatePostPage = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
+    const intl = useIntl();
 
     const { id } = useParams();
-    
+
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -75,14 +77,14 @@ const CreatePostPage = () => {
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [photoToDelete, setPhotoToDelete] = useState(null);
     const [isPostLoaded, setIsPostLoaded] = useState(false);
-    
+
     useEffect(() => {
         if (id) {
             const fetch = async () => {
                 await dispatch(setSelectedPostId(id));
                 await dispatch(fetchPostByIdAsync());
             }
-           fetch();
+            fetch();
         }
     }, [dispatch, id]);
 
@@ -135,19 +137,19 @@ const CreatePostPage = () => {
         const newErrors = {};
 
         if (title.length < 3 || title.length > 75) {
-            newErrors.title = 'Назва повинна містити від 3 до 75 символів.';
+            newErrors.title = intl.formatMessage({ id: 'post.titleCharacters' });
         }
 
         if (description.length < 3 || description.length > 1250) {
-            newErrors.description = 'Опис повинен містити від 3 до 1250 символів.';
+            newErrors.description = intl.formatMessage({ id: 'post.descriptionCharacters' });
         }
 
         if (images.length === 0) {
-            newErrors.images = 'Необхідно додати хоча б одну фотографію.';
+            newErrors.images = intl.formatMessage({ id: 'post.addPhotos' });
         }
 
         if (!category) {
-            newErrors.category = 'Необхідно вибрати категорію.';
+            newErrors.category = intl.formatMessage({ id: 'post.categoryRequired' });
         }
 
         if (Object.keys(newErrors).length > 0) {
@@ -194,14 +196,14 @@ const CreatePostPage = () => {
         clearFields();
         navigate(-1);
     };
-    
+
     return (
         <Container>
-            <Text type="Headline" sr={{margin: '10px 0px 30px 0px'}} text={edit ? "Редагувати оголошення" : "Додати оголошення"} />
+            <Text type="Headline" sr={{margin: '10px 0px 30px 0px'}} text={edit ? <FormattedMessage id="post.editPost" /> : <FormattedMessage id="post.createPost" />} />
             <Section sx={{background: colors.background.secondary, boxShadow: colors.boxShadow}}>
-                <Text type="Title" sr={{margin: '10px 0px 10px 0px'}} text={'Опишіть у подробицях'} />
+                <Text type="Title" sr={{margin: '10px 0px 10px 0px'}} text={<FormattedMessage id="post.describeInDetail" />} />
                 <TextField
-                    label={<Text type="Body" text="Назва" />}
+                    label={<Text type="Body" text={<FormattedMessage id="post.title" />} />}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     fullWidth
@@ -212,16 +214,16 @@ const CreatePostPage = () => {
                     inputProps={{ maxLength: 75 }}
                 />
                 <Box display={'flex'} maxWidth={'924px'} flexDirection={'row'} justifyContent={'space-between'}>
-                    <Text type="Label" text={'Введіть щонайменше 3 символи '}
+                    <Text type="Label" text={<FormattedMessage id="post.titleCharacters" />}
                           color={colors.text.secondary}
                           sx={{position: 'absolute', bottom: '-20px', right: '10px'}}/>
-                    
-                    <Text type="Label" text={`${title?.length ?? '0'} / 75 символів`}
+
+                    <Text type="Label" text={<FormattedMessage id="post.titleMaxCharacters" values={{ length: title?.length ?? '0' }} />}
                           color={colors.text.secondary}
                           sx={{position: 'absolute', bottom: '-20px', right: '10px'}}/>
                 </Box>
                 <TextField
-                    label={<Text type="Body" text="Опис" />}
+                    label={<Text type="Body" text={<FormattedMessage id="post.description" />} />}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     fullWidth
@@ -234,16 +236,16 @@ const CreatePostPage = () => {
                     inputProps={{ maxLength: 1250 }}
                 />
                 <Box display={'flex'} maxWidth={'832px'} flexDirection={'row'} justifyContent={'space-between'}>
-                    <Text type="Label" text={'Введіть щонайменше 3 символи '}
+                    <Text type="Label" text={<FormattedMessage id="post.descriptionCharacters" />}
                           color={colors.text.secondary}
                           sx={{position: 'absolute', bottom: '-20px', right: '10px'}}/>
 
-                    <Text type="Label" text={`${description?.length ?? '0'} / 1250 символів`}
+                    <Text type="Label" text={<FormattedMessage id="post.descriptionMaxCharacters" values={{ length: description?.length ?? '0' }} />}
                           color={colors.text.secondary}
                           sx={{position: 'absolute', bottom: '-20px', right: '10px'}}/>
                 </Box>
                 <TextField
-                    label={<Text type="Body" text="Ціна (грн)" />}
+                    label={<Text type="Body" text={<FormattedMessage id="post.price" />} />}
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     fullWidth
@@ -257,8 +259,8 @@ const CreatePostPage = () => {
             </Section>
 
             <Section sx={{background: colors.background.secondary, boxShadow: colors.boxShadow}}>
-                <Text type="Title" sr={{padding: '6px 8px'}} text={`Додати фото (${images.length} / 10)`} />
-                <Text type="Body" sr={{padding: '6px 8px'}} text={'Переше фото буде на обкладенці оголошення'} />
+                <Text type="Title" sr={{padding: '6px 8px'}} text={<FormattedMessage id="post.addPhotos" values={{ count: images.length }} />} />
+                <Text type="Body" sr={{padding: '6px 8px'}} text={<FormattedMessage id="post.firstPhotoCover" />} />
                 <Box sx={{...imageContainerStyle, display: 'flex', flexWrap: 'wrap', gap: '10px', padding: '6px 8px'}}>
                     {images.map((image, index) => (
                         <Box key={index} sx={{
@@ -311,15 +313,15 @@ const CreatePostPage = () => {
 
             <Section sx={{background: colors.background.secondary, boxShadow: colors.boxShadow}}>
                 <FormControl sx={{width: '100%', padding: '6px 8px'}}>
-                    <FormLabel><Text type="Body" text="Стан товару" /></FormLabel>
+                    <FormLabel><Text type="Body" text={<FormattedMessage id="post.productCondition" />} /></FormLabel>
                     <RadioGroup
                         value={condition}
                         onChange={(e) => setCondition(e.target.value)}
                         row
                         sx={radioGroupStyle}
                     >
-                        <FormControlLabel value="New" control={<Radio />} label={<Text type="Body" text="Новий" />} />
-                        <FormControlLabel value="Used" control={<Radio />} label={<Text type="Body" text="Б/У" />} />
+                        <FormControlLabel value="New" control={<Radio />} label={<Text type="Body" text={<FormattedMessage id="post.new" />} />} />
+                        <FormControlLabel value="Used" control={<Radio />} label={<Text type="Body" text={<FormattedMessage id="post.used" />} />} />
                     </RadioGroup>
                 </FormControl>
             </Section>
@@ -333,7 +335,7 @@ const CreatePostPage = () => {
                     hoverBack={colors.types.error}
                     sr={{padding: '10px', marginRight: '20px', border: '1px solid black'}}
                     textType={'Body'}
-                    text={'Скасувати'}
+                    text={<FormattedMessage id="post.cancel" />}
                     action={handleCloseAndClear}
                 />
                 <SButton
@@ -344,7 +346,7 @@ const CreatePostPage = () => {
                     hoverColor={colors.text.primary}
                     hoverBack={colors.types.success}
                     sr={{padding: '10px', marginRight: '10px', borderRadius: '30px 0px 30px 30px', border: '1px solid black'}}
-                    text={edit ? 'Редагувати пост' : 'Створити пост'}
+                    text={<FormattedMessage id={edit ? 'post.editButton' : 'post.createButton'} />}
                     action={handleSubmit}
                 />
             </Section>
@@ -362,19 +364,19 @@ const CreatePostPage = () => {
                 }}
             >
                 <DialogTitle id="alert-dialog-title" sx={{ color: colors.types.error }}>
-                    {"Підтвердження видалення"}
+                    <FormattedMessage id="post.confirmDelete" />
                 </DialogTitle>
                 <DialogContent sx={{ color: colors.text.revers }}>
                     <DialogContentText id="alert-dialog-description" sx={{ color: colors.text.revers }}>
-                        Ви впевнені, що хочете видалити це фото?
+                        <FormattedMessage id="post.confirmDeleteText" />
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setConfirmDelete(false)} color="primary" sx={{ color: colors.text.revers }}>
-                        Скасувати
+                        <FormattedMessage id="post.cancelDelete" />
                     </Button>
                     <Button onClick={confirmImageRemove} color="error" sx={{ color: colors.types.error }}>
-                        Видалити
+                        <FormattedMessage id="post.delete" />
                     </Button>
                 </DialogActions>
             </Dialog>
