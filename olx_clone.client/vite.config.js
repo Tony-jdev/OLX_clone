@@ -84,6 +84,10 @@ const databaseRoutes = {
         target,
         secure: false
     },
+    '^/api/posts/by-status': {
+        target,
+        secure: false
+    },
     '^/api/favorites': {
         target,
         secure: false

@@ -23,9 +23,9 @@ function SearchPage() {
     const way = ['search', category ?? null, subCategory ?? null];
 
     const items = [
-        "../../../../public/Ads/Ads0.png",
-        "../../../../public/Ads/Ads1.png",
-        "../../../../public/Ads/Ads2.png"
+        "../../../../public/Ads/BannerLong1.png",
+        "../../../../public/Ads/BannerLong2.png",
+        "../../../../public/Ads/BannerLong3.png"
     ];
 
     const dispatch = useDispatch();

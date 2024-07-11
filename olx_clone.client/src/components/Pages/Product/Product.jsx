@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import ProductInfo from "@/components/Tools/ProductInfo/ProductInfo.jsx";
 import SellerInfo from "@/components/Tools/SellerInfo/SellerInfo.jsx";
 import LocationInfo from "@/components/Tools/LocationInfo/LocationInfo.jsx";
-import SButton from "@/components/Tools/Button/SButton.jsx"; 
+import SButton from "@/components/Tools/Button/SButton.jsx";
 import {Box, Container, Grid} from "@mui/material";
 import {ContainerStyle} from "@/components/Pages/Product/Styles.js";
 import {useNavigate, useParams} from "react-router-dom";
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, useIntl} from "react-intl";
 import {
     fetchPostByIdAsync,
     selectError,
@@ -35,7 +35,8 @@ import {useAuth} from "@/providers/AuthProvider.jsx";
 const ProductPage = () => {
     const theme = useTheme();
     const { colors } = theme.palette;
-    
+    const intl = useIntl();
+
     const { id } = useParams();
     const dispatch = useDispatch();
     const postId = useSelector(selectSelectedPostId);
@@ -43,7 +44,7 @@ const ProductPage = () => {
     const loading = useSelector(selectLoading);
     const error = useSelector(selectError);
     const navigate = useNavigate();
-    
+
     const user = useSelector(selectUser);
     const isUserLogined = useSelector(isUserLoggedIn);
     const {openAuth} = useAuth();
@@ -58,9 +59,8 @@ const ProductPage = () => {
     const productListRef = useRef(null);
     const [open,setOpen] = useState(false);
 
-
     const { openChat, fetchChats } = useChat();
-    
+
     useEffect(() => {
         fetchChats();
     }, [fetchChats]);
@@ -73,7 +73,7 @@ const ProductPage = () => {
         fetch();
         window.scrollTo(0, 0);
     }, [dispatch, id]);
-    
+
 
     useEffect(() => {
         if (post && post.photos) {
@@ -82,18 +82,12 @@ const ProductPage = () => {
     }, [post]);
 
     useEffect(() => {
-
-        console.log(user);
-        console.log(post);
-        console.log(post?.user);
-        
         const fetchPosts = async () => {
             const seller = await fetchUserById(post?.user.id);
-            console.log(seller);
             setSellerPosts(seller.data.posts);
         }
         fetchPosts();
-        
+
         if(isUserLogined && post?.sku && user?.userId)
         {
             addRecentView(user?.userId, post?.sku);
@@ -112,13 +106,12 @@ const ProductPage = () => {
             productListRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [open]);
-    
+
     const handleOpenChat = () => {
         if(isUserLogined)
         {
             if(user.userId !== post.user.id)
             {
-                
                 navigate('/user/Messages', { state:
                         {
                             additionalData: {
@@ -127,46 +120,41 @@ const ProductPage = () => {
                                 postId: post.id,
                                 postSku: post.sku,
                             }
-                        } 
+                        }
                 });
             }
         }
         else openAuth();
     };
-    
+
     if (post === null) {
         return <Container>
-            
-            no such Product Found!
-            
-            <SButton
-            type="whiteOutlined"
-            text="Go back"
-            action={()=>{ navigate(-1) }}
-        /></Container>
-    }
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <Container>
-
-            Error: {error}
-
+            <FormattedMessage id="product.noProductFound" />
             <SButton
                 type="whiteOutlined"
-                text="Go back"
+                text={<FormattedMessage id="product.goBack" />}
                 action={()=>{ navigate(-1) }}
             /></Container>
     }
 
+    if (loading) {
+        return <div><FormattedMessage id="product.loading" /></div>;
+    }
+
+    if (error) {
+        return <Container>
+            <FormattedMessage id="product.error" values={{ error: error }} />
+            <SButton
+                type="whiteOutlined"
+                text={<FormattedMessage id="product.goBack" />}
+                action={()=>{ navigate(-1) }}
+            /></Container>
+    }
 
     return (
         <Container style={{marginTop: 60, marginBottom: 60, maxWidth: '1440px', width: '100%', padding: 0}}>
             <Grid container direction={'row'} justifyContent={'space-between'} style={{marginBottom: '20px'}}>
-                <Box sx={{background: colors.background.secondary, boxShadow: colors.boxShadow, 
+                <Box sx={{background: colors.background.secondary, boxShadow: colors.boxShadow,
                     borderRadius: '20px', maxHeight: '630px', height: '100vh',
                     alignContent: 'center',
                 }}>
@@ -179,7 +167,7 @@ const ProductPage = () => {
             </Grid>
             <ProductInfo post={post}/>
             {open && sellerPosts && sellerPosts.length > 0 && (<div ref={productListRef}>
-                <ProductList posts={sellerPosts} headerText={"Всі оголошення продавця"}/>
+                <ProductList posts={sellerPosts} headerText={<FormattedMessage id="product.allSellerListings" />} />
             </div>)}
         </Container>
     );

@@ -38,9 +38,9 @@ const Header = () => {
 
     const searchText = useSelector(selectSearchText) ?? '';
     const [text, setText] = useState(searchText ?? '');
-    
+
     const location = useSelector(selectLocation);
-    const [newLocation, setNewLocation] = useState(location); 
+    const [newLocation, setNewLocation] = useState(location);
 
     const isUserLogined = useSelector(isUserLoggedIn);
     const [open, setOpen] = useState(false);
@@ -51,18 +51,18 @@ const Header = () => {
         const newLocale = locale === 'en' ? 'uk' : 'en';
         dispatch(changeLocale(newLocale));
     };
-    
+
     const searchThings = () => {
         dispatch(setSearchText(text));
-        navigate(`./search`, { state: { refresh: new Date().getTime() } });    
+        navigate(`./search`, { state: { refresh: new Date().getTime() } });
     }
-    
+
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             searchThings();
         }
     };
-    
+
     const authHandle = ()=>  {
         navigate('/user/Settings');
     }
@@ -71,11 +71,11 @@ const Header = () => {
         console.log(location);
         console.log(newLocation);
     }, []);
-    
+
     useEffect(() => {
         dispatch(setLocation(newLocation));
     }, [newLocation]);
-    
+
     return (
         <AppBar style={AppBarStyle} sx={{ backgroundColor: colors.background.primary }}>
             <Container style={ContainerStyle}>
@@ -89,80 +89,80 @@ const Header = () => {
                                 sx={LogoStyle}
                                 onClick={()=>{navigate('./')}}
                             />
-                            <TextField title='non' 
-                                       value={text} 
+                            <TextField title='non'
+                                       value={text}
                                        placeholder={"Пошук"}
                                        onChange={(e)=>setText(e.target.value)}
                                        onKeyDown={handleKeyDown}
-                                       
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start" sx={{marginLeft: '-8px'}}>
-                                            <SButton isIconButton={true} 
-                                                     icon={ <SearchIcon style={{fill: colors.text.revers}}/>}
-                                                     action={searchThings}
-                                            />
-                                        </InputAdornment>
-                                    ),
-                                    inputProps: {
-                                        style: LabelMedium
-                                    },
-                                    style: PropsFieldStyle,
-                                    sx: { backgroundColor: colors.transparent }
-                                }}
-                                style={FieldStyle}
-                                sx={{ color: colors.text.input,
-                                    '& input:-internal-autofill-selected': {
-                                        paddingTop: 1,
-                                        paddingBottom: 1,
-                                        paddingLeft: 7.5,
-                                        marginLeft: -6.5,
-                                    },
-                                    '& .MuiInputBase-input.MuiOutlinedInput-input': {
-                                        paddingTop: 1,
-                                        paddingBottom: 1,
-                                        paddingLeft: 7.5,
-                                        marginLeft: -6.5,
-                                    },
-                                }} 
+
+                                       InputProps={{
+                                           startAdornment: (
+                                               <InputAdornment position="start" sx={{marginLeft: '-8px'}}>
+                                                   <SButton isIconButton={true}
+                                                            icon={ <SearchIcon style={{fill: colors.text.revers}}/>}
+                                                            action={searchThings}
+                                                   />
+                                               </InputAdornment>
+                                           ),
+                                           inputProps: {
+                                               style: LabelMedium
+                                           },
+                                           style: PropsFieldStyle,
+                                           sx: { backgroundColor: colors.transparent }
+                                       }}
+                                       style={FieldStyle}
+                                       sx={{ color: colors.text.input,
+                                           '& input:-internal-autofill-selected': {
+                                               paddingTop: 1,
+                                               paddingBottom: 1,
+                                               paddingLeft: 7.5,
+                                               marginLeft: -6.5,
+                                           },
+                                           '& .MuiInputBase-input.MuiOutlinedInput-input': {
+                                               paddingTop: 1,
+                                               paddingBottom: 1,
+                                               paddingLeft: 7.5,
+                                               marginLeft: -6.5,
+                                           },
+                                       }}
                             >
                             </TextField>
                         </Box>
                         <Box style={FlexBoxStyle}>
                             <SButton
-                              type='orangeRoundButton'
-                              textType={'Body'}
-                              sl={ {backgroundColor: colors.background.orange}}
-                              Color={colors.text.revers}
-                              hoverBack={colors.background.orange}
-                              hoverShadow={colors.types.shadows.boxShadowWarning}
-                              sr={{width: '200px', height: '40px', }}
-                              textSR={{marginLeft: '8px', fontWeight: '600', letterSpacing: '0,1px'}}
-                              textSt={TitleSmall}
-                              prew={
-                                <Icon
-                                    icon={AddIcon}
-                                    color={colors.text.primary}
-                                    step={1}
-                                    width={18}
-                                    height={18}
-                                />
-                              }
-                              text={<FormattedMessage id="header.addButtonLabel"/>}
-                              action={()=>navigate('/create')}
+                                type='orangeRoundButton'
+                                textType={'Body'}
+                                sl={ {backgroundColor: colors.background.orange}}
+                                Color={colors.text.revers}
+                                hoverBack={colors.background.orange}
+                                hoverShadow={colors.types.shadows.boxShadowWarning}
+                                sr={{width: '200px', height: '40px', }}
+                                textSR={{marginLeft: '8px', fontWeight: '600', letterSpacing: '0,1px'}}
+                                textSt={TitleSmall}
+                                prew={
+                                    <Icon
+                                        icon={AddIcon}
+                                        color={colors.text.primary}
+                                        step={1}
+                                        width={18}
+                                        height={18}
+                                    />
+                                }
+                                text={<FormattedMessage id="header.addButtonLabel"/>}
+                                action={()=>navigate('/create')}
                             />
-                            
+
                             <SButton
                                 isIconButton={true}
-                                icon={ 
-                                <Icon
-                                    icon={ProfileIcon}
-                                    color={colors.text.primary}
-                                    hoverColor={colors.text.secondary}
-                                    step={1}
-                                    width={36}
-                                    height={36}
-                                />
+                                icon={
+                                    <Icon
+                                        icon={ProfileIcon}
+                                        color={colors.text.primary}
+                                        hoverColor={colors.text.secondary}
+                                        step={1}
+                                        width={36}
+                                        height={36}
+                                    />
                                 }
                                 sl={{...ProfileButtonStyle, color: colors.text.primary}}
                                 action={()=>navigate('/user')}
@@ -181,7 +181,7 @@ const Header = () => {
                                          height={30}
                                      />}
                             />
-                            
+
                             <SButton
                                 type='transparentButton'
                                 action={toggleLocale}
@@ -202,7 +202,7 @@ const Header = () => {
                         <Box style={LastBoxStyle} >
                             <LocationPickerButton location={location} setLocation={setNewLocation} Color={colors.text.orange}/>
 
-                            <SubCategoriesWrapper categoryId={3}>
+                            <SubCategoriesWrapper categoryId={3} Color={colors.categories.p}>
                                 <UnderlineWrapper underlineColor={colors.categories.p}>
                                     <SquareAndTextWrapper
                                         squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
@@ -214,77 +214,84 @@ const Header = () => {
                                             sr={{padding: "0px 8px 0px 18px"}}
                                             action={() => navigate('./search/' + Categories[3])}
                                             text={<FormattedMessage id="category.realEstate" />}
-                                            textType="TitleMedium"
-                                            textSt={{}}
+                                            textSt={TitleMedium}
+                                        />
+                                    </SquareAndTextWrapper>
+                                </UnderlineWrapper>
+                            </SubCategoriesWrapper>
+
+                            <SubCategoriesWrapper categoryId={4} Color={colors.categories.g}>
+                                <UnderlineWrapper underlineColor={colors.categories.g}>
+                                    <SquareAndTextWrapper
+                                        squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                        squareColor={colors.categories.g}
+                                        textColor={colors.text.primary}
+                                    >
+                                        <SButton
+                                            type='transparentButton'
+                                            sr={{padding: "0px 8px 0px 18px"}}
+                                            action={() => navigate('./search/' + Categories[5])}
+                                            text={<FormattedMessage id="category.animals"/>}
+                                            textSt={TitleMedium}
+                                        />
+                                    </SquareAndTextWrapper>
+                                </UnderlineWrapper>
+                            </SubCategoriesWrapper>
+
+                            <SubCategoriesWrapper categoryId={5} Color={colors.categories.y}>
+                                <UnderlineWrapper underlineColor={colors.categories.y}>
+                                    <SquareAndTextWrapper
+                                        squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                        squareColor={colors.categories.y}
+                                        textColor={colors.text.primary}
+                                    >
+                                        <SButton
+                                            type='transparentButton'
+                                            sr={{padding: "0px 8px 0px 18px"}}
+                                            action={() => navigate('./search/' + Categories[8])}
+                                            text={<FormattedMessage id="category.childrensWorld"/>}
+                                            textSt={TitleMedium}
                                         />
                                     </SquareAndTextWrapper>
                                 </UnderlineWrapper>
                             </SubCategoriesWrapper>
                             
-                            <UnderlineWrapper underlineColor={colors.categories.g}>
-                                <SquareAndTextWrapper
-                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
-                                    squareColor={colors.categories.g}
-                                    textColor={colors.text.primary}
-                                >
-                                    <SButton
-                                        type='transparentButton'
-                                        sr={{padding: "0px 8px 0px 18px"}}
-                                        action={() => navigate('./search/' + Categories[5])}
-                                        text={<FormattedMessage id="category.animals"/>}
-                                        textType="TitleMedium"
-                                        textSt={{}}
-                                    />
-                                </SquareAndTextWrapper>
-                            </UnderlineWrapper>
-                            <UnderlineWrapper underlineColor={colors.categories.y}>
-                                <SquareAndTextWrapper
-                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
-                                    squareColor={colors.categories.y}
-                                    textColor={colors.text.primary}
-                                >
-                                    <SButton
-                                        type='transparentButton'
-                                        sr={{padding: "0px 8px 0px 18px"}}
-                                        action={() => navigate('./search/' + Categories[8])}
-                                        text={<FormattedMessage id="category.childrensWorld"/>}
-                                        textType="TitleMedium"
-                                        textSt={{}}
-                                    />
-                                </SquareAndTextWrapper>
-                            </UnderlineWrapper>
-                            <UnderlineWrapper underlineColor={colors.categories.o}>
-                                <SquareAndTextWrapper
-                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
-                                    squareColor={colors.categories.o}
-                                    textColor={colors.text.primary}
-                                >
-                                    <SButton
-                                        type='transparentButton'
-                                        sr={{padding: "0px 8px 0px 18px"}}
-                                        action={() => navigate('./search/' + Categories[1])}
-                                        text={<FormattedMessage id="category.fashion"/>}
-                                        textType="TitleMedium"
-                                        textSt={{}}
-                                    />
-                                </SquareAndTextWrapper>
-                            </UnderlineWrapper>
-                            <UnderlineWrapper underlineColor={colors.categories.b}>
-                                <SquareAndTextWrapper
-                                    squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
-                                    squareColor={colors.categories.b}
-                                    textColor={colors.text.primary}
-                                >
-                                    <SButton
-                                        type='transparentButton'
-                                        sr={{padding: "0px 8px 0px 18px"}}
-                                        action={() => navigate('./search/' + Categories[0])}
-                                        text={<FormattedMessage id="category.electronics"/>}
-                                        textType="TitleMedium"
-                                        textSt={{}}
-                                    />
-                                </SquareAndTextWrapper>
-                            </UnderlineWrapper>
+                            <SubCategoriesWrapper categoryId={2} Color={colors.categories.o}>
+                                <UnderlineWrapper underlineColor={colors.categories.o}>
+                                    <SquareAndTextWrapper
+                                        squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                        squareColor={colors.categories.o}
+                                        textColor={colors.text.primary}
+                                    >
+                                        <SButton
+                                            type='transparentButton'
+                                            sr={{padding: "0px 8px 0px 18px"}}
+                                            action={() => navigate('./search/' + Categories[1])}
+                                            text={<FormattedMessage id="category.fashion"/>}
+                                            textSt={TitleMedium}
+                                        />
+                                    </SquareAndTextWrapper>
+                                </UnderlineWrapper>
+                            </SubCategoriesWrapper>
+
+                            <SubCategoriesWrapper categoryId={1} Color={colors.categories.b}>
+                                <UnderlineWrapper underlineColor={colors.categories.b}>
+                                    <SquareAndTextWrapper
+                                        squareIcon={<SquareIcon sx={{ width: '10px', height: '10px' }} />}
+                                        squareColor={colors.categories.b}
+                                        textColor={colors.text.primary}
+                                    >
+                                        <SButton
+                                            type='transparentButton'
+                                            sr={{padding: "0px 8px 0px 18px"}}
+                                            action={() => navigate('./search/' + Categories[0])}
+                                            text={<FormattedMessage id="category.electronics"/>}
+                                            textSt={TitleMedium}
+                                        />
+                                    </SquareAndTextWrapper>
+                                </UnderlineWrapper>
+                            </SubCategoriesWrapper>
+
                         </Box>
                     </Grid>
                 </Toolbar>
