@@ -27,6 +27,9 @@ const MyPosts = () => {
     const activeAds = ads.filter(ad => ad.status === 'Active');
     const inactiveAds = ads.filter(ad => ad.status === 'Inactive');
     const soldAds = ads.filter(ad => ad.status === 'Sold');
+    const pendingApproval = ads.filter(ad => ad.status === 'PendingApproval');
+    const rejected = ads.filter(ad => ad.status === 'Rejected');
+
 
     const refreshPosts = () => {
         dispatch(fetchUserPostsAsync());
@@ -53,11 +56,15 @@ const MyPosts = () => {
                 <Tab label={<Text type={'Body'}>Активні</Text>} />
                 <Tab label={<Text type={'Body'}>Неактивні</Text>} />
                 <Tab label={<Text type={'Body'}>Продані</Text>} />
+                <Tab label={<Text type={'Body'}>Очікують підтвердження</Text>} />
+                <Tab label={<Text type={'Body'}>Відхилені</Text>} />
             </Tabs>
             <Box sx={{ marginTop: '20px' }}>
                 {selectedTab === 0 && <PostWideList ads={activeAds} onPostUpdate={refreshPosts} />}
                 {selectedTab === 1 && <PostWideList ads={inactiveAds} onPostUpdate={refreshPosts} />}
                 {selectedTab === 2 && <PostWideList ads={soldAds} onPostUpdate={refreshPosts} />}
+                {selectedTab === 3 && <PostWideList ads={pendingApproval} onPostUpdate={refreshPosts} />}
+                {selectedTab === 4 && <PostWideList ads={rejected} onPostUpdate={refreshPosts} />}
             </Box>
         </Box>
     );

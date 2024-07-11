@@ -10,6 +10,19 @@ export const GetPosts = async (queryParams) => {
         throw new Error('Failed to fetch');
     }
 };
+export const getPostsByStatus = async (status) => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/posts/by-status`, {
+            params: {
+                status: status
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching posts by status:', error);
+        throw new Error('Failed to fetch posts by status');
+    }
+};
 export const GetVIPPosts = async () => {
     try {
         const response = await axios.get(`${baseUrl}/api/posts/vip`);
