@@ -82,7 +82,7 @@ const LocationPickerButton = ({ Color, setLocation, location, withoutDefoult }) 
                         readOnly={false}
                         allowMove={true}
                         isCloseBtn={true}
-                        isSetDefBtn={!(withoutDefoult ?? true)}
+                        isSetDefBtn={withoutDefoult === null ? false : true}
                         isSetOnlyRegion={true}
                         onClose={toggleMapVisibility}
                         setDef={handleLocationSelectionDef}
