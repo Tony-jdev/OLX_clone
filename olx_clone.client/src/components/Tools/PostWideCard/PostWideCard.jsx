@@ -147,7 +147,7 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                     </Box>
                     {ad.status !== 'Sold' && (
                         <Box style={ActionButtonsContainer} onClick={(e) => e.stopPropagation()}>
-                            {ad.status === 'Active' ? (
+                            {ad.status === 'Active' && (
                                 <>
                                     <SButton
                                         textType={'Body'}
@@ -211,7 +211,8 @@ const PostWideCard = ({ ad, container, onPostUpdate }) => {
                                         }}
                                     />
                                 </>
-                            ) : (
+                            ) } 
+                            {ad.status === 'Inactive' && (
                                 <>
                                     <SButton
                                         textType={'Body'}

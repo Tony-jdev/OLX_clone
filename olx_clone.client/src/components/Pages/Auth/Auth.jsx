@@ -119,7 +119,7 @@ const AuthModal = ({ open, handleClose}) => {
             const decodedToken = jwtDecode(token);
             const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
             setToken(user.userId, token);
-            if(role === 'Admin')
+            if(role === 'Administrator')
                 navigate('/admin');
         }
     }
