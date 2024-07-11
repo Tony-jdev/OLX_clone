@@ -55,3 +55,20 @@ export const updateOnlineStatus = async (userId) => {
         throw new Error('Failed to update online status');
     }
 };
+
+export const uploadUserPhoto = async (userId, file) => {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await axios.post(`${baseUrl}/api/users/${userId}/upload-photo`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error uploading photo:', error);
+        throw new Error('Failed to upload photo');
+    }
+};

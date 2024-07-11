@@ -3,14 +3,12 @@ import {
     Avatar,
     Box,
     Button,
-    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
     TextField,
-    Typography
 } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import SButton from '@/components/Tools/Button/SButton.jsx';
@@ -22,7 +20,7 @@ import Text from "@/components/Tools/TextContainer/Text.jsx";
 import { PenEditIcon } from "@/assets/Icons/Icons.jsx";
 import { updateUserById } from "@/Api/userApi.js";
 import { InfoBlock, ButtonGroup } from "@/components/Pages/UserProfileContainer/MiniPages/UserInfo/Styles.js";
-//import { uploadAvatar } from "@/Api/avatarApi.js"; // You need to create this API method
+import { uploadUserPhoto } from '@/Api/userApi.js'; 
 
 const EditableField = ({ label, value, onSave }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -79,10 +77,17 @@ const UserProfile = () => {
     const token = useSelector(selectToken);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [newPassword, setNewPassword] = useState('');
+    const [photo, setPhoto] = useState('');
 
     useEffect(() => {
         if (token) {
-            dispatch(fetchUserDataAsync());
+            const getUser = async () => {
+                const userD = await dispatch(fetchUserDataAsync());
+                console.log(userD);
+                const photoD = userD.profilePhotoUrl;
+                setPhoto(photoD);
+            }
+            getUser();
         }
     }, [token, dispatch]);
 
@@ -98,8 +103,8 @@ const UserProfile = () => {
             phoneNumber: field === 'phone' ? value : user.phoneNumber ?? "",
             address: user.address ?? '',
         };
-         console.log(user);
-         console.log(updatedUser);
+        console.log(user);
+        console.log(updatedUser);
         try {
             await updateUserById(user.userId, updatedUser);
             dispatch(fetchUserDataAsync()); // Re-fetch user data to reflect changes
@@ -110,14 +115,14 @@ const UserProfile = () => {
 
     const handleAvatarChange = async (event) => {
         const file = event.target.files[0];
-        //if (file) {
-        //    try {
-        //        await uploadAvatar(user.id, file);
-        //        dispatch(fetchUserDataAsync()); // Re-fetch user data to reflect changes
-        //    } catch (error) {
-        //        console.error('Failed to upload avatar:', error);
-        //    }
-        //}
+        if (file) {
+            try {
+                await uploadUserPhoto(user.userId, file); // Використовуйте метод завантаження фото
+                dispatch(fetchUserDataAsync()); // Re-fetch user data to reflect changes
+            } catch (error) {
+                console.error('Failed to upload avatar:', error);
+            }
+        }
     };
 
     const handlePasswordChange = async () => {
@@ -146,7 +151,7 @@ const UserProfile = () => {
                                 onChange={handleAvatarChange}
                             />
                             <Avatar
-                                src={user.avatar}
+                                src={photo??""}
                                 sx={{ width: 50, height: 50, cursor: 'pointer' }}
                             />
                         </label>
